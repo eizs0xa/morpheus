@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/adr.json",
+  "title": "Architecture Decision Record",
+  "description": "Validates an ADR (Architecture Decision Record) stored under docs/decisions/. Captures context, decision, and consequences of a significant architectural choice.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "adr_id",
+    "title",
+    "status",
+    "date",
+    "context",
+    "decision",
+    "consequences"
+  ],
+  "properties": {
+    "adr_id": {
+      "type": "string",
+      "pattern": "^ADR-\\d{3}$",
+      "description": "ADR identifier of form ADR-001..ADR-999."
+    },
+    "title": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "accepted", "deprecated", "superseded"]
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "context": { "type": "string" },
+    "decision": { "type": "string" },
+    "consequences": { "type": "string" },
+    "superseded_by": {
+      "type": "string",
+      "pattern": "^ADR-\\d{3}$"
+    }
+  },
+  "examples": [
+    {
+      "adr_id": "ADR-001",
+      "title": "Use copier over cookiecutter for template rendering",
+      "status": "accepted",
+      "date": "2026-04-23",
+      "context": "We need a template engine that supports updates (re-rendering an existing project after template changes) and conditional file rendering per profile.",
+      "decision": "Adopt copier as the rendering engine invoked by the agentic CLI via a Python subprocess.",
+      "consequences": "Projects gain deterministic template upgrades. Requires Python >= 3.10 on developer machines. Cookiecutter ecosystem templates are not directly compatible."
+    }
+  ]
+}

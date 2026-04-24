@@ -1,0 +1,11 @@
+{
+  "name": "morpheus",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Morpheus agentic development platform monorepo root.",
+  "scripts": {
+    "test:integration": "node tests/run.mjs",
+    "test:cli": "cd cli && pnpm test",
+    "build:cli": "cd cli && pnpm build"
+  }
+}

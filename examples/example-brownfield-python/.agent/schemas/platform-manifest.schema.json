@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/platform-manifest.json",
+  "title": "Platform Manifest",
+  "description": "Records the Morpheus platform bootstrap state for a project: profile, hardware, project type, installed modules with versions, and provenance timestamps. Every Morpheus-scaffolded project carries a platform-manifest.json at its root.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "platform_version",
+    "profile",
+    "detected_hardware",
+    "project_type",
+    "modules",
+    "initialized_by",
+    "initialized_at",
+    "last_updated_at"
+  ],
+  "properties": {
+    "platform_version": {
+      "type": "string",
+      "description": "Semantic version of the Morpheus platform at initialization.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?(?:\\+[A-Za-z0-9.-]+)?$"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Ergonomic profile used to scaffold the project. Exactly one of the five Morpheus profiles.",
+      "enum": ["builder", "verifier", "author", "explorer", "steward"]
+    },
+    "detected_hardware": {
+      "type": "object",
+      "description": "Hardware and OS facts detected at init time.",
+      "additionalProperties": false,
+      "required": ["os", "arch"],
+      "properties": {
+        "os": {
+          "type": "string",
+          "description": "Operating system family (e.g. darwin, linux, win32)."
+        },
+        "arch": {
+          "type": "string",
+          "description": "CPU architecture (e.g. arm64, x86_64)."
+        },
+        "shell": {
+          "type": "string",
+          "description": "Shell detected at init time (e.g. zsh, bash, pwsh)."
+        }
+      }
+    },
+    "project_type": {
+      "type": "string",
+      "description": "Project classification inferred at init time.",
+      "enum": [
+        "fullstack-web",
+        "frontend-only",
+        "backend-service",
+        "data-engineering",
+        "mobile-app",
+        "library-or-sdk",
+        "new-empty",
+        "unclassified"
+      ]
+    },
+    "modules": {
+      "type": "object",
+      "description": "Installed modules keyed by module name with pinned semver version.",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?(?:\\+[A-Za-z0-9.-]+)?$"
+      }
+    },
+    "initialized_by": {
+      "type": "string",
+      "description": "Email of the user who initialized the project.",
+      "format": "email"
+    },
+    "initialized_at": {
+      "type": "string",
+      "description": "ISO-8601 timestamp of initial bootstrap.",
+      "format": "date-time"
+    },
+    "last_updated_at": {
+      "type": "string",
+      "description": "ISO-8601 timestamp of the most recent manifest update.",
+      "format": "date-time"
+    }
+  },
+  "examples": [
+    {
+      "platform_version": "0.1.0",
+      "profile": "builder",
+      "detected_hardware": {
+        "os": "darwin",
+        "arch": "arm64",
+        "shell": "zsh"
+      },
+      "project_type": "fullstack-web",
+      "modules": {
+        "core": "0.1.0",
+        "stack-node": "0.1.0",
+        "stack-react": "0.1.0",
+        "workspace-microsoft": "0.1.0",
+        "git-github": "0.1.0",
+        "pm-jira": "0.1.0"
+      },
+      "initialized_by": "ada@example.com",
+      "initialized_at": "2026-04-23T12:00:00Z",
+      "last_updated_at": "2026-04-23T12:00:00Z"
+    }
+  ]
+}

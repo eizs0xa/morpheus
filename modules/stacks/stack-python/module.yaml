@@ -1,0 +1,43 @@
+name: stack-python
+version: 0.1.0
+description: Python stack module. Provides coding and tester skills, PR gate workflow, pre-commit hook, and editor instructions for Python projects.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  skills:
+    - skills/coding-agent-python.md
+    - skills/tester-python.md
+  workflows:
+    - workflows/agent-pr-gate-python.yml.tmpl
+  hooks:
+    - hooks/pre-commit-python.sh
+  templates: []
+  schemas: []
+  instructions:
+    - instructions/python.instructions.md
+prompts:
+  - name: python_version
+    question: "Which Python version?"
+    default: "3.12"
+    choices: ["3.11", "3.12", "3.13"]
+  - name: package_manager
+    question: "Which Python package manager?"
+    default: "pip"
+    choices: ["pip", "poetry", "uv"]
+  - name: test_runner
+    question: "Which test runner?"
+    default: "pytest"
+    choices: ["pytest", "unittest"]
+  - name: linter
+    question: "Which linter?"
+    default: "ruff"
+    choices: ["ruff", "flake8"]
+detection:
+  file_markers:
+    - pyproject.toml
+    - requirements.txt
+  content_markers:
+    - file: pyproject.toml
+      contains: "python"

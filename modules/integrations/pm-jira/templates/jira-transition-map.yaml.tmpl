@@ -1,0 +1,13 @@
+# Jira transition map for project {{ jira_project_key }}.
+#
+# Each key is an artifact-chain lifecycle stage (stable, used by skills and
+# Smart Commit trailers). Each value is the exact Jira status name configured
+# in the target project's workflow. Edit the right-hand side to match your
+# Jira workflow; never edit the left-hand side without updating skills.
+transitions:
+  in_progress: "In Progress"
+  in_review_spec: "In Review - Spec"
+  in_review_plan: "In Review - Plan"
+  in_review_tasks: "In Review - Tasks"
+  ready_for_release: "Ready for Release"
+  done: "Done"

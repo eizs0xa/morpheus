@@ -1,0 +1,19 @@
+{
+  "platform_version": "0.1.0",
+  "profile": "builder",
+  "detected_hardware": {
+    "os": "darwin",
+    "arch": "arm64"
+  },
+  "project_type": "unclassified",
+  "modules": {
+    "core": "0.1.0",
+    "stack-node": "0.1.0",
+    "workspace-microsoft": "0.1.0",
+    "git-github": "0.1.0",
+    "pm-jira": "0.1.0"
+  },
+  "initialized_by": "example@morpheus.dev",
+  "initialized_at": "2026-04-24T01:08:36Z",
+  "last_updated_at": "2026-04-24T01:08:36Z"
+}

@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/tasks.json",
+  "title": "Agent Worktree Task List",
+  "description": "Validates tasks.json — an ordered list of tasks for the decomposer/initializer skills to fan out into git worktrees.",
+  "type": "array",
+  "items": { "$ref": "#/definitions/task" },
+  "definitions": {
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "description",
+        "depends_on",
+        "parallelizable",
+        "worktree_branch",
+        "estimated_tokens",
+        "skill",
+        "acceptance_checks"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^T\\d{3}$",
+          "description": "Task identifier of form T001..T999."
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^T\\d{3}$"
+          }
+        },
+        "parallelizable": { "type": "boolean" },
+        "worktree_branch": { "type": "string" },
+        "estimated_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skill": {
+          "type": "string",
+          "description": "Name of the skill that should execute this task."
+        },
+        "acceptance_checks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    }
+  },
+  "examples": [
+    [
+      {
+        "id": "T001",
+        "title": "Create JSON schemas",
+        "description": "Author all contract schemas in modules/core/schemas.",
+        "depends_on": [],
+        "parallelizable": true,
+        "worktree_branch": "feat/ws-02-schemas",
+        "estimated_tokens": 12000,
+        "skill": "coding-agent",
+        "acceptance_checks": [
+          "All schema files exist",
+          "Every file validates as draft-07",
+          "Every example validates against its schema"
+        ]
+      },
+      {
+        "id": "T002",
+        "title": "Write core skills",
+        "description": "Author spec-author, planner, decomposer skills.",
+        "depends_on": ["T001"],
+        "parallelizable": false,
+        "worktree_branch": "feat/ws-03-core-skills",
+        "estimated_tokens": 18000,
+        "skill": "coding-agent",
+        "acceptance_checks": [
+          "Every skill has YAML frontmatter",
+          "module.yaml validates"
+        ]
+      }
+    ]
+  ]
+}

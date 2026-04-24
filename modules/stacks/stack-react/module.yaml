@@ -1,0 +1,38 @@
+name: stack-react
+version: 0.1.0
+description: React stack module. Provides coding and tester skills, PR gate workflow, pre-commit hook, and editor instructions for React + TS projects.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  skills:
+    - skills/coding-agent-react.md
+    - skills/tester-react.md
+  workflows:
+    - workflows/agent-pr-gate-react.yml.tmpl
+  hooks:
+    - hooks/pre-commit-react.sh
+  templates: []
+  schemas: []
+  instructions:
+    - instructions/react.instructions.md
+prompts:
+  - name: react_version
+    question: "Which React major version?"
+    default: "19"
+    choices: ["18", "19"]
+  - name: bundler
+    question: "Which bundler or meta-framework?"
+    default: "vite"
+    choices: ["vite", "next", "webpack"]
+  - name: test_runner
+    question: "Which test runner?"
+    default: "vitest"
+    choices: ["vitest", "jest", "playwright"]
+detection:
+  file_markers:
+    - package.json
+  content_markers:
+    - file: package.json
+      contains: "\"react\""

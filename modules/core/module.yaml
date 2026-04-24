@@ -1,0 +1,49 @@
+name: core
+version: 0.1.0
+kind: core
+description: >-
+  Mandatory universal module. Provides the artifact chain, core skills, templates,
+  and base schemas every Morpheus-scaffolded project inherits.
+requires: []
+incompatible_with: []
+contributes:
+  skills:
+    - skills/spec-author.md
+    - skills/planner.md
+    - skills/decomposer.md
+    - skills/initializer.md
+    - skills/reviewer.md
+    - skills/integrator.md
+    - skills/fixer.md
+    - skills/evaluator.md
+    - skills/constitution-author.md
+    - skills/lore-reader.md
+    - skills/lore-curator.md
+  templates:
+    - templates/constitution.md.tmpl
+    - templates/CLAUDE.md.tmpl
+    - templates/AGENTS.md.tmpl
+    - templates/copilot-instructions.md.tmpl
+    - templates/feature-template/prd.md.tmpl
+    - templates/feature-template/spec.md.tmpl
+    - templates/feature-template/plan.md.tmpl
+    - templates/feature-template/tasks.json.tmpl
+  schemas:
+    - schemas/platform-manifest.schema.json
+    - schemas/module.schema.json
+    - schemas/profile.schema.json
+    - schemas/tasks.schema.json
+    - schemas/overlap-map.schema.json
+    - schemas/amendment.schema.json
+    - schemas/adr.schema.json
+  workflows: []
+  hooks: []
+prompts:
+  - name: project_name
+    question: "Project name"
+    required: true
+  - name: primary_owner_email
+    question: "Primary owner email (for CODEOWNERS and manifest)"
+    required: true
+detection:
+  file_markers: []

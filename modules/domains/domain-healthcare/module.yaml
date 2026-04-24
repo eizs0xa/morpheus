@@ -1,0 +1,15 @@
+name: domain-healthcare
+version: 0.1.0
+description: "[EXAMPLE-ONLY] Illustrative domain module showing HIPAA-related constraints. Not production-ready. Status=example."
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  instructions: []
+  skills: []
+  templates: []
+  schemas: []
+prompts: []
+detection:
+  file_markers: []

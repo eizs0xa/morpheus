@@ -1,0 +1,42 @@
+name: git-github
+version: 0.1.0
+description: >-
+  GitHub git-provider integration. Ships PR-gate, merge-queue, and release-train
+  workflows plus PR template, CODEOWNERS template, and branch-protection JSON
+  consumable by `gh api`.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with:
+  - git-gitlab
+  - git-bitbucket
+contributes:
+  skills: []
+  workflows:
+    - workflows/agent-pr-gate.yml.tmpl
+    - workflows/merge-queue.yml.tmpl
+    - workflows/release-train.yml.tmpl
+  templates:
+    - templates/pull_request_template.md.tmpl
+    - templates/CODEOWNERS.tmpl
+    - templates/branch-protection.json
+  hooks: []
+  schemas: []
+  instructions: []
+prompts:
+  - name: release_cadence
+    question: "Release cadence"
+    default: "biweekly"
+    choices:
+      - weekly
+      - biweekly
+      - monthly
+  - name: default_branch
+    question: "Default branch name"
+    default: "main"
+  - name: merge_queue_enabled
+    question: "Enable GitHub merge queue?"
+    default: true
+detection:
+  file_markers:
+    - .github/

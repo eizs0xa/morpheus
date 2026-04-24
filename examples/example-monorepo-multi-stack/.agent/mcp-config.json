@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "outlook": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-outlook"
+      ],
+      "env": {
+        "OUTLOOK_PRIMARY_CHANNEL_ID": ""
+      }
+    },
+    "teams": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-teams"
+      ],
+      "env": {
+        "TEAMS_WEBHOOK_URL": "",
+        "TEAMS_PRIMARY_CHANNEL_ID": ""
+      }
+    },
+    "onedrive": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-onedrive"
+      ],
+      "env": {
+        "ONEDRIVE_PRIMARY_CHANNEL_ID": ""
+      }
+    },
+    "jira": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-jira"
+      ],
+      "env": {
+        "JIRA_SITE": "",
+        "JIRA_PROJECT_KEY": "EXAMPLE"
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+_min_copier_version: "9.0.0"
+_answers_file: .copier-answers.yml
+_subdirectory: template
+
+# =============================================================================
+# Brownfield overlay — applies Morpheus platform scaffolding on top of an
+# existing repository WITHOUT modifying source directories.
+#
+# Writes ONLY:
+#   - .agent/                              (full)
+#   - CLAUDE.md / AGENTS.md                (new or appended)
+#   - .github/copilot-instructions.md      (new or appended)
+#   - .github/workflows/morpheus-*.yml     (prefixed to avoid collision)
+#   - .github/CODEOWNERS.morpheus-overlay  (merged by post-task script)
+#   - platform-manifest.json
+#
+# NEVER writes to src/, app/, backend/, frontend/, lib/, or any other
+# source tree. See README.md in this template for the full contract.
+# =============================================================================
+
+# ---- Variables shared with templates/new-project -----------------------------
+project_name:
+  type: str
+  help: "What is the name of this project?"
+  default: "my-project"
+
+profile:
+  type: str
+  help: "Which profile best describes the primary user of this repo?"
+  choices:
+    - builder
+    - verifier
+    - author
+    - explorer
+    - steward
+  default: builder
+
+stacks:
+  type: str
+  help: "Comma-separated list of stack modules to install (e.g. stack-node,stack-python). Leave empty for none."
+  default: ""
+
+workspace:
+  type: str
+  help: "Which office / collaboration workspace does the team use?"
+  choices:
+    - workspace-microsoft
+    - workspace-google
+  default: workspace-microsoft
+
+pm:
+  type: str
+  help: "Which project management tool is in use? (leave empty for none)"
+  choices:
+    - ""
+    - pm-jira
+  default: pm-jira
+
+git:
+  type: str
+  help: "Which git provider hosts this repo?"
+  choices:
+    - git-github
+  default: git-github
+
+jira_project_key:
+  type: str
+  help: "Jira project key (e.g. ABC). Ignored when pm is empty."
+  default: ""
+  when: "{{ pm == 'pm-jira' }}"
+
+# Optional prompts used by downstream templates. Kept in sync with new-project.
+primary_stacks:
+  type: str
+  help: "(internal) computed by overlay tooling — do not answer manually."
+  default: ""
+
+pm_tool:
+  type: str
+  help: "(internal) human-readable PM tool name."
+  default: ""
+
+git_provider:
+  type: str
+  help: "(internal) human-readable git provider name."
+  default: ""
+
+platform_version:
+  type: str
+  help: "Morpheus platform version pinned into the manifest."
+  default: "0.1.0"
+
+# Workspace-specific prompts (mirrors workspace modules).
+teams_webhook_url:
+  type: str
+  help: "Incoming webhook URL for the team's primary Teams channel."
+  default: ""
+  when: "{{ workspace == 'workspace-microsoft' }}"
+
+primary_channel_id:
+  type: str
+  help: "Primary Teams channel ID for gate approvals and CI notifications."
+  default: ""
+  when: "{{ workspace == 'workspace-microsoft' }}"
+
+primary_channel_name:
+  type: str
+  help: "Primary Google Chat / Gmail channel display name."
+  default: ""
+  when: "{{ workspace == 'workspace-google' }}"
+
+chat_space_id:
+  type: str
+  help: "Google Chat space ID for gate approvals and CI notifications."
+  default: ""
+  when: "{{ workspace == 'workspace-google' }}"
+
+# ---- Overlay-specific prompts (NOT in new-project) ---------------------------
+
+existing_conventions_preserved:
+  type: bool
+  help: >-
+    Preserve existing CLAUDE.md / AGENTS.md content by keeping an "Original"
+    section below the Morpheus-managed section? When true the preserve script
+    backs up originals and the append script merges them back in.
+  default: true
+
+consent_to_overlay:
+  type: str
+  help: >-
+    This overlay will write into .agent/, CLAUDE.md, AGENTS.md, and
+    .github/. It will NEVER touch src/, app/, backend/, frontend/, or lib/.
+    Existing files are backed up to {filename}.pre-morpheus.bak before any
+    change. Type "I UNDERSTAND" (exact, all caps) to proceed.
+  validator: "{% if consent_to_overlay != 'I UNDERSTAND' %}You must type the exact phrase 'I UNDERSTAND' to continue.{% endif %}"
+
+# ---- Copier task hooks -------------------------------------------------------
+# Tasks run from the destination directory (where the overlay is being
+# applied), not from the template directory. Scripts are invoked via bash and
+# use the Copier answer environment (COPIER_*) when they need context.
+
+_tasks:
+  - >-
+    bash "{{ _copier_conf.src_path }}/scripts/append-existing.sh"
+    --existing-conventions-preserved "{{ existing_conventions_preserved }}"
+  - >-
+    python3 "{{ _copier_conf.src_path }}/scripts/apply-profile.py"
+    --profile "{{ profile }}"
+    --dest "."
+
+# ---- Exclusions --------------------------------------------------------------
+# Belt-and-suspenders: even if a contributor accidentally places a file under
+# template/src/ or similar, copier will refuse to render it. The overlay is
+# also structured so that these paths simply do not exist in template/.
+_exclude:
+  - "src/**"
+  - "app/**"
+  - "backend/**"
+  - "frontend/**"
+  - "lib/**"
+  - "packages/**"
+  - "dist/**"
+  - "build/**"
+  - "node_modules/**"
+  - "__pycache__/**"
+  - "*.pyc"
+  - ".DS_Store"

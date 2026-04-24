@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint & Test (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Placeholder CI
+        run: |
+          echo "CI placeholder — real pipeline lands with WS-10+."
+          echo "Future: pnpm -r test && pnpm -r lint"

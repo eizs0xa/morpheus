@@ -1,0 +1,35 @@
+name: pm-jira
+version: 0.1.0
+description: >-
+  Jira project-management integration. Provides a Jira MCP server config, a
+  ticket-syncer skill (ticket -> branch -> Smart Commit -> transition), branch
+  and smart-commit enforcement workflows, a Jira status-transition map, and a
+  preflight initiative-link warning.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with:
+  - pm-linear
+contributes:
+  skills:
+    - skills/ticket-syncer-jira.md
+  workflows:
+    - workflows/jira-branch-check.yml.tmpl
+    - workflows/jira-smart-commits.yml.tmpl
+  templates:
+    - mcp-config.json.tmpl
+    - templates/jira-transition-map.yaml.tmpl
+  hooks: []
+  schemas: []
+  instructions: []
+prompts:
+  - name: jira_project_key
+    question: "Jira project key (e.g. PROJ)"
+    default: ""
+  - name: jira_site_url
+    question: "Jira site URL (e.g. company.atlassian.net)"
+    default: ""
+  - name: initiative_key
+    question: "Parent Jira Initiative key (optional, leave blank to skip)"
+    default: ""
+detection: {}

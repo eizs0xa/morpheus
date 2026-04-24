@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/profile.json",
+  "title": "Profiles Configuration",
+  "description": "Validates modules/core/profiles.yaml. There are exactly five Morpheus profiles: builder, verifier, author, explorer, steward. No sixth profile is permitted (stop-line §6.1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profiles"],
+  "properties": {
+    "profiles": {
+      "type": "object",
+      "description": "Exactly five profile definitions keyed by profile name.",
+      "minProperties": 5,
+      "maxProperties": 5,
+      "required": ["builder", "verifier", "author", "explorer", "steward"],
+      "additionalProperties": false,
+      "properties": {
+        "builder": { "$ref": "#/definitions/profile" },
+        "verifier": { "$ref": "#/definitions/profile" },
+        "author": { "$ref": "#/definitions/profile" },
+        "explorer": { "$ref": "#/definitions/profile" },
+        "steward": { "$ref": "#/definitions/profile" }
+      }
+    }
+  },
+  "definitions": {
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modules", "skills_enabled", "scaffolding", "can_commit_code"],
+      "properties": {
+        "modules": {
+          "type": "array",
+          "description": "Modules or template tokens (e.g. {selected_stacks}) included for this profile.",
+          "items": { "type": "string" }
+        },
+        "skills_enabled": {
+          "description": "Either the literal string 'all' or an array of enabled skill names.",
+          "oneOf": [
+            { "type": "string", "enum": ["all"] },
+            {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          ]
+        },
+        "scaffolding": {
+          "type": "string",
+          "enum": ["full", "partial", "prd_templates_only", "none"]
+        },
+        "can_commit_code": { "type": "boolean" },
+        "extras": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "profiles": {
+        "builder": {
+          "modules": ["core", "{selected_stacks}", "{selected_workspace}", "{selected_git}"],
+          "skills_enabled": "all",
+          "scaffolding": "full",
+          "can_commit_code": true
+        },
+        "verifier": {
+          "modules": ["core", "{selected_stacks}", "{selected_workspace}", "{selected_git}"],
+          "skills_enabled": ["tester", "reviewer", "evaluator"],
+          "scaffolding": "full",
+          "can_commit_code": true,
+          "extras": ["holdout-authoring"]
+        },
+        "author": {
+          "modules": ["core"],
+          "skills_enabled": ["spec-author", "planner", "lore-reader"],
+          "scaffolding": "prd_templates_only",
+          "can_commit_code": false
+        },
+        "explorer": {
+          "modules": ["core"],
+          "skills_enabled": ["lore-reader", "codebase-tour"],
+          "scaffolding": "none",
+          "can_commit_code": false
+        },
+        "steward": {
+          "modules": ["core", "{selected_workspace}", "{selected_git}"],
+          "skills_enabled": ["constitution-author", "lore-curator"],
+          "scaffolding": "partial",
+          "can_commit_code": true
+        }
+      }
+    }
+  ]
+}

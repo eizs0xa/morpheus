@@ -1,0 +1,5 @@
+# Morpheus CODEOWNERS
+# Every PR requires review from the matched owner(s).
+# Syntax reference: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @platform-team

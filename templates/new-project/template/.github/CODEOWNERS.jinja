@@ -1,0 +1,21 @@
+# CODEOWNERS for {{ project_name }}
+#
+# Order matters: the last matching pattern wins. Teams and individual users
+# are both accepted; GitHub expands teams at review-request time.
+
+# Default owner for everything not matched below.
+*                           {{ primary_owner_email }}
+
+# Platform-law surface. Stewards own the artifact chain and constitution.
+/.agent/                    {{ primary_owner_email }}
+/.agent/constitution.md     {{ primary_owner_email }}
+/.agent/features/           {{ primary_owner_email }}
+
+# CI and release plumbing.
+/.github/                   {{ primary_owner_email }} {{ primary_owner_email }}
+/.github/workflows/         {{ primary_owner_email }}
+
+# Add stack- and service-scoped entries below as the project grows, e.g.:
+#   /backend/                 @backend-team
+#   /frontend/                @frontend-team
+#   /infra/                   @platform-team

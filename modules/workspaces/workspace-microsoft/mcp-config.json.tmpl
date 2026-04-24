@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "outlook": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-outlook"],
+      "env": {
+        "OUTLOOK_PRIMARY_CHANNEL_ID": "{{ primary_channel_id }}"
+      }
+    },
+    "teams": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-teams"],
+      "env": {
+        "TEAMS_WEBHOOK_URL": "{{ teams_webhook_url }}",
+        "TEAMS_PRIMARY_CHANNEL_ID": "{{ primary_channel_id }}"
+      }
+    },
+    "onedrive": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-onedrive"],
+      "env": {
+        "ONEDRIVE_PRIMARY_CHANNEL_ID": "{{ primary_channel_id }}"
+      }
+    }
+  }
+}

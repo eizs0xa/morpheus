@@ -1,0 +1,19 @@
+name: workspace-microsoft
+version: 0.1.0
+description: Microsoft 365 workspace — Outlook, Teams, OneDrive MCP servers and a notifier skill posting to Teams.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with:
+  - workspace-google
+contributes:
+  skills:
+    - skills/notifier.md
+  templates:
+    - mcp-config.json.tmpl
+prompts:
+  - name: teams_webhook_url
+    question: Incoming webhook URL for the team's primary Teams channel?
+  - name: primary_channel_id
+    question: Primary Teams channel ID for gate approvals and CI notifications?
+detection: {}

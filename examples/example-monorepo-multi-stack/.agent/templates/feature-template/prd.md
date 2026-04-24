@@ -1,0 +1,68 @@
+# PRD: <feature name>
+
+**Feature slug:** <feature_slug>
+**Author:** <named human>
+**Date:** <YYYY-MM-DD>
+**Target release:** <release or sprint>
+
+---
+
+## 1. Problem
+
+One or two paragraphs. What problem are we solving? For whom? What evidence suggests this
+problem is worth solving now?
+
+- Pain point: <bullet>
+- Evidence: <bullet — data, interviews, tickets, support load>
+- Cost of inaction: <bullet>
+
+## 2. Users
+
+Who will use this feature? Name roles, not job titles.
+
+- **Primary user:** <role> — <what they want>
+- **Secondary user:** <role> — <what they want>
+- **Stakeholder (non-user):** <role> — <what they care about>
+
+## 3. Success criteria
+
+Observable, measurable outcomes. Tie each to a metric and a target.
+
+- <metric> from <baseline> to <target> by <date>
+- <metric> from <baseline> to <target> by <date>
+
+## 4. Scope
+
+Requirements, ranked as **Must**, **Should**, or **Could**. Every Must- and Should-have
+becomes a numbered requirement in the downstream `spec.md`.
+
+### Must have
+
+1. <requirement>
+2. <requirement>
+
+### Should have
+
+1. <requirement>
+
+### Could have
+
+1. <requirement>
+
+## 5. Out of scope
+
+Things we are explicitly **not** doing in this feature. Lift these into the spec's
+`Out of scope` section verbatim.
+
+- <bullet>
+- <bullet>
+
+## 6. Open questions
+
+- <question — name the person or team who should answer>
+- <question>
+
+---
+
+*Generated from the Morpheus `feature-template/prd.md.tmpl` template. Delete this footer and
+the angle-brackets once filled in.*

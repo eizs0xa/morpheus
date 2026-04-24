@@ -1,0 +1,63 @@
+name: agent-pr-gate-react
+
+on:
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: React PR Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      REACT_VERSION: "19"
+      BUNDLER: "vite"
+      TEST_RUNNER: "vitest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify React version
+        run: |
+          node -e "const v='19'; const r=require('react/package.json').version; if(!r.startsWith(v+'.')){console.error('React major mismatch: want '+v+', got '+r); process.exit(1);}"
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        env:
+          RUNNER: "vitest"
+        run: |
+          case "vitest" in
+            vitest)     pnpm exec vitest run --coverage ;;
+            jest)       pnpm exec jest --coverage ;;
+            playwright) pnpm exec playwright install --with-deps && pnpm exec playwright test ;;
+            *) echo "Unknown test runner: vitest" && exit 1 ;;
+          esac
+
+      - name: Build
+        run: |
+          case "vite" in
+            vite)    pnpm run build ;;
+            next)    pnpm run build ;;
+            webpack) pnpm run build ;;
+            *) echo "Unknown bundler: vite" && exit 1 ;;
+          esac

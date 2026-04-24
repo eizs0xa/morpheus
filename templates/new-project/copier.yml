@@ -1,0 +1,181 @@
+# Morpheus `new-project` template — copier configuration.
+#
+# Render with:
+#   pipx install copier
+#   copier copy templates/new-project /path/to/new-project
+#
+# Or with answers file:
+#   copier copy --data-file answers.yml templates/new-project /path/to/new-project
+
+_min_copier_version: "9.0.0"
+_answers_file: .copier-answers.yml
+_subdirectory: template
+
+# Post-generation pruning: removes files not applicable to the chosen profile,
+# pm_tool, workspace, or stacks selection. Idempotent.
+_tasks:
+  - ["python3", "{{ _copier_conf.src_path }}/scripts/apply-profile.py",
+     "--profile", "{{ profile }}",
+     "--pm", "{{ pm_tool }}",
+     "--workspace", "{{ workspace }}",
+     "--stacks", "{{ stacks | join(',') if stacks else '' }}"]
+
+# ---------------------------------------------------------------------------
+# Required prompts
+# ---------------------------------------------------------------------------
+
+project_name:
+  type: str
+  help: "Project name (lowercase kebab-case, no spaces)."
+  validator: >-
+    {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}
+    Project name must be lowercase kebab-case (e.g. my-project).
+    {% endif %}
+
+project_description:
+  type: str
+  help: "One-line description of the project."
+
+profile:
+  type: str
+  help: "Scaffolding profile (see CONSTITUTION §6.1)."
+  default: builder
+  choices:
+    - builder
+    - verifier
+    - author
+    - explorer
+    - steward
+
+primary_owner_email:
+  type: str
+  help: "Primary owner email (for manifest provenance and CODEOWNERS seed)."
+  validator: >-
+    {% if not (primary_owner_email | regex_search('^[^@\s]+@[^@\s]+\.[^@\s]+$')) %}
+    Enter a valid email address.
+    {% endif %}
+
+workspace:
+  type: str
+  help: "Workspace integration."
+  default: workspace-microsoft
+  choices:
+    - workspace-microsoft
+    - workspace-google
+
+git_provider:
+  type: str
+  help: "Git provider integration."
+  default: git-github
+  choices:
+    - git-github
+
+pm_tool:
+  type: str
+  help: "Project-management integration (0..1)."
+  default: pm-jira
+  choices:
+    - pm-jira
+    - none
+
+stacks:
+  type: str
+  help: "Stacks to install (0..N). Select with spacebar."
+  multiselect: true
+  default: []
+  choices:
+    - stack-node
+    - stack-python
+    - stack-react
+
+hardware_os:
+  type: str
+  help: "Detected operating system family."
+  default: darwin
+  choices:
+    - darwin
+    - linux
+    - win32
+
+release_cadence:
+  type: str
+  help: "Release cadence (used by release-train workflow)."
+  default: weekly
+  choices:
+    - weekly
+    - biweekly
+    - monthly
+
+# ---------------------------------------------------------------------------
+# Conditional prompts — only asked when predecessor choices require them
+# ---------------------------------------------------------------------------
+
+jira_project_key:
+  type: str
+  help: "Jira project key (e.g. PROJ)."
+  default: "PROJ"
+  when: "{{ pm_tool == 'pm-jira' }}"
+
+jira_site_url:
+  type: str
+  help: "Jira site URL (e.g. company.atlassian.net)."
+  default: "example.atlassian.net"
+  when: "{{ pm_tool == 'pm-jira' }}"
+
+initiative_key:
+  type: str
+  help: "Parent Jira Initiative key (optional; leave blank to skip)."
+  default: ""
+  when: "{{ pm_tool == 'pm-jira' }}"
+
+teams_webhook_url:
+  type: str
+  help: "Incoming webhook URL for the team's primary Teams channel."
+  default: ""
+  when: "{{ workspace == 'workspace-microsoft' }}"
+
+primary_channel_id:
+  type: str
+  help: "Primary Teams channel ID."
+  default: ""
+  when: "{{ workspace == 'workspace-microsoft' }}"
+
+chat_space_id:
+  type: str
+  help: "Google Chat space ID (e.g. spaces/AAAA)."
+  default: ""
+  when: "{{ workspace == 'workspace-google' }}"
+
+primary_channel_name:
+  type: str
+  help: "Human-readable name of the primary Chat channel."
+  default: "general"
+  when: "{{ workspace == 'workspace-google' }}"
+
+node_version:
+  type: str
+  help: "Node.js version."
+  default: "20"
+  choices: ["18", "20", "22"]
+  when: "{{ 'stack-node' in stacks or 'stack-react' in stacks }}"
+
+package_manager_node:
+  type: str
+  help: "Node package manager."
+  default: "pnpm"
+  choices: ["npm", "pnpm", "yarn"]
+  when: "{{ 'stack-node' in stacks or 'stack-react' in stacks }}"
+
+python_version:
+  type: str
+  help: "Python version."
+  default: "3.12"
+  choices: ["3.11", "3.12", "3.13"]
+  when: "{{ 'stack-python' in stacks }}"
+
+package_manager_python:
+  type: str
+  help: "Python package manager."
+  default: "pip"
+  choices: ["pip", "poetry", "uv"]
+  when: "{{ 'stack-python' in stacks }}"

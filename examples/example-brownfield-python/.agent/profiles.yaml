@@ -1,0 +1,46 @@
+# Morpheus profiles configuration.
+#
+# Defines the five canonical profiles: builder, verifier, author, explorer, steward.
+# Per CONSTITUTION §6.1 (stop-line): exactly five profiles — no sixth is permitted.
+#
+# Template tokens expanded by the CLI at `agentic init`:
+#   {selected_stacks} — list of stack module names chosen interactively
+#   {workspace}       — workspace module name (e.g. vscode, cursor, claude-code)
+#   {pm}              — project-management integration (e.g. jira, linear, github-projects)
+#   {git}             — git-provider integration (e.g. github, gitlab, azure-devops)
+#
+# The literal strings above are placeholders; after expansion, modules[] contains
+# only concrete module names resolvable against the registry.
+
+profiles:
+  builder:
+    modules: [core, "{selected_stacks}", "{workspace}", "{pm}", "{git}"]
+    skills_enabled: all
+    scaffolding: full
+    can_commit_code: true
+
+  verifier:
+    modules: [core, "{selected_stacks}", "{workspace}", "{pm}", "{git}"]
+    skills_enabled: [evaluator, reviewer, tester, spec-author-read, planner-read]
+    scaffolding: partial
+    can_commit_code: true
+    extras: [holdout_authoring]
+
+  author:
+    modules: [core, "{workspace}", "{pm}"]
+    skills_enabled: [spec-author, decomposer-read]
+    scaffolding: prd_templates_only
+    can_commit_code: false
+
+  explorer:
+    modules: [core-readonly]
+    skills_enabled: [lore-reader]
+    scaffolding: none
+    can_commit_code: false
+
+  steward:
+    modules: [core, "{selected_stacks}", "{workspace}", "{pm}", "{git}", core-steward]
+    skills_enabled: all
+    scaffolding: full
+    can_commit_code: true
+    extras: [constitution_author, lore_curator, platform_migrator]

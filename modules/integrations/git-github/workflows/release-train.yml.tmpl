@@ -1,0 +1,77 @@
+name: Release train
+on:
+  schedule:
+    # Cadence: {{ release_cadence }}
+    {%- if release_cadence == "weekly" %}
+    - cron: "0 15 * * 1"       # Mondays 15:00 UTC
+    {%- elif release_cadence == "monthly" %}
+    - cron: "0 15 1 * *"       # 1st of the month 15:00 UTC
+    {%- else %}
+    - cron: "0 15 * * 1/2"     # every other Monday 15:00 UTC (biweekly default)
+    {%- endif %}
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  cut-release-branch:
+    name: Cut release branch from {{ default_branch }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: "{{ default_branch }}"
+          fetch-depth: 0
+
+      - name: Compute release branch name
+        id: name
+        run: |
+          set -euo pipefail
+          year=$(date -u +%Y)
+          week=$(date -u +%V)
+          branch="release/${year}.${week}"
+          echo "branch=${branch}" >> "${GITHUB_OUTPUT}"
+          echo "Release branch: ${branch}"
+
+      - name: Create release branch
+        env:
+          BRANCH: {% raw %}${{ steps.name.outputs.branch }}{% endraw %}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin "${BRANCH}" >/dev/null 2>&1; then
+            echo "Release branch ${BRANCH} already exists; skipping creation."
+          else
+            git push origin "HEAD:refs/heads/${BRANCH}"
+          fi
+
+      - name: Notify release
+        env:
+          BRANCH: {% raw %}${{ steps.name.outputs.branch }}{% endraw %}
+        run: |
+          # The notifier skill (provided by the active workspace module) is
+          # invoked by the CLI; this workflow just announces intent. See
+          # `modules/workspaces/*/skills/notifier.md`.
+          echo "notifier skill will announce release branch ${BRANCH}"
+
+  close-stale-release-branches:
+    name: Close release branches older than 14 days
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete stale release branches
+        run: |
+          set -euo pipefail
+          cutoff_epoch=$(date -u -d '14 days ago' +%s 2>/dev/null || date -u -v-14d +%s)
+          git for-each-ref --format='%(refname:short) %(committerdate:unix)' refs/remotes/origin/release/ \
+            | while read -r ref ts; do
+                short="${ref#origin/}"
+                if [[ "${ts}" -lt "${cutoff_epoch}" ]]; then
+                  echo "Closing stale release branch: ${short}"
+                  git push origin --delete "${short}" || true
+                fi
+              done

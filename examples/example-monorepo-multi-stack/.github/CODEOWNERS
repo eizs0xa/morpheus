@@ -1,0 +1,21 @@
+# CODEOWNERS for example-monorepo-multi-stack
+#
+# Order matters: the last matching pattern wins. Teams and individual users
+# are both accepted; GitHub expands teams at review-request time.
+
+# Default owner for everything not matched below.
+*                           example@morpheus.dev
+
+# Platform-law surface. Stewards own the artifact chain and constitution.
+/.agent/                    example@morpheus.dev
+/.agent/constitution.md     example@morpheus.dev
+/.agent/features/           example@morpheus.dev
+
+# CI and release plumbing.
+/.github/                   example@morpheus.dev example@morpheus.dev
+/.github/workflows/         example@morpheus.dev
+
+# Add stack- and service-scoped entries below as the project grows, e.g.:
+#   /backend/                 @backend-team
+#   /frontend/                @frontend-team
+#   /infra/                   @platform-team

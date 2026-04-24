@@ -1,0 +1,33 @@
+name: Jira branch check
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  enforce-jira-branch:
+    name: Enforce Jira branch naming
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          PROJECT_KEY: "EXAMPLE"
+        run: |
+          set -euo pipefail
+          echo "Head branch: ${HEAD_REF}"
+          echo "Jira project key: ${PROJECT_KEY}"
+
+          if [[ "${HEAD_REF}" =~ ^hotfix/ ]]; then
+            echo "OK: hotfix branch exempt from Jira key requirement."
+            exit 0
+          fi
+
+          pattern="${PROJECT_KEY}-[0-9]+"
+          if [[ "${HEAD_REF}" =~ ${pattern} ]]; then
+            echo "OK: branch contains Jira key matching ${pattern}."
+            exit 0
+          fi
+
+          echo "::error::Branch '${HEAD_REF}' does not contain a Jira key."
+          echo "::error::Expected pattern: <type>/${PROJECT_KEY}-<NNNN>-<slug> or hotfix/<slug>."
+          exit 1

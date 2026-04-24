@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/overlap-map.json",
+  "title": "Task Overlap Map",
+  "description": "Validates an overlap-map.json produced by the decomposer skill. Enumerates pairs of tasks that touch overlapping files, along with a resolution strategy (serialize, merge-coordinator, file-locks, etc.).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tasks", "overlaps"],
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "description": "All task ids covered by this overlap map.",
+      "items": {
+        "type": "string",
+        "pattern": "^T\\d{3}$"
+      }
+    },
+    "overlaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["task_a", "task_b", "files", "resolution_strategy"],
+        "properties": {
+          "task_a": {
+            "type": "string",
+            "pattern": "^T\\d{3}$"
+          },
+          "task_b": {
+            "type": "string",
+            "pattern": "^T\\d{3}$"
+          },
+          "files": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "resolution_strategy": {
+            "type": "string",
+            "description": "How to resolve the overlap (e.g. 'serialize', 'merge-coordinator', 'file-locks', 'split-task')."
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "tasks": ["T001", "T002", "T003"],
+      "overlaps": [
+        {
+          "task_a": "T001",
+          "task_b": "T002",
+          "files": ["modules/core/module.yaml"],
+          "resolution_strategy": "serialize"
+        },
+        {
+          "task_a": "T002",
+          "task_b": "T003",
+          "files": ["CHANGELOG.md", "README.md"],
+          "resolution_strategy": "merge-coordinator"
+        }
+      ]
+    }
+  ]
+}

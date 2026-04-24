@@ -1,0 +1,19 @@
+name: workspace-google
+version: 0.1.0
+description: Google Workspace — Gmail, Google Chat, Drive MCP servers and a notifier skill posting to Chat.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with:
+  - workspace-microsoft
+contributes:
+  skills:
+    - skills/notifier.md
+  templates:
+    - mcp-config.json.tmpl
+prompts:
+  - name: chat_space_id
+    question: Google Chat space ID for the team's primary channel (e.g. spaces/AAAA)?
+  - name: primary_channel_name
+    question: Human-readable name of the primary Chat channel (e.g. general)?
+detection: {}

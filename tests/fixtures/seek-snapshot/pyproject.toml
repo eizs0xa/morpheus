@@ -1,0 +1,14 @@
+[project]
+name = "mms-daaa-gov-rfp-web-backend"
+version = "0.0.1"
+description = "Backend pyproject stub mirroring SEEK's Flask service. Trimmed to what brownfield detection needs."
+requires-python = ">=3.11"
+dependencies = [
+  "flask",
+  "pydantic",
+  "pyodbc",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']

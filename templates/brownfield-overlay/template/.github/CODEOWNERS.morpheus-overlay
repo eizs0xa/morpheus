@@ -1,0 +1,15 @@
+# -- morpheus additions --
+# Appended by the Morpheus brownfield overlay. The post-task script
+# (scripts/append-existing.sh) merges this block into an existing CODEOWNERS
+# when one is detected. If no CODEOWNERS pre-existed, this file is renamed to
+# CODEOWNERS. Either way, the `.morpheus-overlay` suffix disappears after
+# post-task runs.
+
+# Platform-managed agent configuration — stewards own these paths.
+/.agent/                    @stewards
+/platform-manifest.json     @stewards
+/.github/workflows/morpheus-*  @stewards
+/CLAUDE.md                  @stewards
+/AGENTS.md                  @stewards
+/.github/copilot-instructions.md  @stewards
+# -- end morpheus additions --

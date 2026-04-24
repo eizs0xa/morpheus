@@ -1,0 +1,40 @@
+# Morpheus-managed workflow — added by the brownfield overlay.
+# Named `morpheus-*` to avoid collision with any pre-existing workflow file.
+# Safe to extend; do not remove the `name:` prefix.
+name: morpheus-constitution-check
+
+on:
+  pull_request:
+    branches: ["**"]
+    paths:
+      - ".agent/**"
+      - "platform-manifest.json"
+      - "CLAUDE.md"
+      - "AGENTS.md"
+      - ".github/copilot-instructions.md"
+      - ".github/workflows/morpheus-*.yml"
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  constitution-check:
+    name: Morpheus constitution gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify platform-manifest.json is valid JSON
+        run: |
+          python3 -c "import json, sys; json.load(open('platform-manifest.json'))"
+
+      - name: Verify .agent/constitution.md exists and is non-empty
+        run: |
+          test -s .agent/constitution.md
+
+      - name: Forbid hand-edits to platform-managed paths on non-steward PRs
+        run: |
+          echo "Placeholder: CODEOWNERS review on stewards paths is enforced by branch protection."

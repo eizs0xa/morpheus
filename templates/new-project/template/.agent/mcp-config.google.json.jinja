@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "gmail": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gmail"],
+      "env": {
+        "GMAIL_PRIMARY_CHANNEL_NAME": "{{ primary_channel_name }}"
+      }
+    },
+    "googlechat": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-googlechat"],
+      "env": {
+        "GOOGLECHAT_SPACE_ID": "{{ chat_space_id }}",
+        "GOOGLECHAT_PRIMARY_CHANNEL_NAME": "{{ primary_channel_name }}"
+      }
+    },
+    "drive": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-drive"],
+      "env": {
+        "DRIVE_PRIMARY_CHANNEL_NAME": "{{ primary_channel_name }}"
+      }
+    }
+  }
+}

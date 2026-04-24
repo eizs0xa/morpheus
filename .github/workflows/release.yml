@@ -1,0 +1,35 @@
+name: release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install copier
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: cd cli && pnpm install --frozen-lockfile
+      - run: cd cli && pnpm build
+      - run: cd cli && pnpm test
+      - run: pnpm test:integration
+      - name: Extract changelog entry
+        id: changelog
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v ver="$VERSION" '/^## \['ver'\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md > RELEASE_NOTES.md
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          name: "Morpheus v${{ steps.changelog.outputs.version }}"
+          tag_name: ${{ github.ref_name }}

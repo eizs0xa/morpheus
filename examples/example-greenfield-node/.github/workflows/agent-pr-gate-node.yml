@@ -1,0 +1,49 @@
+name: agent-pr-gate-node
+
+on:
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Node PR Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: |
+          case "pnpm" in
+            pnpm) pnpm install --frozen-lockfile ;;
+            yarn) yarn install --immutable ;;
+            npm)  npm ci ;;
+            *) echo "Unknown package manager: pnpm" && exit 1 ;;
+          esac
+
+      - name: Lint
+        run: "pnpm run lint"
+
+      - name: Typecheck
+        run: "pnpm run typecheck"
+
+      - name: Test
+        env:
+          TEST_RUNNER: "vitest"
+        run: "pnpm run test -- --reporter=default"
+
+      - name: Build
+        run: "pnpm run build"

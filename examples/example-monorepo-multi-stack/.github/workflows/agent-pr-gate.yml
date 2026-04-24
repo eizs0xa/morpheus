@@ -1,0 +1,81 @@
+name: Agent PR gate
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - "main"
+
+jobs:
+  artifact-chain-lint:
+    name: Artifact chain lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify feature folder artifacts
+        run: |
+          set -euo pipefail
+          # Each feature folder under .agent/features/<slug>/ must carry the
+          # canonical artifact chain. Missing artifacts block the PR.
+          required=(prd.md spec.md plan.md tasks.json)
+          missing=0
+          shopt -s nullglob
+          for dir in .agent/features/*/; do
+            slug=$(basename "${dir}")
+            for f in "${required[@]}"; do
+              if [[ ! -f "${dir}${f}" ]]; then
+                echo "::error file=${dir}${f}::Missing artifact '${f}' for feature '${slug}'."
+                missing=$((missing + 1))
+              fi
+            done
+          done
+          if [[ "${missing}" -gt 0 ]]; then
+            echo "::error::Artifact-chain lint failed: ${missing} missing file(s)."
+            exit 1
+          fi
+          echo "Artifact-chain lint OK."
+
+  constitution-drift:
+    name: Constitution drift check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Diff .agent/constitution.md against last release tag
+        run: |
+          set -euo pipefail
+          if [[ ! -f .agent/constitution.md ]]; then
+            echo "::warning::No .agent/constitution.md found; skipping drift check."
+            exit 0
+          fi
+          last_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1 || true)
+          if [[ -z "${last_tag}" ]]; then
+            echo "No prior release tag; skipping drift check."
+            exit 0
+          fi
+          if git diff --quiet "${last_tag}" -- .agent/constitution.md; then
+            echo "Constitution unchanged since ${last_tag}."
+          else
+            echo "::warning::Constitution changed since ${last_tag}. An amendment ADR may be required."
+            git --no-pager diff "${last_tag}" -- .agent/constitution.md | head -n 200
+          fi
+
+  reviewer-skill:
+    name: Reviewer skill (placeholder)
+    needs: [artifact-chain-lint, constitution-drift]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke reviewer skill
+        run: |
+          # Placeholder: downstream CLI (WS-11) wires this step to the
+          # `reviewer` core skill. For v0.1.0 this is a no-op that records
+          # intent so the job graph is stable.
+          echo "reviewer-skill invocation placeholder"
+
+  merge-queue-ready:
+    name: Merge-queue readiness gate
+    needs: [artifact-chain-lint, constitution-drift, reviewer-skill]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report readiness
+        run: echo "PR is ready for the merge queue."

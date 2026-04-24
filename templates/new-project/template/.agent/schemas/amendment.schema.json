@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/amendment.json",
+  "title": "Constitutional Amendment",
+  "description": "Validates a proposed amendment to a constitution (platform or project). Amendments are tracked as structured records alongside the ADR that justifies them.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "amendment_id",
+    "proposed_by",
+    "proposed_at",
+    "target_section",
+    "rationale",
+    "diff",
+    "reviewed_by",
+    "status"
+  ],
+  "properties": {
+    "amendment_id": {
+      "type": "string",
+      "description": "Stable identifier for the amendment."
+    },
+    "proposed_by": {
+      "type": "string",
+      "description": "Email or handle of the proposer."
+    },
+    "proposed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "target_section": {
+      "type": "string",
+      "description": "Section of the constitution being amended (e.g. '§6.4')."
+    },
+    "rationale": { "type": "string" },
+    "diff": {
+      "type": "string",
+      "description": "Unified-diff text of the proposed change."
+    },
+    "reviewed_by": {
+      "type": "array",
+      "description": "Reviewers who have signed off (or abstained).",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "approved", "rejected", "superseded"]
+    }
+  },
+  "examples": [
+    {
+      "amendment_id": "AMD-001",
+      "proposed_by": "ada@example.com",
+      "proposed_at": "2026-04-23T09:00:00Z",
+      "target_section": "§4 Versioning",
+      "rationale": "Clarify that prerelease tags are allowed on platform versions.",
+      "diff": "--- a/CONSTITUTION.md\n+++ b/CONSTITUTION.md\n@@\n-MAJOR (`X.0.0`)\n+MAJOR (`X.0.0`) or `X.0.0-rc.N`\n",
+      "reviewed_by": ["grace@example.com", "alan@example.com"],
+      "status": "proposed"
+    }
+  ]
+}

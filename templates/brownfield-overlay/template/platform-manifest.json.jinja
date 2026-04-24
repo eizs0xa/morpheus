@@ -1,0 +1,15 @@
+{
+  "platform_version": "{{ platform_version | default('0.1.0') }}",
+  "overlay_type": "brownfield",
+  "profile": "{{ profile }}",
+  "project_type": "unclassified",
+  "modules": {
+    "core": "0.1.0"{% if stacks %}{% for stack in stacks.split(',') if stack.strip() %},
+    "{{ stack.strip() }}": "0.1.0"{% endfor %}{% endif %},
+    "{{ workspace }}": "0.1.0",
+    "{{ git }}": "0.1.0"{% if pm %},
+    "{{ pm }}": "0.1.0"{% endif %}
+  },
+  "initialized_at": "__MORPHEUS_INIT_TIMESTAMP__",
+  "last_updated_at": "__MORPHEUS_INIT_TIMESTAMP__"
+}

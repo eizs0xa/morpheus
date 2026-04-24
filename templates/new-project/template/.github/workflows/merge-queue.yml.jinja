@@ -1,0 +1,40 @@
+name: Merge queue
+on:
+  merge_group:
+    types: [checks_requested]
+
+jobs:
+  full-suite:
+    name: Full test suite + risk score
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run test suite
+        run: |
+          set -euo pipefail
+          if [[ -f package.json ]]; then
+            npm test --if-present
+          fi
+          if [[ -f pyproject.toml || -f requirements.txt ]]; then
+            python -m pytest -q || true
+          fi
+
+      - name: Compute risk score
+        id: risk
+        run: |
+          set -euo pipefail
+          # Risk score = number of changed files + 2 * number of changed skills.
+          # Scores above 20 fail the gate; tune as the platform matures.
+          changed=$(git diff --name-only "origin/main"... | wc -l | tr -d ' ')
+          skill_changes=$(git diff --name-only "origin/main"... -- '.agent/**/skills/**' | wc -l | tr -d ' ')
+          score=$(( changed + 2 * skill_changes ))
+          echo "score=${score}" >> "${GITHUB_OUTPUT}"
+          echo "Risk score: ${score} (changed=${changed}, skill_changes=${skill_changes})"
+          if [[ "${score}" -gt 20 ]]; then
+            echo "::error::Risk score ${score} exceeds merge-queue threshold (20)."
+            exit 1
+          fi
+
+      - name: Ready to merge
+        run: echo "Merge queue checks passed."

@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/module.json",
+  "title": "Module Manifest",
+  "description": "Validates a Morpheus module.yaml. Every module (core, stack, workspace, integration, domain) ships a module.yaml that declares identity, dependencies, incompatibilities, contributions, prompts, detection, migrations, and breaking changes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "version", "description"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique module name (kebab-case).",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of this module.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?(?:\\+[A-Za-z0-9.-]+)?$"
+    },
+    "description": {
+      "type": "string",
+      "description": "One-line description of the module."
+    },
+    "requires": {
+      "type": "array",
+      "description": "Other modules this module depends on.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "version_range"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "version_range": {
+            "type": "string",
+            "description": "Semver range expression (e.g. '>= 0.1.0', '^0.1.0')."
+          }
+        }
+      }
+    },
+    "incompatible_with": {
+      "type": "array",
+      "description": "Modules that cannot coexist with this one.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      }
+    },
+    "contributes": {
+      "type": "object",
+      "description": "Artifacts this module adds to a scaffolded project.",
+      "additionalProperties": false,
+      "properties": {
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "workflows": { "type": "array", "items": { "type": "string" } },
+        "hooks": { "type": "array", "items": { "type": "string" } },
+        "templates": { "type": "array", "items": { "type": "string" } },
+        "schemas": { "type": "array", "items": { "type": "string" } },
+        "instructions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "prompts": {
+      "type": "array",
+      "description": "Prompts surfaced during `agentic init` when this module is selected.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "question"],
+        "properties": {
+          "name": { "type": "string" },
+          "question": { "type": "string" },
+          "default": {},
+          "choices": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "detection": {
+      "type": "object",
+      "description": "Auto-detection markers for this module.",
+      "additionalProperties": false,
+      "properties": {
+        "file_markers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "content_markers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "contains"],
+            "properties": {
+              "file": { "type": "string" },
+              "contains": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "migrations": {
+      "type": "object",
+      "description": "Map of semver-range keys to migration script paths.",
+      "additionalProperties": { "type": "string" }
+    },
+    "breaking_changes": {
+      "type": "object",
+      "description": "Map of version keys to breaking-change metadata.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description", "migration_script", "deprecation_notice_since"],
+        "properties": {
+          "description": { "type": "string" },
+          "migration_script": { "type": "string" },
+          "deprecation_notice_since": { "type": "string" }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "stack-python",
+      "version": "0.1.0",
+      "description": "Python stack: pytest, black, ruff, and SonarQube defaults.",
+      "requires": [
+        { "name": "core", "version_range": ">= 0.1.0" }
+      ],
+      "incompatible_with": [],
+      "contributes": {
+        "skills": ["coding-agent-python.md", "tester-python.md"],
+        "workflows": ["agent-pr-gate-python.yml.tmpl"],
+        "hooks": ["pre-commit-python.sh"],
+        "templates": [],
+        "schemas": [],
+        "instructions": ["python.instructions.md"]
+      },
+      "prompts": [
+        {
+          "name": "python_version",
+          "question": "Which Python version?",
+          "default": "3.12",
+          "choices": ["3.11", "3.12", "3.13"]
+        }
+      ],
+      "detection": {
+        "file_markers": ["pyproject.toml", "requirements.txt"],
+        "content_markers": [
+          { "file": "pyproject.toml", "contains": "[tool.poetry]" }
+        ]
+      },
+      "migrations": {
+        ">=0.1.0 <0.2.0": "migrations/0.1-to-0.2.ts"
+      },
+      "breaking_changes": {
+        "0.2.0": {
+          "description": "Renamed skill coding-agent-python.md to coder-python.md.",
+          "migration_script": "migrations/rename-coding-agent.ts",
+          "deprecation_notice_since": "0.1.5"
+        }
+      }
+    }
+  ]
+}

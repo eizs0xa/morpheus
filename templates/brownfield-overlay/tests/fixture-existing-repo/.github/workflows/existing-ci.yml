@@ -1,0 +1,12 @@
+name: existing-ci
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "pre-existing CI is untouched"

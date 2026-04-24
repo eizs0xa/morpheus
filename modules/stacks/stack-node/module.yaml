@@ -1,0 +1,38 @@
+name: stack-node
+version: 0.1.0
+description: Node.js + TypeScript stack module. Provides coding and tester skills, PR gate workflow, pre-commit hook, and editor instructions for Node+TS projects.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  skills:
+    - skills/coding-agent-node.md
+    - skills/tester-node.md
+  workflows:
+    - workflows/agent-pr-gate-node.yml.tmpl
+  hooks:
+    - hooks/pre-commit-node.sh
+  templates: []
+  schemas: []
+  instructions:
+    - instructions/node.instructions.md
+prompts:
+  - name: node_version
+    question: "Which Node.js version?"
+    default: "20"
+    choices: ["18", "20", "22"]
+  - name: package_manager
+    question: "Which Node package manager?"
+    default: "pnpm"
+    choices: ["npm", "pnpm", "yarn"]
+  - name: test_runner
+    question: "Which test runner?"
+    default: "vitest"
+    choices: ["vitest", "jest", "node:test"]
+detection:
+  file_markers:
+    - package.json
+  content_markers:
+    - file: package.json
+      contains: "\"typescript\""

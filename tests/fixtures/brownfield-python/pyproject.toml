@@ -1,0 +1,13 @@
+[project]
+name = "brownfield-python-fixture"
+version = "0.0.1"
+description = "Minimal existing python project used as a brownfield-overlay test fixture."
+requires-python = ">=3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

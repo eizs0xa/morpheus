@@ -1,0 +1,49 @@
+name: agent-pr-gate-node
+
+on:
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Node PR Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "{{ node_version }}"
+          cache: "{{ package_manager_node }}"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: |
+          case "{{ package_manager_node }}" in
+            pnpm) pnpm install --frozen-lockfile ;;
+            yarn) yarn install --immutable ;;
+            npm)  npm ci ;;
+            *) echo "Unknown package manager: {{ package_manager_node }}" && exit 1 ;;
+          esac
+
+      - name: Lint
+        run: "{{ package_manager_node }} run lint"
+
+      - name: Typecheck
+        run: "{{ package_manager_node }} run typecheck"
+
+      - name: Test
+        env:
+          TEST_RUNNER: "vitest"
+        run: "{{ package_manager_node }} run test -- --reporter=default"
+
+      - name: Build
+        run: "{{ package_manager_node }} run build"

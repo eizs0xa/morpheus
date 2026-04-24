@@ -1,0 +1,21 @@
+{
+  "platform_version": "0.1.0",
+  "profile": "{{ profile }}",
+  "detected_hardware": {
+    "os": "{{ hardware_os }}",
+    "arch": "{{ hardware_arch | default('arm64') }}"
+  },
+  "project_type": "{{ project_type | default('unclassified') }}",
+  "modules": {
+    "core": "0.1.0"{% if 'stack-node' in stacks %},
+    "stack-node": "0.1.0"{% endif %}{% if 'stack-python' in stacks %},
+    "stack-python": "0.1.0"{% endif %}{% if 'stack-react' in stacks %},
+    "stack-react": "0.1.0"{% endif %},
+    "{{ workspace }}": "0.1.0",
+    "{{ git_provider }}": "0.1.0"{% if pm_tool != 'none' %},
+    "{{ pm_tool }}": "0.1.0"{% endif %}
+  },
+  "initialized_by": "{{ primary_owner_email }}",
+  "initialized_at": "__NOW__",
+  "last_updated_at": "__NOW__"
+}
