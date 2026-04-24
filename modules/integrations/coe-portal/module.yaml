@@ -1,0 +1,35 @@
+name: coe-portal
+version: 0.1.0
+kind: integration
+description: >-
+  CoE Portal adapter. Read/write bridge between a Morpheus-scaffolded project
+  and the enterprise AI/MLOps Center of Excellence portal. Pushes manifest and
+  artifact-chain state to the Agent Registry and Demand Intake on every merge
+  to the default branch; pulls playbooks and standards on init.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+  - name: governance-adlc
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  skills:
+    - skills/registry-sync.md
+    - skills/portal-pull.md
+  workflows:
+    - workflows/coe-registry-sync.yml.tmpl
+  templates:
+    - templates/agent-registry-card.md.tmpl
+  schemas: []
+  hooks:
+    - git.on_merge_to_default
+    - artifact_chain.evaluation.on_publish
+prompts:
+  - name: coe_portal_base_url
+    question: "CoE Portal base URL"
+    default: "https://coe.internal.example.com"
+  - name: coe_portal_api_token_env
+    question: "Env var name holding the CoE Portal API token"
+    default: "COE_PORTAL_TOKEN"
+detection:
+  file_markers: []

@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/template.json",
+  "title": "Morpheus Template Manifest",
+  "description": "Validates a template.yaml shipped under templates/ or by a module. Supports the AI Adoption Engineering curated template library: each template declares its training tier, intake pre-population, and lifecycle state so the CoE Portal can surface it consistently.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "version", "kind", "training_tier", "description"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["new-project", "brownfield-overlay", "feature", "agent-pattern", "migration"]
+    },
+    "training_tier": {
+      "type": "string",
+      "description": "AI Adoption Engineering tier this template is curated for.",
+      "enum": ["explorer", "builder", "engineer"]
+    },
+    "description": { "type": "string" },
+    "intake_defaults": {
+      "type": "object",
+      "description": "Values pre-populated into the AI Service Intake form when this template is selected.",
+      "additionalProperties": false,
+      "properties": {
+        "risk_tier": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "review_track": {
+          "type": "string",
+          "enum": ["accelerated", "standard", "enhanced", "board"]
+        },
+        "expected_monthly_usd": { "type": "number", "minimum": 0 },
+        "cost_center": { "type": "string" }
+      }
+    },
+    "runbook": {
+      "type": "string",
+      "description": "Relative path to the runbook that ships with this template."
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": ["proposed", "incubating", "recommended", "deprecated"],
+      "default": "incubating"
+    },
+    "maintainers": {
+      "type": "array",
+      "items": { "type": "string", "format": "email" }
+    }
+  }
+}

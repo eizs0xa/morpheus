@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/value-card.json",
+  "title": "Agent Value Card",
+  "description": "Records the measured value of a production agent, connecting operating cost to business outcome. Emitted by every Morpheus project at the evaluation stage of the artifact chain. Normalized into the enterprise AI ROI Measurement Framework. One value card per agent_registry_id per reporting period.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_registry_id",
+    "reporting_period",
+    "operating_cost_usd",
+    "value_metric",
+    "value_confidence"
+  ],
+  "properties": {
+    "agent_registry_id": {
+      "type": "string",
+      "description": "Identifier from the enterprise Agent Registry.",
+      "pattern": "^[A-Z]+-[0-9]+$"
+    },
+    "reporting_period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end": { "type": "string", "format": "date" }
+      }
+    },
+    "operating_cost_usd": {
+      "type": "object",
+      "description": "Normalized operating cost collected from every platform this agent consumes.",
+      "additionalProperties": false,
+      "required": ["total"],
+      "properties": {
+        "total": { "type": "number", "minimum": 0 },
+        "by_platform": {
+          "type": "object",
+          "description": "Cost attributed to each platform (e.g. azure-openai, anthropic).",
+          "additionalProperties": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "value_metric": {
+      "type": "object",
+      "description": "The business outcome this agent is measured against.",
+      "additionalProperties": false,
+      "required": ["name", "unit", "measured"],
+      "properties": {
+        "name": { "type": "string", "description": "Outcome name (e.g. rfp_cycle_time_reduction)." },
+        "unit": { "type": "string", "description": "Unit of measure (hours_saved, dollars_saved, tickets_deflected, etc.)." },
+        "measured": { "type": "number", "description": "Measured value for the reporting period." },
+        "target": { "type": "number", "description": "Target value from the original value_hypothesis." }
+      }
+    },
+    "value_confidence": {
+      "type": "string",
+      "description": "How the measurement was obtained. 'verified' = instrumented end-to-end, 'estimated' = sampled or modeled, 'directional' = qualitative.",
+      "enum": ["verified", "estimated", "directional"]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text context for the reporting period."
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/memory.json",
+  "title": "Agent Memory (Five-Layer)",
+  "description": "Formal schema for the five-layer memory system referenced by the enterprise Agent Memory strategy. Every Morpheus project emits memory artifacts under these scopes so that institutional knowledge accumulates consistently across teams. Scopes are listed from narrowest to broadest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope", "key", "value", "updated_at"],
+  "properties": {
+    "scope": {
+      "type": "string",
+      "description": "Which memory layer this entry belongs to. session = per-conversation, project = per-repo, domain = shared across repos in the same domain, cross_project = harvested across projects, enterprise = business-wide curated knowledge.",
+      "enum": ["session", "project", "domain", "cross_project", "enterprise"]
+    },
+    "key": {
+      "type": "string",
+      "description": "Short stable identifier within the scope (e.g. 'rfp.tone.style', 'billing.id_format').",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "value": {
+      "description": "Free-form content — string or structured JSON. Interpreted by the consuming skill.",
+      "type": ["string", "object", "array", "number", "boolean"]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source_artifact": {
+      "type": "string",
+      "description": "Path or URI to the artifact that produced this memory (PRD, spec, evaluation, etc.). Preserves the knowledge trail."
+    },
+    "steward_approved_by": {
+      "type": "string",
+      "format": "email",
+      "description": "For scopes `domain`, `cross_project`, and `enterprise`: email of the steward who approved this memory entry. Required for those scopes."
+    },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "supersedes": {
+      "type": "string",
+      "description": "Optional pointer to a prior memory entry this one replaces."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "scope": { "enum": ["domain", "cross_project", "enterprise"] } }
+      },
+      "then": { "required": ["steward_approved_by"] }
+    }
+  ]
+}

@@ -11,15 +11,20 @@ incompatible_with:
   - git-gitlab
   - git-bitbucket
 contributes:
-  skills: []
+  skills:
+    - skills/branch-naming.md
+    - skills/conventional-commits.md
   workflows:
     - workflows/agent-pr-gate.yml.tmpl
     - workflows/merge-queue.yml.tmpl
     - workflows/release-train.yml.tmpl
+    - workflows/commit-lint.yml.tmpl
+    - workflows/branch-name-check.yml.tmpl
   templates:
     - templates/pull_request_template.md.tmpl
     - templates/CODEOWNERS.tmpl
     - templates/branch-protection.json
+    - templates/commitlint.config.cjs.tmpl
   hooks: []
   schemas: []
   instructions: []
@@ -36,6 +41,12 @@ prompts:
     default: "main"
   - name: merge_queue_enabled
     question: "Enable GitHub merge queue?"
+    default: true
+  - name: branch_prefix_pattern
+    question: "Branch prefix regex (e.g. '^(feat|fix|chore|docs)/' or '^[A-Z]+-[0-9]+')"
+    default: "^(feat|fix|chore|docs|refactor|test|style)/"
+  - name: conventional_commits_enforced
+    question: "Enforce Conventional Commits on PR titles and commits?"
     default: true
 detection:
   file_markers:

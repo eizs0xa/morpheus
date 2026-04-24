@@ -11,6 +11,7 @@
     "detected_hardware",
     "project_type",
     "modules",
+    "governance",
     "initialized_by",
     "initialized_at",
     "last_updated_at"
@@ -68,6 +69,111 @@
         "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?(?:\\+[A-Za-z0-9.-]+)?$"
       }
     },
+    "governance": {
+      "type": "object",
+      "description": "Agent Governance Operating Model fields. Maps to the enterprise Agent Development Lifecycle (ADLC) and AI Service Intake. Every Morpheus-scaffolded project declares a governance block; production-bound projects must set risk_tier and agent_registry_id before merge to the default branch.",
+      "additionalProperties": false,
+      "required": ["risk_tier"],
+      "properties": {
+        "risk_tier": {
+          "type": "integer",
+          "description": "Four-tier risk classification per the enterprise Agent Governance model. 1 = internal/experimental, 2 = internal/production, 3 = customer-facing/non-regulated, 4 = customer-facing/regulated or high-impact.",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "agent_registry_id": {
+          "type": "string",
+          "description": "Identifier for this project in the enterprise Agent Registry surfaced by the CoE Portal. Assigned after intake approval.",
+          "pattern": "^[A-Z]+-[0-9]+$"
+        },
+        "intake_record_id": {
+          "type": "string",
+          "description": "AI Service Intake record identifier produced when the initial spec was submitted to the CoE Portal."
+        },
+        "review_track": {
+          "type": "string",
+          "description": "Review track assigned at intake time, based on risk_tier scoring.",
+          "enum": ["accelerated", "standard", "enhanced", "board"]
+        },
+        "kill_switch": {
+          "type": "object",
+          "description": "Containment configuration. Every agent project must declare how it can be halted.",
+          "additionalProperties": false,
+          "required": ["mechanism", "owner"],
+          "properties": {
+            "mechanism": {
+              "type": "string",
+              "description": "How this agent is halted in an emergency (e.g. feature_flag, env_var, api_disable, deploy_rollback).",
+              "enum": ["feature_flag", "env_var", "api_disable", "deploy_rollback", "manual"]
+            },
+            "owner": {
+              "type": "string",
+              "format": "email",
+              "description": "Email of the on-call owner with authority to trigger the kill switch."
+            },
+            "reference": {
+              "type": "string",
+              "description": "Pointer to the kill-switch runbook or feature-flag key."
+            }
+          }
+        },
+        "decommission": {
+          "type": "object",
+          "description": "Planned decommissioning metadata. Required when the agent has a known sunset path.",
+          "additionalProperties": false,
+          "properties": {
+            "planned_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Planned decommission date (ISO-8601)."
+            },
+            "status": {
+              "type": "string",
+              "enum": ["active", "deprecated", "sunset-scheduled", "decommissioned"]
+            },
+            "successor_agent_registry_id": {
+              "type": "string",
+              "description": "Registry ID of the replacement agent, if any."
+            }
+          }
+        }
+      }
+    },
+    "cost_tags": {
+      "type": "object",
+      "description": "Instrumentation for the AI ROI Measurement Framework. Connects operating cost to a value hypothesis so each production agent can be issued a value card.",
+      "additionalProperties": false,
+      "properties": {
+        "cost_center": {
+          "type": "string",
+          "description": "Business cost center charged for this agent's operating cost."
+        },
+        "platforms": {
+          "type": "array",
+          "description": "AI platforms this agent consumes (e.g. azure-openai, anthropic, bedrock, foundry).",
+          "items": { "type": "string" }
+        },
+        "primary_models": {
+          "type": "array",
+          "description": "Primary model identifiers in production use.",
+          "items": { "type": "string" }
+        },
+        "expected_monthly_usd": {
+          "type": "number",
+          "description": "Expected monthly operating cost in USD at initialization time.",
+          "minimum": 0
+        },
+        "value_hypothesis": {
+          "type": "string",
+          "description": "One-sentence statement of the measurable business outcome this agent is designed to produce."
+        },
+        "value_confidence": {
+          "type": "string",
+          "description": "Confidence label for value measurement, per the enterprise ROI framework.",
+          "enum": ["verified", "estimated", "directional"]
+        }
+      }
+    },
     "initialized_by": {
       "type": "string",
       "description": "Email of the user who initialized the project.",
@@ -101,6 +207,28 @@
         "workspace-microsoft": "0.1.0",
         "git-github": "0.1.0",
         "pm-jira": "0.1.0"
+      },
+      "governance": {
+        "risk_tier": 2,
+        "agent_registry_id": "AGT-1042",
+        "intake_record_id": "INTAKE-2026-0417",
+        "review_track": "standard",
+        "kill_switch": {
+          "mechanism": "feature_flag",
+          "owner": "ada@example.com",
+          "reference": "flag:agent.ada.enabled"
+        },
+        "decommission": {
+          "status": "active"
+        }
+      },
+      "cost_tags": {
+        "cost_center": "CC-4821",
+        "platforms": ["azure-openai"],
+        "primary_models": ["gpt-4o"],
+        "expected_monthly_usd": 1200,
+        "value_hypothesis": "Reduces RFP draft cycle time by 30% across Gov sales.",
+        "value_confidence": "estimated"
       },
       "initialized_by": "ada@example.com",
       "initialized_at": "2026-04-23T12:00:00Z",

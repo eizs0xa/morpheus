@@ -6,7 +6,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-(no changes)
+### Added — AI/MLOps strategic-roadmap alignment (Phase 1–3)
+
+**Phase 1 — Foundation / Governance**
+
+- `platform-manifest.schema.json`: new required `governance` block (`risk_tier` 1–4, `agent_registry_id`, `intake_record_id`, `review_track`, `kill_switch`, `decommission`). Maps 1:1 to the enterprise Agent Governance Operating Model.
+- `modules/core/skills/kill-switch.md` — universal containment procedure with behavioral-threshold table by risk tier.
+- `modules/core/skills/decommission.md` — formal agent sunset path; preserves the artifact chain as institutional knowledge.
+- `modules/integrations/governance-adlc/` — new integration module. Ships `risk-score`, `intake-submit`, `adlc-gate` skills and the four-tier risk-scoring rubric (audience × autonomy × data sensitivity × blast radius).
+- `modules/integrations/git-github/`: added `branch-naming` and `conventional-commits` skills; new `commit-lint.yml` and `branch-name-check.yml` workflows; `commitlint.config.cjs.tmpl`.
+- `modules/integrations/pm-jira/`: added `story-emitter` skill (emits Jira stories from `tasks.json` with risk-tier + agent-registry custom fields); new `jira-story-sync.yml` workflow; `jira-story.md.tmpl`.
+
+**Phase 2 — Visibility & Enablement**
+
+- `modules/integrations/coe-portal/` — new integration module. Ships `registry-sync` (pushes manifest + artifact-chain state to the Agent Registry on every merge to default) and `portal-pull` (pulls playbooks, standards, approved template updates).
+- `modules/core/schemas/template.schema.json` — template manifest contract with `training_tier` (`explorer | builder | engineer`), `intake_defaults`, and `lifecycle` to support the AI Adoption Engineering curated template library.
+
+**Phase 3 — Accountability & Intelligence**
+
+- `cost_tags` block added to `platform-manifest.schema.json` (cost_center, platforms, primary_models, expected_monthly_usd, value_hypothesis, value_confidence) — feeds the AI ROI Measurement Framework.
+- `modules/core/schemas/value-card.schema.json` — normalized agent value card, one per agent_registry_id per reporting period.
+- `modules/core/templates/value-card.md.tmpl` — human-readable value-card companion.
+- `modules/core/schemas/memory.schema.json` — five-layer memory schema (session, project, domain, cross_project, enterprise) with steward-approval enforcement on the shared scopes.
+- `modules/core/schemas/ontology.schema.json` — domain-ontology contract with cross-domain disambiguation and append-only steward change_log.
+- `modules/domains/domain-healthcare/ontology.yaml` — first example ontology applying the contract.
+
+### Changed
+
+- README rewritten with a Phase 1–3 compelling pitch and Strategic Alignment table.
+- `modules/core/module.yaml` `contributes` extended with new skills, schemas, and templates.
+- `modules/integrations/git-github/module.yaml` now prompts for `branch_prefix_pattern` and `conventional_commits_enforced`.
+- `modules/integrations/pm-jira/module.yaml` now prompts for risk-tier / agent-registry custom-field IDs and `auto_emit_stories_from_tasks`.
+
+### Notes
+
+- All additions are additive (new fields, new modules). No constitution stop-line is modified. Existing `v0.1.0` manifests remain valid once they add the required `governance.risk_tier`. A migration script under `templates/migration/0.1.0-to-0.2.0/` is the last item to land before the `v0.2.0` cut.
 
 ## [0.1.0] - 2026-04-23
 

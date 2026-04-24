@@ -1,0 +1,35 @@
+# Value Card — {{ agent_registry_id }}
+
+> Emitted by `skills/evaluator.md` at every reporting-period close. Validated against `schemas/value-card.schema.json`. Normalized by the enterprise AI ROI Measurement Framework.
+
+## Identity
+
+- **Agent Registry ID**: {{ agent_registry_id }}
+- **Reporting period**: {{ reporting_period.start }} → {{ reporting_period.end }}
+- **Risk tier**: {{ governance.risk_tier }}
+- **Cost center**: {{ cost_tags.cost_center }}
+
+## Operating cost (USD)
+
+| Platform | Cost |
+|---|---|
+{% for platform, cost in operating_cost_usd.by_platform %}
+| {{ platform }} | ${{ cost }} |
+{% endfor %}
+| **Total** | **${{ operating_cost_usd.total }}** |
+
+## Value delivered
+
+- **Hypothesis**: {{ cost_tags.value_hypothesis }}
+- **Metric**: {{ value_metric.name }} ({{ value_metric.unit }})
+- **Target**: {{ value_metric.target }}
+- **Measured**: {{ value_metric.measured }}
+- **Confidence**: {{ value_confidence }}
+
+## Notes
+
+{{ notes }}
+
+---
+
+_This card is machine-readable (YAML front-matter elsewhere) and is the single source of truth for this agent's ROI. Do not hand-edit the measured values; regenerate from instrumentation._

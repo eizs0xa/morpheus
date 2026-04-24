@@ -13,12 +13,15 @@ incompatible_with:
 contributes:
   skills:
     - skills/ticket-syncer-jira.md
+    - skills/story-emitter.md
   workflows:
     - workflows/jira-branch-check.yml.tmpl
     - workflows/jira-smart-commits.yml.tmpl
+    - workflows/jira-story-sync.yml.tmpl
   templates:
     - mcp-config.json.tmpl
     - templates/jira-transition-map.yaml.tmpl
+    - templates/jira-story.md.tmpl
   hooks: []
   schemas: []
   instructions: []
@@ -32,4 +35,13 @@ prompts:
   - name: initiative_key
     question: "Parent Jira Initiative key (optional, leave blank to skip)"
     default: ""
+  - name: risk_tier_field
+    question: "Custom field ID for risk_tier (optional)"
+    default: ""
+  - name: agent_registry_field
+    question: "Custom field ID for agent_registry_id (optional)"
+    default: ""
+  - name: auto_emit_stories_from_tasks
+    question: "Automatically emit Jira stories from tasks.md on spec finalize?"
+    default: true
 detection: {}

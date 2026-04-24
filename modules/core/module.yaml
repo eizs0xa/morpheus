@@ -19,6 +19,8 @@ contributes:
     - skills/constitution-author.md
     - skills/lore-reader.md
     - skills/lore-curator.md
+    - skills/kill-switch.md
+    - skills/decommission.md
   templates:
     - templates/constitution.md.tmpl
     - templates/CLAUDE.md.tmpl
@@ -28,6 +30,7 @@ contributes:
     - templates/feature-template/spec.md.tmpl
     - templates/feature-template/plan.md.tmpl
     - templates/feature-template/tasks.json.tmpl
+    - templates/value-card.md.tmpl
   schemas:
     - schemas/platform-manifest.schema.json
     - schemas/module.schema.json
@@ -36,6 +39,10 @@ contributes:
     - schemas/overlap-map.schema.json
     - schemas/amendment.schema.json
     - schemas/adr.schema.json
+    - schemas/value-card.schema.json
+    - schemas/memory.schema.json
+    - schemas/ontology.schema.json
+    - schemas/template.schema.json
   workflows: []
   hooks: []
 prompts:

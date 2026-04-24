@@ -1,10 +1,41 @@
 # Philosophy
 
+## The metaphor: Morpheus is the digital foreman
+
+Before the engineering language, here is the whole idea in one image a non-engineer can hold onto.
+
+A construction foreman does not pour the concrete or run the wire. The foreman carries a clipboard, walks the site before the crew arrives, and makes sure the **foundation, plumbing, and electrical are up to code**. They hand out the right forms, they know where the inspector will look, and they keep a log so that months later anyone can answer the question: *who built this, from what plan, and why?*
+
+Morpheus is that foreman — for codebases built by AI agents.
+
+- The **site** is any repository, greenfield or brownfield.
+- The **crew** is a fleet of AI agents (Copilot, Claude, Cursor, custom) doing the actual work.
+- The **clipboard** is the artifact chain: PRD → spec → plan → tasks → implementation → review → evaluation.
+- The **house rules** are the `.agent-rules` / `AGENTS.md` files, skill files, and schemas that Morpheus drops into every repo so that any agent entering the site knows how we build here.
+- The **inspector** is the human reviewer at each HITL checkpoint, and the **permit office** is Jira + Confluence + the CoE portal — the systems of record that the foreman keeps up to date automatically.
+
+Every design tenet below exists to make that foreman trustworthy: small, consistent, never in the way, and impossible to bypass on the parts that matter.
+
 ## The mission
 
 Morpheus exists to enable a **standardized way for agentic development to take place across the business** — one that can morph and evolve as the underlying technology does, while allowing any team to contribute back to it. Standardization is not a ceiling; it is the shared floor that lets every team move faster together than they could alone.
 
 Equally, Morpheus is a **mechanism for collecting and organizing the institutional knowledge embedded in our code bases** — the patterns, decisions, domain rules, and hard-won context that today live only in individual repos and individual heads. By capturing that knowledge in a structured, machine-readable form (skills, specs, artifact chains, domain modules), Morpheus makes it available to agentic AI now and to whatever comes next — so the business compounds its own expertise instead of rediscovering it each quarter.
+
+## The operational goal: reliable E2E automation with HITL where it matters
+
+The concrete thing Morpheus is trying to make *boring and repeatable* is the path from a detailed PRD to shipped, reviewed, auditable software built by a fleet of agents.
+
+The canonical flow:
+
+1. **PRD ingested.** A human-authored PRD is the only hand-written input required. Morpheus decomposes it into a spec, a design, a plan, and an agent-legible task list — each task sized for a single agent to complete in one attempt.
+2. **Systems of record populated automatically.** Jira stories are emitted (with bidirectional links back to the spec and task IDs), Confluence (or equivalent) pages are generated for human-readable documentation, and the CoE portal receives the value card and ADLC gate state. Teams live in their existing tools; Morpheus just keeps them honest.
+3. **Agent fleet dispatched against the task list.** Every agent reads the same `.agent-rules` / `AGENTS.md` on entry, so conventions, banned patterns, and review expectations are consistent across the crew.
+4. **Git is the audit trail.** Conventional commits, PR-to-story linkage, and the standardized artifact chain mean the paper trail is produced as a side effect of doing the work — not reconstructed after the fact. Every commit traces back to a task, every task to a spec, every spec to a PRD requirement.
+5. **HITL checkpoints are declared, not improvised.** Morpheus places human gates at the points where a real foreman would stop the crew: risk-tier approval, first implementation of a new module, irreversible operations (production deploys, destructive migrations, kill-switch activation), and any action outside the agent's declared scope. Elsewhere the crew proceeds without interruption.
+6. **Inspection at any moment.** At any point in the lifecycle, a human can answer *what was built, by which agent, from which requirement, reviewed by whom, and why*, using only the systems of record that Morpheus has been updating all along.
+
+This is the load-bearing promise of the platform. Everything downstream — modules, profiles, schemas, skills — exists to make this flow trustworthy at enterprise scale without a central team heroically stitching it together per repo.
 
 ## The problem
 

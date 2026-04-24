@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://morpheus.dev/schemas/ontology.json",
+  "title": "Domain Ontology",
+  "description": "Contract for a domain module's ontology.yaml. Declares scoped business terms with cross-domain disambiguation and governed change management. Feeds the enterprise business ontology component of the Agent Memory strategy so agents receive domain-aware, steward-approved definitions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["domain", "version", "steward", "terms"],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "description": "Canonical domain name matching the module (e.g. healthcare, payments, rfp).",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "steward": {
+      "type": "object",
+      "description": "The domain steward responsible for approving changes to this ontology.",
+      "additionalProperties": false,
+      "required": ["email"],
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "team": { "type": "string" }
+      }
+    },
+    "terms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "Canonical term label in this domain."
+          },
+          "definition": {
+            "type": "string",
+            "description": "Scoped definition as used in this domain."
+          },
+          "synonyms": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "conflicts_with": {
+            "type": "array",
+            "description": "Cross-domain disambiguation: other domains where the same term has a different meaning.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["domain", "note"],
+              "properties": {
+                "domain": { "type": "string" },
+                "note": { "type": "string" }
+              }
+            }
+          },
+          "examples": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "change_log": {
+      "type": "array",
+      "description": "Append-only record of steward-approved changes. Every mutation to `terms` ships with a change_log entry.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["version", "date", "approved_by", "summary"],
+        "properties": {
+          "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+          "date": { "type": "string", "format": "date" },
+          "approved_by": { "type": "string", "format": "email" },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+domain: healthcare
+version: 0.1.0
+steward:
+  email: healthcare-steward@example.com
+  team: Clinical Platform
+terms:
+  - term: Patient
+    definition: >-
+      An individual receiving or eligible to receive medical care, identified by
+      a governed patient_id issued by the enterprise MPI. Not interchangeable
+      with "customer".
+    synonyms: [member, subject]
+    conflicts_with:
+      - domain: payments
+        note: >-
+          In `payments`, "customer" refers to the billing party, which may be a
+          guarantor and NOT the patient.
+    examples:
+      - "Retrieve the patient's active care plan."
+  - term: Encounter
+    definition: >-
+      A single instance of interaction between a patient and a care provider,
+      scoped to a facility and a start/end timestamp.
+    synonyms: [visit]
+  - term: PHI
+    definition: >-
+      Protected Health Information as defined by HIPAA. Any dataset containing
+      PHI raises the project's governance.risk_tier to at least 3.
+change_log:
+  - version: 0.1.0
+    date: 2026-04-24
+    approved_by: healthcare-steward@example.com
+    summary: Initial ontology for the healthcare domain module.

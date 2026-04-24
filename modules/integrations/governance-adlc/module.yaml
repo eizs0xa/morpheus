@@ -1,0 +1,50 @@
+name: governance-adlc
+version: 0.1.0
+kind: integration
+description: >-
+  Enterprise Agent Governance / Agent Development Lifecycle (ADLC) integration.
+  Hooks the artifact chain to the AI Service Intake at spec time, enforces
+  four-tier risk classification, and emits governance events (intake, review,
+  promotion, containment, decommission) to the CoE Portal Agent Registry.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  skills:
+    - skills/risk-score.md
+    - skills/intake-submit.md
+    - skills/adlc-gate.md
+  workflows:
+    - workflows/governance-events.yml.tmpl
+  templates:
+    - templates/intake-record.md.tmpl
+    - templates/risk-scoring-rubric.md.tmpl
+  schemas: []
+  hooks:
+    - artifact_chain.spec.on_finalize
+    - artifact_chain.review.on_approve
+    - artifact_chain.evaluation.on_publish
+prompts:
+  - name: risk_tier
+    question: "Initial risk tier (1=internal/experimental, 2=internal/prod, 3=customer-facing, 4=regulated/high-impact)"
+    required: true
+    choices: [1, 2, 3, 4]
+  - name: cost_center
+    question: "Cost center charged for this agent"
+    required: true
+  - name: expected_monthly_usd
+    question: "Expected monthly operating cost (USD)"
+    default: 0
+  - name: value_hypothesis
+    question: "One-sentence business outcome hypothesis"
+    required: true
+  - name: kill_switch_mechanism
+    question: "Kill-switch mechanism"
+    default: "feature_flag"
+    choices: [feature_flag, env_var, api_disable, deploy_rollback, manual]
+  - name: kill_switch_owner
+    question: "Kill-switch on-call owner email"
+    required: true
+detection:
+  file_markers: []
