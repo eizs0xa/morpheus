@@ -71,8 +71,14 @@ See `cli/src/commands/_init/mode-detect.ts` for the exact logic.
 
 [5/5] Writing platform manifest
   ✓ platform-manifest.json written (profile=builder)
+  ✓ post-init tasks written → .agent/tasks/01-author-constitution.md
+  · docs audit task written → .agent/tasks/02-audit-docs.md
 
-✓ Morpheus init complete.
+✓ Morpheus scaffolding is in place.
+
+Next step — one action:
+
+  Type /morpheus in your agent prompt window and press send.
 ```
 
 ## Step 3 — What changed
@@ -113,15 +119,44 @@ git diff HEAD -- backend/ frontend/ src/ app/ tests/ package.json tsconfig.json 
 ## Step 4 — Validate
 
 ```bash
-agentic validate
-agentic doctor
+morpheus validate
+morpheus doctor
 ```
 
 Both should exit `0` or `1`. Exit `2` means the overlay left the repo in an inconsistent state; open an issue and attach the full `validate --json` output.
 
-## Step 5 — Review and commit
+## Step 5 — Hand off to your agent (`/morpheus`)
 
-Review the overlay in small, targeted chunks:
+This is the **single action** you take after a successful overlay. The CLI tells
+you exactly what to type:
+
+```
+Type /morpheus in your agent prompt window and press send.
+```
+
+What happens next:
+
+1. Your agent loads `.github/prompts/morpheus.prompt.md`, which points it at
+   `.agent/skills/morpheus-orchestrator.md`.
+2. The orchestrator skill drives every pending task in `.agent/tasks/` in numeric
+   order:
+   - `01-author-constitution.md` — interviews the steward, fills `.agent/constitution.md`.
+   - `02-audit-docs.md` — restructures pre-existing docs into `docs/<role>/` (only
+     present when existing docs were detected).
+   - `99-finalize-report.md` — runs `morpheus validate`, opens **one** PR titled
+     `chore: complete Morpheus initialization`, and writes
+     `MORPHEUS_INIT_REPORT.md` at the repo root.
+3. The report shows **what changed, why, and how the new system works relative
+   to the old**. You read the report, review the PR, merge.
+
+If the orchestrator halts (validation failure, missing skill, conflicting work)
+it prints the reason. Resolve and re-issue `/morpheus` — completed tasks have
+`status: done` in their front-matter and will be skipped.
+
+## Step 6 — Commit and PR (manual fallback)
+
+If you prefer to drive the post-init steps by hand instead of running
+`/morpheus`, review the overlay in small chunks:
 
 ```bash
 git add .agent/
@@ -137,7 +172,7 @@ git add platform-manifest.json
 git commit -m "chore(morpheus): record platform manifest"
 ```
 
-## Step 6 — Open a PR
+## Step 7 — Open a PR (manual fallback)
 
 ```bash
 git push -u origin chore/morpheus-overlay

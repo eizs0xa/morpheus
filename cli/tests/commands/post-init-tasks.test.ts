@@ -59,6 +59,7 @@ describe('writePostInitTasks', () => {
 
     expect(result.constitutionTask).toBe('');
     expect(result.docsTask).toBeNull();
+    expect(result.finalReportTask).toBe('');
 
     // .agent/tasks/ should not have been created
     await expect(fs.access(path.join(root, '.agent', 'tasks'))).rejects.toThrow();
@@ -72,6 +73,7 @@ describe('writePostInitTasks', () => {
 
     expect(result.constitutionTask).toBe(path.join('.agent', 'tasks', '01-author-constitution.md'));
     expect(result.docsTask).toBeNull(); // no existing docs in empty root
+    expect(result.finalReportTask).toBe(path.join('.agent', 'tasks', '99-finalize-report.md'));
 
     const content = await fs.readFile(
       path.join(root, '.agent', 'tasks', '01-author-constitution.md'),
@@ -83,6 +85,14 @@ describe('writePostInitTasks', () => {
     expect(content).toContain('builder');
     expect(content).toContain('stack-python');
     expect(content).toContain('workspace-microsoft');
+
+    const finalContent = await fs.readFile(
+      path.join(root, '.agent', 'tasks', '99-finalize-report.md'),
+      'utf-8',
+    );
+    expect(finalContent).toContain('task: finalize-init-report');
+    expect(finalContent).toContain('skill: morpheus-orchestrator');
+    expect(finalContent).toContain('MORPHEUS_INIT_REPORT.md');
   });
 
   it('brownfield mode with existing .md docs writes 02-audit-docs.md listing them', async () => {
@@ -137,5 +147,6 @@ describe('writePostInitTasks', () => {
 
     expect(result.constitutionTask).toBe('');
     expect(result.docsTask).toBeNull();
+    expect(result.finalReportTask).toBe('');
   });
 });

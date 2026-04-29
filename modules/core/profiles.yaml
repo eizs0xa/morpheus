@@ -21,14 +21,14 @@ profiles:
 
   verifier:
     modules: [core, "{selected_stacks}", "{workspace}", "{pm}", "{git}"]
-    skills_enabled: [evaluator, reviewer, tester, spec-author-read, planner-read]
+    skills_enabled: [evaluator, reviewer, tester, spec-author-read, planner-read, morpheus-orchestrator]
     scaffolding: partial
     can_commit_code: true
     extras: [holdout_authoring]
 
   author:
     modules: [core, "{workspace}", "{pm}"]
-    skills_enabled: [spec-author, decomposer-read]
+    skills_enabled: [spec-author, decomposer-read, morpheus-orchestrator]
     scaffolding: prd_templates_only
     can_commit_code: false
 

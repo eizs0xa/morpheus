@@ -77,6 +77,28 @@ morpheus invoke --profile steward --resume
 agentic init
 ```
 
+**Post-init flow (brownfield only):**
+
+When `morpheus invoke` succeeds in brownfield mode it writes ordered task files
+under `.agent/tasks/` and prints:
+
+```
+Type /morpheus in your agent prompt window and press send.
+```
+
+That single action triggers the **Morpheus Orchestrator** skill
+(`.agent/skills/morpheus-orchestrator.md`) via
+`.github/prompts/morpheus.prompt.md`. The orchestrator:
+
+1. Executes every pending task in `.agent/tasks/` in numeric order.
+2. Runs `morpheus validate` and refuses to continue past a failure.
+3. Opens a single PR titled `chore: complete Morpheus initialization`.
+4. Writes `MORPHEUS_INIT_REPORT.md` at the repo root summarising what changed,
+   why, and how the new system works relative to the old.
+
+The default tasks are `01-author-constitution.md`, `02-audit-docs.md` (only when
+existing docs are detected), and `99-finalize-report.md`.
+
 ---
 
 ### `agentic validate`

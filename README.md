@@ -73,6 +73,10 @@ morpheus invoke
 
 # Brownfield overlay on an existing repo
 cd my-existing-repo && morpheus invoke
+# When it finishes, it tells you the one action to take:
+#   "Type /morpheus in your agent prompt window and press send."
+# Your agent then drives constitution authoring, docs audit, validation,
+# and writes MORPHEUS_INIT_REPORT.md at the repo root.
 
 # Keep Morpheus current (pull + rebuild + re-apply)
 morpheus update

@@ -21,6 +21,7 @@ contributes:
     - skills/lore-curator.md
     - skills/kill-switch.md
     - skills/decommission.md
+    - skills/morpheus-orchestrator.md
   templates:
     - templates/constitution.md.tmpl
     - templates/CLAUDE.md.tmpl
