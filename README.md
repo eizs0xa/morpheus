@@ -69,14 +69,19 @@ Walk away any time. Every rendered file is inspectable markdown / YAML / TypeScr
 
 ```bash
 # Greenfield
-agentic init
+morpheus invoke
 
 # Brownfield overlay on an existing repo
-cd my-existing-repo && agentic init
+cd my-existing-repo && morpheus invoke
+
+# Keep Morpheus current (pull + rebuild + re-apply)
+morpheus update
 
 # Validate against platform law
-agentic doctor
+morpheus doctor
 ```
+
+> `agentic init` is a backward-compatible alias. Both `morpheus` and `agentic` resolve to the same binary.
 
 See [docs/getting-started.md](docs/) for the full flow and [docs/for-engineers/](docs/for-engineers/) for role-based walkthroughs.
 

@@ -33,7 +33,7 @@ git status   # should be clean
 ## Step 1 — Run init
 
 ```bash
-agentic init
+morpheus invoke
 ```
 
 Mode detection auto-routes to brownfield when:
@@ -163,7 +163,7 @@ If you already merged and need to remove Morpheus, write a revert PR that delete
 
 | Symptom | Likely cause | Fix |
 |---------|--------------|-----|
-| `E_TEMPLATE: Brownfield preserve step failed` | Repo already has `.agent/platform-manifest.json`. | Run `agentic init --resume` instead. |
+| `E_TEMPLATE: Brownfield preserve step failed` | Repo already has `.agent/platform-manifest.json`. | Run `morpheus invoke --resume` instead. |
 | Existing workflow appears modified | It isn't — look again; the diff is whitespace or line-ending. | Check `git diff --ignore-all-space`. |
 | `append-existing.sh` ran twice | Copier `_tasks` invoked it and the CLI tried to re-run. | v0.1.0 CLI already guards against this — ensure you're on latest. |
 

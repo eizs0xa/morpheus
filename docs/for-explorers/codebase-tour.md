@@ -33,7 +33,7 @@ No scaffolding is produced. No agent will surface coding, testing, or spec-autho
 Swap at any time:
 
 ```bash
-agentic init --profile builder --resume
+morpheus invoke --profile builder --resume
 ```
 
 `--resume` preserves the manifest and bumps the profile in-place.
@@ -42,7 +42,7 @@ agentic init --profile builder --resume
 
 ```bash
 cd <any-repo>
-agentic init --profile explorer
+morpheus invoke --profile explorer
 ```
 
 This writes a minimal `platform-manifest.json` recording `profile: explorer`. Nothing else is added.
@@ -139,7 +139,7 @@ Resist the urge to read all source. Source tells you *what*; lore and specs tell
 When you're ready to contribute:
 
 ```bash
-agentic init --profile <builder|verifier|author|steward> --resume
+morpheus invoke --profile <builder|verifier|author|steward> --resume
 ```
 
 The manifest updates; no files are re-rendered unless you pass `--answers-file` with changed stacks or modules.
@@ -148,7 +148,7 @@ The manifest updates; no files are re-rendered unless you pass `--answers-file` 
 
 | Symptom | Likely cause | Fix |
 |---------|--------------|-----|
-| Agent suggests writing code | You forgot to set the profile. | `agentic init --profile explorer --resume`. |
+| Agent suggests writing code | You forgot to set the profile. | `morpheus invoke --profile explorer --resume`. |
 | `lore-reader` returns nothing | Project has no `.agent/lore/` yet. | The project is young; rely on constitution + README. |
 | Tour feels endless | No prioritization. | Start from the feature you actually care about; expand outward. |
 

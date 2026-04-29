@@ -77,7 +77,7 @@ Then dogfood:
 ```bash
 # Against an empty scratch dir:
 mkdir /tmp/morpheus-release-check && cd /tmp/morpheus-release-check
-agentic init --non-interactive --profile builder
+morpheus invoke --non-interactive --profile builder
 agentic validate
 agentic doctor
 ```

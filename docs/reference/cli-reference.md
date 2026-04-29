@@ -1,12 +1,17 @@
 # CLI reference
 
-> Every `agentic` command, flag, exit code, and environment variable. Derived from [`../../cli/src/index.ts`](../../cli/src/index.ts) and [`../../cli/src/commands/`](../../cli/src/commands/).
+> Every `morpheus` / `agentic` command, flag, exit code, and environment variable. Derived from [`../../cli/src/index.ts`](../../cli/src/index.ts) and [`../../cli/src/commands/`](../../cli/src/commands/).
 
 ## Invocation
 
+The CLI ships as two binary names from the same entrypoint:
+
 ```text
-agentic [global-options] <command> [command-options]
+morpheus [global-options] <command> [command-options]   # preferred
+agentic  [global-options] <command> [command-options]   # backward-compatible alias
 ```
+
+Help text reflects whichever name was used. All commands and flags are identical.
 
 ## Global options
 
@@ -33,7 +38,7 @@ Commands that compute a report (`validate`, `doctor`) emit a stable code:
 
 ## Commands
 
-### `agentic init`
+### `morpheus invoke` (alias: `agentic init`)
 
 Scaffold a new Morpheus project or overlay the platform onto an existing repository. Auto-detects mode:
 
@@ -60,13 +65,16 @@ Command-local options:
 
 ```bash
 # Interactive
-agentic init
+morpheus invoke
 
 # Scripted
-agentic init --non-interactive --profile builder --answers-file answers.yml
+morpheus invoke --non-interactive --profile builder --answers-file answers.yml
 
 # Switch profile on an existing project
-agentic init --profile steward --resume
+morpheus invoke --profile steward --resume
+
+# Backward-compatible alias
+agentic init
 ```
 
 ---
@@ -148,14 +156,44 @@ agentic remove stack-node
 
 ---
 
+### `morpheus update` (alias: `agentic update`)
+
+Pull the latest Morpheus platform from GitHub, rebuild the CLI, and re-apply the overlay on the current project.
+
+Three sequential steps:
+
+| Step | What it does | Skip flag |
+|---|---|---|
+| 1/3 Pull | `git pull --ff-only origin <branch>` on the Morpheus platform root | `--skip-pull` |
+| 2/3 Build | `pnpm install && pnpm build` in `platform-root/cli/` (falls back to `npm`) | `--skip-build` |
+| 3/3 Overlay | `invoke --resume` on the current project to apply new module contributions, template changes, and schema updates | `--skip-overlay` |
+
+Guards:
+- Refuses to pull if the platform repo has uncommitted local changes.
+- Throws a clear error if the target project hasn't been initialized yet (`morpheus invoke` first).
+
+**Examples:**
+
+```bash
+# Full update
+morpheus update
+
+# CI: skip the pull (checkout is managed externally)
+morpheus update --skip-pull
+
+# Only pull + build, don't touch the project overlay
+morpheus update --skip-overlay
+```
+
+---
+
 ### Planned commands (tracked, not shipped)
 
 | Command | Intent |
 |---------|--------|
-| `agentic update` | Wrapper around `copier update` + manifest refresh. See [../for-engineers/updating-the-platform.md](../for-engineers/updating-the-platform.md). |
-| `agentic feature new --intent=prd <KEY>` | Create a feature folder from the core template. |
-| `agentic tour` | Walk an agent through the codebase in explorer mode. |
-| `agentic lore search <query>` | Flat-file + ripgrep lore search (per [ADR-004](../decisions/ADR-004-open-questions-v0.1.md)). |
+| `morpheus feature new --intent=prd <KEY>` | Create a feature folder from the core template. |
+| `morpheus tour` | Walk an agent through the codebase in explorer mode. |
+| `morpheus lore search <query>` | Flat-file + ripgrep lore search (per [ADR-004](../decisions/ADR-004-open-questions-v0.1.md)). |
 
 ## Error codes
 
@@ -219,7 +257,7 @@ Highest wins:
 
 ## Answers file format
 
-Used with `agentic init --non-interactive --answers-file <path>`. YAML mapping at top level:
+Used with `morpheus invoke --non-interactive --answers-file <path>`. YAML mapping at top level:
 
 ```yaml
 project_name: my-service

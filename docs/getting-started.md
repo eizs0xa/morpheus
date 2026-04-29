@@ -8,7 +8,7 @@ All three paths share the same prerequisites.
 
 | Tool | Version | Notes |
 |------|---------|-------|
-| Node.js | 20 LTS or newer | Powers the `agentic` CLI. |
+| Node.js | 20 LTS or newer | Powers the `morpheus` / `agentic` CLI. |
 | pnpm | 9+ | Package manager the CLI expects. |
 | Python | 3.10+ | Hosts the `copier` template engine. |
 | copier | 9+ | `pipx install copier` (preferred) or `pip install copier`. See note below. |
@@ -37,7 +37,8 @@ pnpm install && pnpm build
 # (or run: source ~/.zshrc) before proceeding.
 pnpm setup
 pnpm link --global
-agentic --version     # prints the platform version
+morpheus --version     # prints the platform version
+# agentic --version also works — both names resolve to the same binary
 ```
 
 ---
@@ -55,7 +56,7 @@ mkdir my-service && cd my-service
 ### 2. Run init
 
 ```bash
-agentic init
+morpheus invoke
 ```
 
 The CLI runs a five-step interview:
@@ -103,7 +104,7 @@ You have an existing repo — `.git/` exists, source code exists, maybe `.github
 ### Preconditions
 
 - The repo has `.git/` (run `git rev-parse --git-dir` to confirm).
-- The repo has no `platform-manifest.json` yet (if it does, use `agentic init --resume`).
+- The repo has no `platform-manifest.json` yet (if it does, use `morpheus invoke --resume`).
 - You have permission to commit to a new branch.
 
 ### 1. Check out a clean branch
@@ -117,7 +118,7 @@ git checkout -b chore/morpheus-overlay
 Mode is auto-detected. No flag needed.
 
 ```bash
-agentic init
+morpheus invoke
 ```
 
 ### 3. What it touches vs preserves
@@ -131,14 +132,14 @@ agentic init
 | Writes `platform-manifest.json`. | Project config files (`package.json`, `pyproject.toml`, `tsconfig.json`). |
 
 The overlay template runs `scripts/preserve-existing.sh` before any write. Backups are deterministic (`.pre-morpheus.bak` suffix).
-If an init run is interrupted after the preflight step, re-run `agentic init`; the preflight is safe to replay.
+If an init run is interrupted after the preflight step, re-run `morpheus invoke`; the preflight is safe to replay.
 
 ### 4. Verify
 
 ```bash
-agentic validate   # should exit 0
-agentic doctor     # 0 or 1 acceptable
-git status         # review what changed
+morpheus validate   # should exit 0
+morpheus doctor     # 0 or 1 acceptable
+git status          # review what changed
 git diff --stat
 ```
 
@@ -153,7 +154,7 @@ You want to understand a codebase — your own, a teammate's, an OSS project —
 ### 1. Choose the explorer profile
 
 ```bash
-agentic init --profile explorer
+morpheus invoke --profile explorer
 ```
 
 The `explorer` profile scaffolds **nothing** beyond a minimal `.agent/platform-manifest.json`. It surfaces only the `lore-reader` skill. It cannot commit code (`can_commit_code: false` per [`modules/core/profiles.yaml`](../modules/core/profiles.yaml)).
@@ -171,7 +172,7 @@ agentic lore search "auth flow"    # (future) find prior decisions touching auth
 You now have a `platform-manifest.json` that records your profile as `explorer`. You can switch to a writing profile later with:
 
 ```bash
-agentic init --profile builder --resume
+morpheus invoke --profile builder --resume
 ```
 
 `--resume` upgrades the profile in-place without re-scaffolding.
