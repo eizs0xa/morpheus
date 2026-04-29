@@ -46,7 +46,7 @@ Questions:
 5. Are there domain concerns (e.g. regulatory, data residency)?
 6. What modules would you add tomorrow if they existed?
 
-Cross-check answers against [`../../modules/core/profiles.yaml`](../../modules/core/profiles.yaml) and the [module catalog](../reference/module-catalog.md). Composition rules are enforced at `agentic init`; the constitution records the team's reasoning.
+Cross-check answers against [`../../modules/core/profiles.yaml`](../../modules/core/profiles.yaml) and the [module catalog](../reference/module-catalog.md). Composition rules are enforced at `morpheus invoke`; the constitution records the team's reasoning.
 
 ### Block 3 — Conventions (40 min)
 

@@ -127,7 +127,9 @@ No. v0.1.0 ships module versions pinned to the platform version. Module-level ve
 
 ### Q: What if my answers changed (e.g. swapped workspace)?
 
-Use `agentic init --resume --profile <name>` with an updated `--answers-file`. Workspace swaps specifically follow the migration guide under `templates/migration/` (e.g. `workspace-swap.sh`).
+Use `morpheus invoke --resume --profile <name>` with an updated `--answers-file`. Workspace swaps specifically follow the migration guide under `templates/migration/` (e.g. `workspace-swap.sh`).
+
+To pull the latest platform version and re-apply in one step, use `morpheus update` (see [CLI reference](../reference/cli-reference.md#morpheus-update)).
 
 ## Common gotchas
 

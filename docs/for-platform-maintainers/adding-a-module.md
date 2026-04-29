@@ -68,7 +68,7 @@ Rules:
 - Every non-core module `requires` `core` with a sensible range.
 - `incompatible_with` is non-empty when the module is exclusive (one workspace, one git provider, one PM).
 - `contributes.*` paths are relative to the module directory and must exist.
-- `detection.file_markers` is used by `agentic init` to auto-propose this module when the CLI detects applicability.
+- `detection.file_markers` is used by `morpheus invoke` to auto-propose this module when the CLI detects applicability.
 - `prompts` lists any answers the module needs collected at init time (e.g. webhook URL).
 
 Validate the file:

@@ -151,7 +151,7 @@ if __name__ == "__main__":
 Every breaking change ships with three user-facing artifacts:
 
 1. **CHANGELOG entry** under `## [Breaking Changes]`, dated, linking the PR and the migration script.
-2. **Deprecation warnings** surfaced by the CLI when the deprecated surface is used. Example: `agentic init` emits `[DEPRECATION] --old-flag will be removed in vX.0.0. Use --new-flag.`
+2. **Deprecation warnings** surfaced by the CLI when the deprecated surface is used. Example: `morpheus invoke` emits `[DEPRECATION] --old-flag will be removed in vX.0.0. Use --new-flag.`
 3. **Doc banners** on affected pages under `docs/`. Use an admonition at the top of the page:
    ```markdown
    > **Deprecated in vX.Y.0 — removed in v(X+1).0.0.** Use [<new surface>](…) instead.

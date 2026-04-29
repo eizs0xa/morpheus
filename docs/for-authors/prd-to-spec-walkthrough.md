@@ -37,13 +37,13 @@ If you need to both author and code, use `builder` or `steward` instead. Author 
 If the repo was scaffolded for a different profile, resume with the author profile:
 
 ```bash
-agentic init --profile author --resume
+morpheus invoke --profile author --resume
 ```
 
 Or, on a fresh repo:
 
 ```bash
-agentic init --profile author
+morpheus invoke --profile author
 ```
 
 Author-profile scaffolding includes only:

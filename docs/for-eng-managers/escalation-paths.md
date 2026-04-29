@@ -31,7 +31,7 @@
 
 | Severity | Example | Target response time |
 |----------|---------|----------------------|
-| Blocking a pilot team | `agentic init` crashes mid-scaffold. | Same business day. |
+| Blocking a pilot team | `morpheus invoke` crashes mid-scaffold. | Same business day. |
 | Blocking a non-pilot team | `agentic validate` exits 2 after an update. | 2 business days. |
 | Functional gap / module request | "We need a `stack-go`." | Triage in 5 business days; decision or deferral in 10. |
 | Doc rot | Walkthrough references a flag that was renamed. | Next weekly sync. |

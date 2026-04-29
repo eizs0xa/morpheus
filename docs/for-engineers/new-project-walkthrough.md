@@ -28,18 +28,18 @@ See [getting-started.md](../getting-started.md#prerequisites). Plus:
 mkdir my-service && cd my-service
 ```
 
-## Step 2 — Run `agentic init`
+## Step 2 — Run `morpheus invoke`
 
 Interactive:
 
 ```bash
-agentic init
+morpheus invoke
 ```
 
 Non-interactive (scriptable, CI-friendly):
 
 ```bash
-agentic init \
+morpheus invoke \
   --non-interactive \
   --profile builder \
   --answers-file answers.yml
@@ -171,7 +171,7 @@ Until `agentic feature new` ships, create `.agent/features/<slug>/` manually fro
 
 | Symptom | Likely cause | Fix |
 |---------|--------------|-----|
-| `E_TEMPLATE: copier not found` | copier not installed or not on `PATH`. | `pipx install copier`, then re-run `agentic init`. |
+| `E_TEMPLATE: copier not found` | copier not installed or not on `PATH`. | `pipx install copier`, then re-run `morpheus invoke`. |
 | `E_COMPOSE: exactly one workspace required` | Passed both `workspace-microsoft` and `workspace-google`. | Choose one. Composition rule §1.2. |
 | `jira preflight (stubbed): warning` | Expected for v0.1.0 — the preflight is a stub. | Safe to proceed; track the stub in `cli/src/commands/_init/jira-preflight.ts`. |
 | `agentic validate` exits `2` after init | A rendered file is missing from the template. | Open an issue with the manifest and the missing path. |

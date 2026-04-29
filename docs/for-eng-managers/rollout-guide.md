@@ -9,12 +9,12 @@
 Exit criteria:
 
 - [ ] `agentic --version` prints the target version in every maintainer's shell.
-- [ ] `agentic init` + `agentic validate` pass on a scratch greenfield directory.
+- [ ] `morpheus invoke` + `morpheus validate` pass on a scratch greenfield directory.
 - [ ] The platform repo has CODEOWNERS covering every module.
 - [ ] `CHANGELOG.md` has an entry for the target version.
 - [ ] `docs/` coverage is ≥ 90% against the doc index (this file tree).
 
-**Checkpoint (manager):** platform lead demos `agentic init` end-to-end in a 15-minute recording. If the demo requires manual workarounds, block Phase 1.
+**Checkpoint (manager):** platform lead demos `morpheus invoke` end-to-end in a 15-minute recording. If the demo requires manual workarounds, block Phase 1.
 
 ## Phase 1 — Friendly pilot (one team, one project)
 
@@ -29,7 +29,7 @@ Entry criteria:
 
 Exit criteria:
 
-- [ ] `agentic init` ran successfully in the project.
+- [ ] `morpheus invoke` ran successfully in the project.
 - [ ] A project constitution exists at `.agent/constitution.md`.
 - [ ] At least one feature went PRD → spec → plan → tasks → merge.
 - [ ] `agentic validate` returns exit `0` in CI.
