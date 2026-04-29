@@ -15,6 +15,12 @@
     "{{ git_provider }}": "0.1.0"{% if pm_tool != 'none' %},
     "{{ pm_tool }}": "0.1.0"{% endif %}
   },
+  "governance": {
+    "risk_tier": 1,
+    "decommission": {
+      "status": "active"
+    }
+  },
   "initialized_by": "{{ primary_owner_email }}",
   "initialized_at": "__NOW__",
   "last_updated_at": "__NOW__"

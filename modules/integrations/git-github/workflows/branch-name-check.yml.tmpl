@@ -1,0 +1,20 @@
+name: branch-name-check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  branch:
+    name: Branch Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch prefix
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          BRANCH_PATTERN: "{{ branch_prefix_pattern }}"
+        run: |
+          echo "$BRANCH_NAME" | grep -Eq "$BRANCH_PATTERN"

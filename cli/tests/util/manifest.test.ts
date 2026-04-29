@@ -22,6 +22,10 @@ const VALID: PlatformManifest = {
     'workspace-microsoft': '0.1.0',
     'git-github': '0.1.0',
   },
+  governance: {
+    risk_tier: 1,
+    decommission: { status: 'active' },
+  },
   initialized_by: 'ada@example.com',
   initialized_at: '2026-04-23T12:00:00Z',
   last_updated_at: '2026-04-23T12:00:00Z',

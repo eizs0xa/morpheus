@@ -43,7 +43,8 @@ contributes:
     - schemas/memory.schema.json
     - schemas/ontology.schema.json
     - schemas/template.schema.json
-  workflows: []
+  workflows:
+    - workflows/morpheus-constitution-check.yml.tmpl
   hooks: []
 prompts:
   - name: project_name

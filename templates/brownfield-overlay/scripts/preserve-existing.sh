@@ -78,6 +78,11 @@ backup_file() {
   [[ -f "$src" ]] || return 0
   local dst="${src}.pre-morpheus.bak"
   if [[ -e "$dst" ]]; then
+    if cmp -s "$src" "$dst"; then
+      backed_up_files+=("$src -> $dst")
+      echo "  backup already exists: $src -> $dst"
+      return 0
+    fi
     dst="${src}.pre-morpheus.bak.${TIMESTAMP}"
   fi
   cp -p "$src" "$dst"

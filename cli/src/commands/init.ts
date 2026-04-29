@@ -29,7 +29,8 @@ import {
   type Profile,
   type ProfileName,
 } from '../composers/module-resolver.js';
-import { renderTemplate } from '../composers/file-renderer.js';
+import { ensureCopierAvailable, renderTemplate } from '../composers/file-renderer.js';
+import { renderModuleContributions } from '../composers/module-contribution-renderer.js';
 import { askInitQuestions } from '../prompts/index.js';
 import { detectMode, type InitMode } from './_init/mode-detect.js';
 import { resolvePlatformRoot } from './_init/platform-root.js';
@@ -156,10 +157,22 @@ function buildManifest(
     },
     project_type: projectType,
     modules,
+    governance: previous?.governance ?? {
+      risk_tier: 1,
+      decommission: { status: 'active' },
+    },
     initialized_by: previous?.initialized_by ?? ans.primary_owner_email,
     initialized_at: previous?.initialized_at ?? now,
     last_updated_at: now,
   };
+}
+
+async function mirrorManifestToAgent(projectRoot: string): Promise<void> {
+  const rootManifest = path.join(projectRoot, 'platform-manifest.json');
+  const agentDir = path.join(projectRoot, '.agent');
+  const agentManifest = path.join(agentDir, 'platform-manifest.json');
+  await fs.mkdir(agentDir, { recursive: true });
+  await fs.copyFile(rootManifest, agentManifest);
 }
 
 async function runPreserveScript(
@@ -182,7 +195,7 @@ async function runPreserveScript(
     );
   }
   try {
-    await execa('bash', [script, '--target', projectRoot], { stdio: 'pipe' });
+    await execa('bash', [script, '--target', projectRoot, '--force'], { stdio: 'pipe' });
   } catch (err) {
     const e = err as { stderr?: unknown; stdout?: unknown; message?: string };
     const stderr =
@@ -331,6 +344,8 @@ export async function init(options: InitOptions = {}): Promise<void> {
   // ------------------------------------------------------------------
   progress(4, `Rendering ${mode === 'brownfield' ? 'brownfield overlay' : 'new-project template'}`);
 
+  await ensureCopierAvailable();
+
   if (mode === 'brownfield') {
     note('running preserve-existing.sh');
     await runPreserveScript(platformRoot, projectRoot);
@@ -358,6 +373,14 @@ export async function init(options: InitOptions = {}): Promise<void> {
   }
   success('templates rendered');
 
+  await renderModuleContributions({
+    platformRoot,
+    projectRoot,
+    modules: composed.modules,
+    answers,
+  });
+  success('module contributions rendered');
+
   // brownfield append-existing is invoked via copier `_tasks` in
   // templates/brownfield-overlay/copier.yml — we do NOT re-run it here.
   if (mode === 'brownfield') {
@@ -377,6 +400,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
   );
   try {
     await writeManifest(projectRoot, manifest);
+    await mirrorManifestToAgent(projectRoot);
   } catch (err) {
     if (err instanceof ManifestError) throw err;
     throw new ManifestError(

@@ -18,6 +18,7 @@ import { ComposeError, ValidationError } from '../../src/util/errors.js';
 // Mock the copier-backed renderer so every test path is hermetic.
 vi.mock('../../src/composers/file-renderer.js', () => {
   return {
+    ensureCopierAvailable: vi.fn(async () => undefined),
     renderTemplate: vi.fn(async (input: { targetPath: string }) => {
       // Simulate copier writing a couple of representative files. Tests that
       // care about real template output live in the smoke script.
@@ -200,6 +201,10 @@ describe('agentic init — WS-11', () => {
       detected_hardware: { os: 'darwin', arch: 'arm64', shell: 'zsh' },
       project_type: 'new-empty',
       modules: { core: '0.1.0' },
+      governance: {
+        risk_tier: 1,
+        decommission: { status: 'active' },
+      },
       initialized_by: 'seed@example.com',
       initialized_at: '2026-01-01T00:00:00Z',
       last_updated_at: '2026-01-01T00:00:00Z',
@@ -228,6 +233,10 @@ describe('agentic init — WS-11', () => {
       detected_hardware: { os: 'darwin', arch: 'arm64', shell: 'zsh' },
       project_type: 'new-empty',
       modules: { core: '0.1.0' },
+      governance: {
+        risk_tier: 1,
+        decommission: { status: 'active' },
+      },
       initialized_by: 'seed@example.com',
       initialized_at: '2024-07-04T00:00:00Z',
       last_updated_at: '2024-07-04T00:00:00Z',
