@@ -1,0 +1,23 @@
+name: jira-story-sync
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  sync:
+    name: Jira Story Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Jira project configuration
+        env:
+          JIRA_PROJECT_KEY: "{{ jira_project_key }}"
+          JIRA_SITE_URL: "{{ jira_site_url }}"
+        run: |
+          test -n "$JIRA_PROJECT_KEY"
+          test -n "$JIRA_SITE_URL"

@@ -25,6 +25,22 @@ export interface PlatformManifest {
     | 'new-empty'
     | 'unclassified';
   modules: Record<string, string>;
+  governance: {
+    risk_tier: number;
+    agent_registry_id?: string;
+    intake_record_id?: string;
+    review_track?: 'accelerated' | 'standard' | 'enhanced' | 'board';
+    kill_switch?: {
+      mechanism: 'feature_flag' | 'env_var' | 'api_disable' | 'deploy_rollback' | 'manual';
+      owner: string;
+      reference?: string;
+    };
+    decommission?: {
+      planned_date?: string;
+      status?: 'active' | 'deprecated' | 'sunset-scheduled' | 'decommissioned';
+      successor_agent_registry_id?: string;
+    };
+  };
   initialized_by: string;
   initialized_at: string;
   last_updated_at: string;

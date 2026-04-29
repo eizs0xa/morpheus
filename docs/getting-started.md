@@ -17,12 +17,12 @@ All three paths share the same prerequisites.
 Verify with:
 
 ```bash
-node --version && pnpm --version && python3 --version && copier --version && git --version
+node --version && pnpm --version && python3 --version && (copier --version || python3 -m copier --version) && git --version
 ```
 
-> **macOS note — `copier` not found after `pip install`:** `pip install copier` places the binary in
-> `~/Library/Python/<version>/bin`, which macOS does not add to `$PATH` automatically. Either use
-> `pipx` instead (`brew install pipx && pipx install copier`), or add the directory to your PATH:
+> **macOS note — `copier` after `pip install`:** `pip install copier` may place the binary in
+> `~/Library/Python/<version>/bin`, which macOS does not add to `$PATH` automatically. The CLI can
+> fall back to `python3 -m copier`; add the bin directory only if you want the `copier` command itself:
 > ```bash
 > echo 'export PATH="$PATH:$(python3 -m site --user-base)/bin"' >> ~/.zshrc && source ~/.zshrc
 > ```
@@ -131,6 +131,7 @@ agentic init
 | Writes `platform-manifest.json`. | Project config files (`package.json`, `pyproject.toml`, `tsconfig.json`). |
 
 The overlay template runs `scripts/preserve-existing.sh` before any write. Backups are deterministic (`.pre-morpheus.bak` suffix).
+If an init run is interrupted after the preflight step, re-run `agentic init`; the preflight is safe to replay.
 
 ### 4. Verify
 

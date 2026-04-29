@@ -71,6 +71,10 @@ function baseManifest(modules: Record<string, string>): PlatformManifest {
     detected_hardware: { os: 'darwin', arch: 'arm64', shell: 'zsh' },
     project_type: 'fullstack-web',
     modules,
+    governance: {
+      risk_tier: 1,
+      decommission: { status: 'active' },
+    },
     initialized_by: 'ada@example.com',
     initialized_at: '2026-04-23T12:00:00Z',
     last_updated_at: '2026-04-23T12:00:00Z',
