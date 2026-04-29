@@ -11,7 +11,7 @@ All three paths share the same prerequisites.
 | Node.js | 20 LTS or newer | Powers the `agentic` CLI. |
 | pnpm | 9+ | Package manager the CLI expects. |
 | Python | 3.10+ | Hosts the `copier` template engine. |
-| copier | 9+ | `pipx install copier` or `pip install copier`. |
+| copier | 9+ | `pipx install copier` (preferred) or `pip install copier`. See note below. |
 | git | 2.39+ | Required for brownfield mode detection. |
 
 Verify with:
@@ -20,12 +20,22 @@ Verify with:
 node --version && pnpm --version && python3 --version && copier --version && git --version
 ```
 
+> **macOS note — `copier` not found after `pip install`:** `pip install copier` places the binary in
+> `~/Library/Python/<version>/bin`, which macOS does not add to `$PATH` automatically. Either use
+> `pipx` instead (`brew install pipx && pipx install copier`), or add the directory to your PATH:
+> ```bash
+> echo 'export PATH="$PATH:$(python3 -m site --user-base)/bin"' >> ~/.zshrc && source ~/.zshrc
+> ```
+
 Install the CLI from a local checkout (distribution is clone-the-repo for v0.1.0 per [ADR-004](decisions/ADR-004-open-questions-v0.1.md)):
 
 ```bash
 git clone https://github.com/<org>/morpheus.git
 cd morpheus/cli
 pnpm install && pnpm build
+# First-time pnpm users: set up the global bin directory, then open a new terminal
+# (or run: source ~/.zshrc) before proceeding.
+pnpm setup
 pnpm link --global
 agentic --version     # prints the platform version
 ```
