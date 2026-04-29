@@ -23,46 +23,56 @@ export async function printNextSteps(
 ): Promise<void> {
   const lines: string[] = [];
   lines.push('');
-  lines.push(chalk.bold('Next steps:'));
+  lines.push(chalk.bold.green('✓ Morpheus scaffolding is in place.'));
+  lines.push('');
 
-  // Brownfield post-init tasks always take priority over generic next steps.
+  // For brownfield (post-init tasks present) — collapse everything to one
+  // simple instruction the user can act on without thinking.
   if (postInitTasks?.constitutionTask) {
-    lines.push(
-      '  • ' +
-        chalk.yellow('Open .agent/tasks/01-author-constitution.md in your IDE'),
-    );
-    lines.push(
-      '    Ask your agent to complete it — it contains a ready-to-run prompt.',
-    );
-    if (postInitTasks.docsTask) {
-      lines.push(
-        '  • ' +
-          chalk.yellow('Open .agent/tasks/02-audit-docs.md in your IDE'),
-      );
-      lines.push(
-        '    Ask your agent to restructure the detected existing docs into Morpheus format.',
-      );
-    }
+    lines.push(chalk.bold('Next step — one action:'));
     lines.push('');
-    lines.push(chalk.dim('  Then continue with:'));
+    lines.push(
+      '  ' +
+        chalk.yellow.bold('Type ') +
+        chalk.yellow.bold.underline('/morpheus') +
+        chalk.yellow.bold(' in your agent prompt window and press send.'),
+    );
+    lines.push('');
+    lines.push(
+      chalk.dim('  Your agent will read .agent/skills/morpheus-orchestrator.md and'),
+    );
+    lines.push(
+      chalk.dim('  drive every pending task in .agent/tasks/ to completion. When it'),
+    );
+    lines.push(
+      chalk.dim('  finishes you will get a single MORPHEUS_INIT_REPORT.md at the repo'),
+    );
+    lines.push(
+      chalk.dim('  root showing what changed, why, and how the new system works.'),
+    );
+    lines.push('');
+    process.stdout.write(lines.join('\n'));
+    return;
   }
 
+  // Greenfield / resume — short profile-aware hint, then a single command.
+  lines.push(chalk.bold('Next step:'));
   switch (profile) {
     case 'author':
-      lines.push('  • ' + chalk.cyan('agentic feature new --intent=prd <JIRA>'));
+      lines.push('  • ' + chalk.cyan('morpheus feature new --intent=prd <JIRA>'));
       lines.push('    draft a PRD from a Jira ticket.');
       break;
     case 'explorer':
-      lines.push('  • ' + chalk.cyan('agentic tour'));
+      lines.push('  • ' + chalk.cyan('morpheus tour'));
       lines.push('    take a guided read-only walk of the repo.');
       break;
     case 'steward': {
       const hasConstitution = await exists(path.join(projectRoot, 'CONSTITUTION.md'));
-      if (!hasConstitution && !postInitTasks?.constitutionTask) {
-        lines.push('  • ' + chalk.cyan('agentic constitution author'));
+      if (!hasConstitution) {
+        lines.push('  • ' + chalk.cyan('morpheus constitution author'));
         lines.push('    no CONSTITUTION.md was detected — author one.');
       } else {
-        lines.push('  • ' + chalk.cyan('agentic feature new <JIRA>'));
+        lines.push('  • ' + chalk.cyan('morpheus feature new <JIRA>'));
         lines.push('    start a new feature (CONSTITUTION.md detected).');
       }
       break;
@@ -70,12 +80,12 @@ export async function printNextSteps(
     case 'verifier':
     case 'builder':
     default:
-      lines.push('  • ' + chalk.cyan('agentic feature new <JIRA>'));
+      lines.push('  • ' + chalk.cyan('morpheus feature new <JIRA>'));
       lines.push('    kick off a new feature slice.');
       break;
   }
 
-  lines.push('  • ' + chalk.cyan('agentic validate'));
+  lines.push('  • ' + chalk.cyan('morpheus validate'));
   lines.push('    confirm the manifest + modules are healthy.');
   lines.push('');
   process.stdout.write(lines.join('\n'));

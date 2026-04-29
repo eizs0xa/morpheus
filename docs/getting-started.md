@@ -143,6 +143,29 @@ git status          # review what changed
 git diff --stat
 ```
 
+### 5. Hand off to your agent — one action
+
+When `morpheus invoke` finishes it prints:
+
+```
+Type /morpheus in your agent prompt window and press send.
+```
+
+Do exactly that. Your coding agent (Copilot Chat, Cursor, Claude Code) reads
+`.github/prompts/morpheus.prompt.md`, loads
+`.agent/skills/morpheus-orchestrator.md`, and drives every pending file in
+`.agent/tasks/` to completion in order:
+
+1. `01-author-constitution.md` — interviews the steward and fills the constitution.
+2. `02-audit-docs.md` — restructures any pre-existing docs into the role-based
+   `docs/` layout (only present when existing docs are detected).
+3. `99-finalize-report.md` — runs `morpheus validate`, opens a single PR titled
+   `chore: complete Morpheus initialization`, and writes `MORPHEUS_INIT_REPORT.md`
+   at the repo root summarising **what changed, why, and how the new system works
+   relative to the old**.
+
+You read the report, review the PR, and merge.
+
 Next: read [for-engineers/brownfield-walkthrough.md](for-engineers/brownfield-walkthrough.md).
 
 ---

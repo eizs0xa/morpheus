@@ -207,6 +207,45 @@ docs/
 `;
 }
 
+function buildFinalReportPrompt(answers: ResolvedAnswers): string {
+  const stackList = answers.stacks.join(', ') || '(none)';
+  return `---
+task: finalize-init-report
+skill: morpheus-orchestrator
+priority: critical
+status: pending
+---
+
+# Task: Produce MORPHEUS_INIT_REPORT.md
+
+This is the **final** post-init task. It runs after every other task in
+\`.agent/tasks/\` reaches \`status: done\`. Do not start it sooner.
+
+## How to complete this task
+
+1. Confirm every other file in \`.agent/tasks/\` has \`status: done\` in its front-matter.
+   If any are still \`pending\`, complete them first.
+2. Run \`morpheus validate\` and capture the output verbatim.
+3. Follow §"Final report template" in \`.agent/skills/morpheus-orchestrator.md\` exactly
+   to write \`MORPHEUS_INIT_REPORT.md\` at the repo root.
+4. Open a single PR titled \`chore: complete Morpheus initialization\` containing all
+   changes from prior tasks plus this report.
+5. Update \`status: done\` in this file.
+6. Print the PR URL and the absolute path to \`MORPHEUS_INIT_REPORT.md\` to the user.
+
+## Project context (do not re-ask)
+
+| Field | Value |
+|---|---|
+| project_name | ${answers.project_name} |
+| profile | ${answers.profile} |
+| primary_stacks | ${stackList} |
+| workspace | ${answers.workspace} |
+| pm_tool | ${answers.pm} |
+| git_provider | ${answers.git} |
+`;
+}
+
 // ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
@@ -214,6 +253,7 @@ docs/
 export interface PostInitTaskResult {
   constitutionTask: string;
   docsTask: string | null;
+  finalReportTask: string;
 }
 
 /**
@@ -226,7 +266,7 @@ export async function writePostInitTasks(
   answers: ResolvedAnswers,
 ): Promise<PostInitTaskResult> {
   if (mode !== 'brownfield') {
-    return { constitutionTask: '', docsTask: null };
+    return { constitutionTask: '', docsTask: null, finalReportTask: '' };
   }
 
   const tasksDir = path.join(projectRoot, '.agent', 'tasks');
@@ -245,8 +285,13 @@ export async function writePostInitTasks(
     docsTaskRel = path.relative(projectRoot, docsTaskPath);
   }
 
+  // 3. Final report task — always written for brownfield, runs last
+  const finalReportPath = path.join(tasksDir, '99-finalize-report.md');
+  await fs.writeFile(finalReportPath, buildFinalReportPrompt(answers), 'utf8');
+
   return {
     constitutionTask: path.relative(projectRoot, constitutionTaskPath),
     docsTask: docsTaskRel,
+    finalReportTask: path.relative(projectRoot, finalReportPath),
   };
 }
