@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { ProfileName } from '../../composers/module-resolver.js';
+import type { PostInitTaskResult } from './post-init-tasks.js';
 
 async function exists(p: string): Promise<boolean> {
   try {
@@ -18,10 +19,33 @@ async function exists(p: string): Promise<boolean> {
 export async function printNextSteps(
   projectRoot: string,
   profile: ProfileName,
+  postInitTasks?: PostInitTaskResult,
 ): Promise<void> {
   const lines: string[] = [];
   lines.push('');
   lines.push(chalk.bold('Next steps:'));
+
+  // Brownfield post-init tasks always take priority over generic next steps.
+  if (postInitTasks?.constitutionTask) {
+    lines.push(
+      '  • ' +
+        chalk.yellow('Open .agent/tasks/01-author-constitution.md in your IDE'),
+    );
+    lines.push(
+      '    Ask your agent to complete it — it contains a ready-to-run prompt.',
+    );
+    if (postInitTasks.docsTask) {
+      lines.push(
+        '  • ' +
+          chalk.yellow('Open .agent/tasks/02-audit-docs.md in your IDE'),
+      );
+      lines.push(
+        '    Ask your agent to restructure the detected existing docs into Morpheus format.',
+      );
+    }
+    lines.push('');
+    lines.push(chalk.dim('  Then continue with:'));
+  }
 
   switch (profile) {
     case 'author':
@@ -34,7 +58,7 @@ export async function printNextSteps(
       break;
     case 'steward': {
       const hasConstitution = await exists(path.join(projectRoot, 'CONSTITUTION.md'));
-      if (!hasConstitution) {
+      if (!hasConstitution && !postInitTasks?.constitutionTask) {
         lines.push('  • ' + chalk.cyan('agentic constitution author'));
         lines.push('    no CONSTITUTION.md was detected — author one.');
       } else {

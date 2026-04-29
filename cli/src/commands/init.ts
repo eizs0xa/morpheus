@@ -37,6 +37,7 @@ import { resolvePlatformRoot } from './_init/platform-root.js';
 import { resolveAnswers, type ResolvedAnswers } from './_init/answer-sources.js';
 import { checkInitiative } from './_init/jira-preflight.js';
 import { printNextSteps } from './_init/next-steps.js';
+import { writePostInitTasks } from './_init/post-init-tasks.js';
 import { printBanner, progress, note, success, warn } from './_init/banner.js';
 
 const PLATFORM_VERSION = '0.1.0';
@@ -410,7 +411,16 @@ export async function init(options: InitOptions = {}): Promise<void> {
   }
   success(`platform-manifest.json written (profile=${manifest.profile})`);
 
-  await printNextSteps(projectRoot, answers.profile);
+  // Write agent task files that guide subsequent IDE-agent work.
+  const postInitTasks = await writePostInitTasks(projectRoot, mode, answers);
+  if (postInitTasks.constitutionTask) {
+    success(`post-init tasks written → ${postInitTasks.constitutionTask}`);
+    if (postInitTasks.docsTask) {
+      note(`docs audit task written → ${postInitTasks.docsTask}`);
+    }
+  }
+
+  await printNextSteps(projectRoot, answers.profile, postInitTasks);
 
   process.stdout.write(chalk.green('\n✓ Morpheus init complete.\n'));
 }
