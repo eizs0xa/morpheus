@@ -4,7 +4,8 @@
   "description": "Morpheus agentic development platform CLI.",
   "type": "module",
   "bin": {
-    "agentic": "./dist/index.js"
+    "agentic": "./dist/index.js",
+    "morpheus": "./dist/index.js"
   },
   "main": "./dist/index.js",
   "files": [

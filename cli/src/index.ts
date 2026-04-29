@@ -2,37 +2,93 @@
 /**
  * Morpheus CLI entrypoint.
  *
- * Wires commander subcommands. Individual commands live under `./commands/`
- * and are imported lazily so a single failing command does not crash the
- * whole CLI at load time.
+ * Ships as two binaries from the same entrypoint:
+ *   `morpheus`  — preferred name (e.g. `morpheus invoke`, `morpheus update`)
+ *   `agentic`   — legacy/alias name kept for backward compatibility
+ *
+ * Subcommands:
+ *   invoke   — scaffold or overlay a Morpheus project (alias: init)
+ *   update   — pull latest Morpheus from GitHub and re-apply overlay
+ *   init     — synonym for invoke (backward compat)
+ *   validate — validate manifest + modules
+ *   doctor   — deeper health check
+ *   add      — add a module (future)
+ *   remove   — remove a module (future)
  */
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { AgenticError } from './util/errors.js';
 
+// Detect which binary name was used so the help text reflects it.
+const binName = process.argv[1]?.endsWith('morpheus') ? 'morpheus' : 'agentic';
+
 const program = new Command();
 
 program
-  .name('agentic')
+  .name(binName)
   .description('Morpheus agentic development platform CLI')
   .version('0.1.0')
   .option('--non-interactive', 'run without interactive prompts', false)
   .option('--profile <name>', 'pre-select a profile (builder|verifier|author|explorer|steward)')
   .option('--verbose', 'verbose logging', false);
 
+// ---------------------------------------------------------------------------
+// Shared init action (used by both `invoke` and `init`)
+// ---------------------------------------------------------------------------
+async function runInit(localOpts: { resume?: boolean; answersFile?: string }): Promise<void> {
+  const mod = await import('./commands/init.js');
+  const global = program.opts<{ nonInteractive?: boolean; profile?: string }>();
+  await mod.init({
+    nonInteractive: global.nonInteractive === true,
+    profile: global.profile as
+      | 'builder'
+      | 'verifier'
+      | 'author'
+      | 'explorer'
+      | 'steward'
+      | undefined,
+    resume: localOpts.resume === true,
+    answersFile: localOpts.answersFile,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// `invoke` — primary entry point  (morpheus invoke)
+// ---------------------------------------------------------------------------
+program
+  .command('invoke')
+  .description('Scaffold or overlay a Morpheus project on the current repo')
+  .option('--resume', 're-run against an already-initialized project', false)
+  .option('--answers-file <path>', 'YAML answers file for non-interactive runs')
+  .action(runInit);
+
+// ---------------------------------------------------------------------------
+// `init` — backward-compatible alias for invoke  (agentic init)
+// ---------------------------------------------------------------------------
 program
   .command('init')
-  .description('Scaffold or overlay a Morpheus project')
+  .description('Scaffold or overlay a Morpheus project (alias for `invoke`)')
   .option('--resume', 're-run init against an already-initialized project', false)
   .option('--answers-file <path>', 'YAML answers file for non-interactive runs')
-  .action(async (localOpts: { resume?: boolean; answersFile?: string }) => {
-    const mod = await import('./commands/init.js');
-    const global = program.opts<{
-      nonInteractive?: boolean;
-      profile?: string;
-    }>();
-    await mod.init({
-      nonInteractive: global.nonInteractive === true,
+  .action(runInit);
+
+// ---------------------------------------------------------------------------
+// `update` — pull + rebuild + re-overlay  (morpheus update)
+// ---------------------------------------------------------------------------
+program
+  .command('update')
+  .description('Pull latest Morpheus from GitHub and re-apply the overlay to this project')
+  .option('--skip-pull', 'skip the git pull step', false)
+  .option('--skip-build', 'skip the CLI rebuild step', false)
+  .option('--skip-overlay', 'skip re-running the overlay on this project', false)
+  .action(async (localOpts: { skipPull?: boolean; skipBuild?: boolean; skipOverlay?: boolean }) => {
+    const mod = await import('./commands/update.js');
+    const global = program.opts<{ nonInteractive?: boolean; profile?: string }>();
+    await mod.update({
+      skipPull: localOpts.skipPull === true,
+      skipBuild: localOpts.skipBuild === true,
+      skipOverlay: localOpts.skipOverlay === true,
+      nonInteractive: global.nonInteractive !== false,
       profile: global.profile as
         | 'builder'
         | 'verifier'
@@ -40,8 +96,6 @@ program
         | 'explorer'
         | 'steward'
         | undefined,
-      resume: localOpts.resume === true,
-      answersFile: localOpts.answersFile,
     });
   });
 
