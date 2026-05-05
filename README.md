@@ -65,7 +65,27 @@ Walk away any time. Every rendered file is inspectable markdown / YAML / TypeScr
 - [CONTRIBUTING.md](CONTRIBUTING.md) — module proposals, breaking-change policy.
 - [CHANGELOG.md](CHANGELOG.md) — what shipped, what's next.
 
-## Quick start
+## Get started — one command, any machine
+
+No prerequisites. No manual steps. Paste one line in your terminal from inside your project directory (or an empty folder for greenfield), and Morpheus installs everything it needs, detects your project type, and walks you through the setup interactively.
+
+**macOS / Linux:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.ps1 | iex
+```
+
+> The bootstrap script: installs git, Node ≥ 20, pnpm, Python 3, and copier if any are missing → clones/updates the Morpheus platform → builds and globally links the CLI → runs `morpheus invoke` in your current directory, which auto-detects greenfield vs brownfield and walks you through a five-question setup.
+>
+> **Already have the repo cloned?** Run `./scripts/bootstrap.sh` (or `.\scripts\bootstrap.ps1`) from the repo root — it will skip the clone step.
+
+---
+
+## Quick start (if Morpheus CLI is already installed)
 
 ```bash
 # Greenfield
