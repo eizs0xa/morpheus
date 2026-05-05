@@ -14,6 +14,7 @@ contributes:
   skills:
     - skills/ticket-syncer-jira.md
     - skills/story-emitter.md
+    - skills/story-prompt-composer.md
   workflows:
     - workflows/jira-branch-check.yml.tmpl
     - workflows/jira-smart-commits.yml.tmpl
