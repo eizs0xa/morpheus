@@ -28,6 +28,18 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# ── TTY fix: re-exec from a temp file when piped from curl ────────────────────
+# When the script is run as `curl ... | bash`, stdin is the curl pipe — not
+# the terminal. Interactive prompts (morpheus invoke) require a real TTY.
+# We save the script to a temp file and re-execute it so bash inherits the
+# caller's terminal as stdin.
+if [[ ! -t 0 ]]; then
+  _tmp="$(mktemp /tmp/morpheus-bootstrap-XXXXXX.sh)"
+  cat > "$_tmp"
+  chmod +x "$_tmp"
+  exec bash "$_tmp" "$@"
+fi
+
 # ── Configuration ─────────────────────────────────────────────────────────────
 MORPHEUS_REPO="${MORPHEUS_REPO:-https://github.com/eizs0xa/morpheus.git}"
 MORPHEUS_DIR="${MORPHEUS_DIR:-$HOME/.morpheus}"
@@ -306,10 +318,19 @@ invoke_morpheus() {
   echo -e "${BOLD}${CYAN}Running morpheus invoke in: ${USER_CWD}${RESET}"
   echo ""
 
-  if require_cmd morpheus; then
-    morpheus invoke
+  # Ensure the invoke step always reads from the real terminal, not any pipe.
+  if [[ -t 0 ]]; then
+    if require_cmd morpheus; then
+      morpheus invoke
+    else
+      node "$MORPHEUS_DIR/cli/dist/index.js" invoke
+    fi
   else
-    node "$MORPHEUS_DIR/cli/dist/index.js" invoke
+    if require_cmd morpheus; then
+      morpheus invoke < /dev/tty
+    else
+      node "$MORPHEUS_DIR/cli/dist/index.js" invoke < /dev/tty
+    fi
   fi
 }
 
