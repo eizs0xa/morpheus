@@ -2,9 +2,35 @@
 
 > Three paths into Morpheus: **new project**, **brownfield overlay**, and **learning-only**. Pick the one that matches your situation and follow it end to end.
 
-## Prerequisites
+## The fast path — one command, zero prerequisites
 
-All three paths share the same prerequisites.
+No tools need to be installed first. Paste one line in your terminal from inside your project directory (or an empty folder for a new project) and the bootstrap handles everything:
+
+**macOS / Linux:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.ps1 | iex
+```
+
+The bootstrap script:
+1. Installs any missing system dependencies (git, Node.js ≥ 20, pnpm, Python 3, copier).
+2. Clones or updates the Morpheus platform at `~/.morpheus`.
+3. Builds and globally links the `morpheus` CLI.
+4. Runs `morpheus invoke` in your current directory — auto-detecting greenfield vs brownfield and starting the interactive setup.
+
+That's it. The rest of this page documents what happens after the bootstrap runs, and how to drive the same steps manually if you prefer.
+
+---
+
+## Manual setup (optional — skip if you used the bootstrap above)
+
+If you prefer to install things yourself or are working in a locked-down environment:
+
+### Prerequisites
 
 | Tool | Version | Notes |
 |------|---------|-------|
@@ -27,7 +53,9 @@ node --version && pnpm --version && python3 --version && (copier --version || py
 > echo 'export PATH="$PATH:$(python3 -m site --user-base)/bin"' >> ~/.zshrc && source ~/.zshrc
 > ```
 
-Install the CLI from a local checkout (distribution is clone-the-repo for v0.1.0 per [ADR-004](decisions/ADR-004-open-questions-v0.1.md)):
+### Install the CLI
+
+Distribution is clone-the-repo for v0.1.0 (per [ADR-004](decisions/ADR-004-open-questions-v0.1.md)):
 
 ```bash
 git clone https://github.com/<org>/morpheus.git
@@ -45,7 +73,7 @@ morpheus --version     # prints the platform version
 
 ## Path 1 — New project (greenfield)
 
-You are starting from an empty directory.
+You are starting from an empty directory. If you used the bootstrap above, `morpheus invoke` already ran — jump straight to [Outcome](#3-outcome) to see what was created.
 
 ### 1. Create and enter an empty directory
 
@@ -99,7 +127,7 @@ Next: read [for-engineers/new-project-walkthrough.md](for-engineers/new-project-
 
 ## Path 2 — Brownfield overlay
 
-You have an existing repo — `.git/` exists, source code exists, maybe `.github/workflows/*` already exists. You want Morpheus to **add** scaffolding without touching your code.
+You have an existing repo — `.git/` exists, source code exists, maybe `.github/workflows/*` already exists. You want Morpheus to **add** scaffolding without touching your code. If you ran the bootstrap from inside an existing repo, `morpheus invoke` already auto-detected brownfield mode — skip to [step 4 (Verify)](#4-verify).
 
 ### Preconditions
 
