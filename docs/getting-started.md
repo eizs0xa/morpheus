@@ -8,12 +8,12 @@ No tools need to be installed first. Paste one line in your terminal from inside
 
 **macOS / Linux:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.sh | bash
 ```
 
 **Windows (PowerShell):**
 ```powershell
-irm https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.ps1 | iex
+irm https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.ps1 | iex
 ```
 
 The bootstrap script:
@@ -58,7 +58,7 @@ node --version && pnpm --version && python3 --version && (copier --version || py
 Distribution is clone-the-repo for v0.1.0 (per [ADR-004](decisions/ADR-004-open-questions-v0.1.md)):
 
 ```bash
-git clone https://github.com/<org>/morpheus.git
+git clone https://github.com/eizs0xa/morpheus.git
 cd morpheus/cli
 pnpm install && pnpm build
 # First-time pnpm users: set up the global bin directory, then open a new terminal

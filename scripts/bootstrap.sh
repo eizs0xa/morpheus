@@ -5,7 +5,7 @@
 # One command to go from zero to running Morpheus, regardless of what is
 # already installed on the machine:
 #
-#   curl -fsSL https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.sh | bash
 #
 # Or, if you already have the repo:
 #
@@ -29,7 +29,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # ── Configuration ─────────────────────────────────────────────────────────────
-MORPHEUS_REPO="${MORPHEUS_REPO:-https://github.com/<org>/morpheus.git}"
+MORPHEUS_REPO="${MORPHEUS_REPO:-https://github.com/eizs0xa/morpheus.git}"
 MORPHEUS_DIR="${MORPHEUS_DIR:-$HOME/.morpheus}"
 MORPHEUS_BRANCH="${MORPHEUS_BRANCH:-main}"
 MORPHEUS_SKIP_INVOKE="${MORPHEUS_SKIP_INVOKE:-0}"

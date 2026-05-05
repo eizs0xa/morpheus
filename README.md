@@ -71,12 +71,12 @@ No prerequisites. No manual steps. Paste one line in your terminal from inside y
 
 **macOS / Linux:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.sh | bash
 ```
 
 **Windows (PowerShell):**
 ```powershell
-irm https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.ps1 | iex
+irm https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.ps1 | iex
 ```
 
 > The bootstrap script: installs git, Node ≥ 20, pnpm, Python 3, and copier if any are missing → clones/updates the Morpheus platform → builds and globally links the CLI → runs `morpheus invoke` in your current directory, which auto-detects greenfield vs brownfield and walks you through a five-question setup.

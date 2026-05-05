@@ -4,7 +4,7 @@
 # One command to go from zero to running Morpheus on Windows, regardless of
 # what is already installed:
 #
-#   irm https://raw.githubusercontent.com/<org>/morpheus/main/scripts/bootstrap.ps1 | iex
+#   irm https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.ps1 | iex
 #
 # Or, if you already have the repo:
 #
@@ -30,7 +30,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # ── Configuration ─────────────────────────────────────────────────────────────
-$MorpheusRepo   = if ($env:MORPHEUS_REPO)   { $env:MORPHEUS_REPO }   else { 'https://github.com/<org>/morpheus.git' }
+$MorpheusRepo   = if ($env:MORPHEUS_REPO)   { $env:MORPHEUS_REPO }   else { 'https://github.com/eizs0xa/morpheus.git' }
 $MorpheusDir    = if ($env:MORPHEUS_DIR)    { $env:MORPHEUS_DIR }    else { Join-Path $HOME '.morpheus' }
 $MorpheusBranch = if ($env:MORPHEUS_BRANCH) { $env:MORPHEUS_BRANCH } else { 'main' }
 $SkipInvoke     = ($env:MORPHEUS_SKIP_INVOKE -eq '1')
