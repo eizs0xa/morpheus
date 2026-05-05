@@ -180,7 +180,7 @@ agentic remove stack-node
 
 ### `morpheus update` (alias: `agentic update`)
 
-Pull the latest Morpheus platform from GitHub, rebuild the CLI, and re-apply the overlay on the current project.
+Pull the latest Morpheus platform from GitHub, rebuild the CLI, re-apply the overlay on the current project, and print a summary of what changed.
 
 Three sequential steps:
 
@@ -188,16 +188,23 @@ Three sequential steps:
 |---|---|---|
 | 1/3 Pull | `git pull --ff-only origin <branch>` on the Morpheus platform root | `--skip-pull` |
 | 2/3 Build | `pnpm install && pnpm build` in `platform-root/cli/` (falls back to `npm`) | `--skip-build` |
-| 3/3 Overlay | `invoke --resume` on the current project to apply new module contributions, template changes, and schema updates | `--skip-overlay` |
+| 3/3 Overlay | `init --resume` on the current project to apply new module contributions, template changes, and schema updates | `--skip-overlay` |
+
+After the overlay step, `morpheus update` prints an **Update summary** that shows:
+
+- New commits pulled from the platform repo
+- Platform-level module changes (new/removed modules, version bumps, added or removed skill/workflow/template/schema files)
+- Impact on your project — which new `.agent/skills/` files were added and which `.github/workflows/` files are new
 
 Guards:
 - Refuses to pull if the platform repo has uncommitted local changes.
 - Throws a clear error if the target project hasn't been initialized yet (`morpheus invoke` first).
+- When resuming, restores the original composition selections (pm integration, workspace, git provider, stacks, domains) from `platform-manifest.json` so modules like `pm-jira` are never silently dropped.
 
 **Examples:**
 
 ```bash
-# Full update
+# Full update — pulls latest platform, rebuilds CLI, refreshes your project, prints changelog
 morpheus update
 
 # CI: skip the pull (checkout is managed externally)
@@ -206,8 +213,6 @@ morpheus update --skip-pull
 # Only pull + build, don't touch the project overlay
 morpheus update --skip-overlay
 ```
-
----
 
 ### Planned commands (tracked, not shipped)
 

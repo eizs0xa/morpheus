@@ -17,6 +17,7 @@ import { execa } from 'execa';
 import chalk from 'chalk';
 import { resolvePlatformRoot } from './_init/platform-root.js';
 import { ValidationError } from '../util/errors.js';
+import { loadAllModules } from '../detectors/stack.js';
 
 export interface UpdateOptions {
   /** Skip the git pull step (useful in CI where the checkout is managed externally). */
@@ -29,6 +30,154 @@ export interface UpdateOptions {
   projectRoot?: string;
   nonInteractive?: boolean;
   profile?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Changelog helpers
+// ---------------------------------------------------------------------------
+
+const CONTRIB_TYPES = ['skills', 'workflows', 'templates', 'schemas', 'instructions', 'hooks'] as const;
+type ContribType = (typeof CONTRIB_TYPES)[number];
+
+interface ModuleSnapshot {
+  name: string;
+  version: string;
+  contributes: Record<ContribType, string[]>;
+}
+
+/** Best-effort snapshot of every module's version and contribution lists. */
+async function snapshotModules(platformRoot: string): Promise<Map<string, ModuleSnapshot>> {
+  const map = new Map<string, ModuleSnapshot>();
+  try {
+    const allModules = await loadAllModules(platformRoot);
+    for (const m of allModules) {
+      const raw = (m.raw.contributes as Record<string, unknown> | undefined) ?? {};
+      const toList = (key: string): string[] => {
+        const v = raw[key];
+        return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
+      };
+      map.set(m.name, {
+        name: m.name,
+        version: m.version,
+        contributes: {
+          skills: toList('skills'),
+          workflows: toList('workflows'),
+          templates: toList('templates'),
+          schemas: toList('schemas'),
+          instructions: toList('instructions'),
+          hooks: toList('hooks'),
+        },
+      });
+    }
+  } catch {
+    // Non-fatal — changelog degrades gracefully.
+  }
+  return map;
+}
+
+function renderChangelog(
+  before: Map<string, ModuleSnapshot>,
+  after: Map<string, ModuleSnapshot>,
+  commits: string[],
+  oldSha: string,
+  newSha: string,
+): void {
+  const hr = chalk.dim('─'.repeat(58));
+  process.stdout.write(`\n${hr}\n`);
+  process.stdout.write(chalk.bold('  Update summary\n'));
+  process.stdout.write(`${hr}\n`);
+
+  if (oldSha !== '' && oldSha === newSha) {
+    process.stdout.write(chalk.dim('  Already up to date — no platform changes.\n'));
+    process.stdout.write(`${hr}\n`);
+    return;
+  }
+
+  // Commits section
+  if (commits.length > 0) {
+    process.stdout.write(chalk.bold('\n  New commits:\n'));
+    for (const line of commits.slice(0, 20)) {
+      process.stdout.write(chalk.dim(`    · ${line}\n`));
+    }
+    if (commits.length > 20) {
+      process.stdout.write(chalk.dim(`    · … and ${commits.length - 20} more\n`));
+    }
+  }
+
+  // Module-level diff
+  const moduleLines: string[] = [];
+  const allNames = new Set([...before.keys(), ...after.keys()]);
+  const newSkills: string[] = [];
+  const newWorkflows: string[] = [];
+
+  for (const name of [...allNames].sort()) {
+    const b = before.get(name);
+    const a = after.get(name);
+
+    if (a === undefined) {
+      moduleLines.push(chalk.red(`  - ${name} (removed)`));
+      continue;
+    }
+    if (b === undefined) {
+      moduleLines.push(chalk.green(`  + ${name} v${a.version} (new module)`));
+      for (const s of a.contributes.skills) newSkills.push(path.basename(s, '.md'));
+      for (const w of a.contributes.workflows) newWorkflows.push(path.basename(w).replace(/\.yml\.tmpl$|\.yml$/, ''));
+      continue;
+    }
+
+    const diffs: string[] = [];
+    if (b.version !== a.version) diffs.push(chalk.yellow(`    v${b.version} → v${a.version}`));
+
+    for (const type of CONTRIB_TYPES) {
+      const bSet = new Set(b.contributes[type]);
+      const aArr = a.contributes[type];
+      for (const item of aArr) {
+        if (!bSet.has(item)) {
+          const label = type.slice(0, -1); // 'skills' → 'skill'
+          diffs.push(chalk.green(`    + ${item} (new ${label})`));
+          if (type === 'skills') newSkills.push(path.basename(item, '.md'));
+          if (type === 'workflows') newWorkflows.push(path.basename(item).replace(/\.yml\.tmpl$|\.yml$/, ''));
+        }
+      }
+      const aSet = new Set(aArr);
+      for (const item of b.contributes[type]) {
+        if (!aSet.has(item)) {
+          const label = type.slice(0, -1);
+          diffs.push(chalk.red(`    - ${item} (removed ${label})`));
+        }
+      }
+    }
+
+    if (diffs.length > 0) {
+      moduleLines.push(`\n  ~ ${chalk.cyan(name)}`);
+      for (const d of diffs) moduleLines.push(d);
+    }
+  }
+
+  if (moduleLines.length > 0) {
+    process.stdout.write(chalk.bold('\n  Platform changes:\n'));
+    for (const l of moduleLines) process.stdout.write(`${l}\n`);
+  }
+
+  // Impact notes
+  process.stdout.write(chalk.bold('\n  Impact on your project:\n'));
+  process.stdout.write(chalk.dim('    · Skills in .agent/skills/ and workflows in .github/workflows/\n'));
+  process.stdout.write(chalk.dim('      have been refreshed with the latest platform versions.\n'));
+  process.stdout.write(chalk.dim('    · Reload your IDE agent context for new skills to take effect.\n'));
+
+  if (newSkills.length > 0) {
+    process.stdout.write(chalk.dim(`\n    New skills: ${newSkills.join(', ')}\n`));
+    process.stdout.write(chalk.dim('    Open .agent/skills/<name>.md for usage instructions.\n'));
+  }
+  if (newWorkflows.length > 0) {
+    process.stdout.write(chalk.dim(`\n    New CI workflows: ${newWorkflows.join(', ')}\n`));
+    process.stdout.write(chalk.dim('    Review .github/workflows/ and commit any new files to your repo.\n'));
+  }
+  if (newSkills.length === 0 && newWorkflows.length === 0 && moduleLines.length === 0) {
+    process.stdout.write(chalk.dim('    · Module contributions refreshed — no new skills or workflows.\n'));
+  }
+
+  process.stdout.write(`\n${hr}\n`);
 }
 
 function step(n: number, total: number, msg: string): void {
@@ -65,6 +214,12 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
       chalk.dim(`  project root:  ${projectRoot}\n`),
   );
 
+  // Snapshot platform state before the pull (best-effort, for changelog).
+  const beforeSnapshot = await snapshotModules(platformRoot);
+  let oldSha = '';
+  let newSha = '';
+  let commits: string[] = [];
+
   // ------------------------------------------------------------------
   // [1/3] git pull
   // ------------------------------------------------------------------
@@ -88,6 +243,14 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
     }
 
     note(`branch: ${currentBranch}`);
+
+    // Capture the SHA before the pull so the changelog can show new commits.
+    try {
+      const { stdout: shaOut } = await execa('git', ['-C', platformRoot, 'rev-parse', 'HEAD'], { stdio: 'pipe' });
+      oldSha = shaOut.trim();
+    } catch {
+      // Non-fatal.
+    }
 
     // Check for uncommitted changes in the platform repo that would block ff-only.
     const { stdout: statusOut } = await execa(
@@ -115,6 +278,22 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
         `git pull failed: ${msg.trim()}`,
         `Resolve merge conflicts in ${platformRoot} then retry, or pass --skip-pull to skip the pull step.`,
       );
+    }
+
+    // Capture new SHA and commit list for the changelog.
+    try {
+      const { stdout: newShaOut } = await execa('git', ['-C', platformRoot, 'rev-parse', 'HEAD'], { stdio: 'pipe' });
+      newSha = newShaOut.trim();
+      if (oldSha !== '' && oldSha !== newSha) {
+        const { stdout: logOut } = await execa(
+          'git',
+          ['-C', platformRoot, 'log', '--oneline', `${oldSha}..HEAD`],
+          { stdio: 'pipe' },
+        );
+        commits = logOut.trim().split('\n').filter((l) => l.length > 0);
+      }
+    } catch {
+      // Non-fatal.
     }
 
     ok('platform repo up to date');
@@ -189,4 +368,8 @@ export async function update(options: UpdateOptions = {}): Promise<void> {
       '  The rebuilt binary takes effect on the next command invocation.\n',
     ),
   );
+
+  // Snapshot after the overlay has been re-applied and print the summary.
+  const afterSnapshot = await snapshotModules(platformRoot);
+  renderChangelog(beforeSnapshot, afterSnapshot, commits, oldSha, newSha);
 }

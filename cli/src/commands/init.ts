@@ -276,6 +276,25 @@ export async function init(options: InitOptions = {}): Promise<void> {
     answers.profile = options.profile;
   }
 
+  // When resuming, restore composition selections (pm, workspace, git, stacks, domains)
+  // from the previous manifest's module keys.  resolveAnswers only seeds `profile`
+  // from the manifest, so pm/workspace/git/stacks default to 'none'/'workspace-microsoft'/
+  // etc. without this correction — causing modules like pm-jira to be silently dropped
+  // from the composed set and their skill/workflow contributions never refreshed.
+  if (previousManifest !== null) {
+    const moduleNames = Object.keys(previousManifest.modules);
+    const prevPm = moduleNames.find((n) => n.startsWith('pm-'));
+    const prevWorkspace = moduleNames.find((n) => n.startsWith('workspace-'));
+    const prevGit = moduleNames.find((n) => n.startsWith('git-'));
+    const prevStacks = moduleNames.filter((n) => n.startsWith('stack-'));
+    const prevDomains = moduleNames.filter((n) => n.startsWith('domain-'));
+    if (prevPm !== undefined) answers.pm = prevPm;
+    if (prevWorkspace !== undefined) answers.workspace = prevWorkspace;
+    if (prevGit !== undefined) answers.git = prevGit;
+    if (prevStacks.length > 0) answers.stacks = prevStacks;
+    if (prevDomains.length > 0) answers.domains = prevDomains;
+  }
+
   if (!nonInteractive) {
     // Lightweight interactive confirmation; the full Artifact B interview
     // lives in prompts/index.ts.
