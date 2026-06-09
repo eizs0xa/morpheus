@@ -20,9 +20,9 @@ assignees: []
 
 <!-- What's in, what's out. Keep it tight. -->
 
-## Detection markers (stacks only)
+## Detection markers (optional)
 
-<!-- Files, globs, or heuristics the CLI will use to auto-detect this stack -->
+<!-- Files, globs, or heuristics agents/scripts can use to identify when this module applies -->
 
 ## Incompatibilities
 
@@ -42,9 +42,9 @@ contributes:
     - <hook-name>.sh
 ```
 
-## Composition impact
+## Setup impact
 
-<!-- Does this module affect the composition rules (CONSTITUTION §1)? -->
+<!-- Does this module affect chat setup questions, generated files, env examples, or validation? -->
 
 ## Risks / open questions
 

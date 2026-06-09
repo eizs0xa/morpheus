@@ -1,0 +1,51 @@
+name: Jira-linked PR check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  jira-linkage:
+    name: Jira key in branch and PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Jira-linked names
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          JIRA_PROJECT_KEY: "{{ jira_project_key }}"
+        run: |
+          set -euo pipefail
+
+          if [[ -n "${JIRA_PROJECT_KEY}" ]]; then
+            key_pattern="${JIRA_PROJECT_KEY}-[0-9]+"
+          else
+            key_pattern="[A-Z][A-Z0-9]+-[0-9]+"
+          fi
+
+          if [[ "${BRANCH_NAME}" =~ ^revert- ]] || [[ "${BRANCH_NAME}" =~ ^release/ ]] || [[ "${BRANCH_NAME}" =~ ^dependabot/ ]]; then
+            echo "Exempt branch '${BRANCH_NAME}'."
+            exit 0
+          fi
+
+          if ! [[ "${BRANCH_NAME}" =~ ${key_pattern} ]]; then
+            echo "::error::Branch name '${BRANCH_NAME}' must include Jira key matching ${key_pattern}."
+            exit 1
+          fi
+
+          if ! [[ "${PR_TITLE}" =~ ${key_pattern} ]]; then
+            echo "::error::PR title '${PR_TITLE}' must include Jira key matching ${key_pattern}."
+            exit 1
+          fi
+
+          branch_key=$(echo "${BRANCH_NAME}" | grep -Eo "${key_pattern}" | head -n 1)
+          title_key=$(echo "${PR_TITLE}" | grep -Eo "${key_pattern}" | head -n 1)
+          if [[ "${branch_key}" != "${title_key}" ]]; then
+            echo "::error::Branch Jira key '${branch_key}' must match PR title Jira key '${title_key}'."
+            exit 1
+          fi
+
+          echo "Jira linkage OK: ${branch_key}"

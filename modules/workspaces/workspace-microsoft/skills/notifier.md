@@ -49,7 +49,7 @@ meaningful event, shaped so the recipient can decide in under 10 seconds whether
    - `release_merged` → release notes snippet, link to CHANGELOG
    - `spec_ready` → link to spec.md, requested reviewers
    - `incident` → severity, incident channel link, on-call handle
-3. **Post.** Call the Teams MCP server with the `teams_webhook_url` configured at `agentic
+3. **Post.** Call the Teams MCP server with the `teams_webhook_url` configured during Morpheus
    init`. Capture the returned message ID as `notification_id`.
 4. **Fallback.** If Teams returns non-2xx, retry once with jitter. On second failure, send
    an Outlook email to `primary_channel_id`'s subscriber list with the same title + body +

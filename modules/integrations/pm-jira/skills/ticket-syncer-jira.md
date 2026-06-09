@@ -42,7 +42,7 @@ hardcoded in code or in agents.
 
 The skill replaces ad-hoc "create a ticket, then create a branch, then commit
 something, then maybe someone drags the card" manual work with a deterministic
-flow that the CLI, CI, and agents all agree on.
+flow that GitHub Actions, Jira, and agents all agree on.
 
 ## Inputs
 
@@ -60,7 +60,7 @@ flow that the CLI, CI, and agents all agree on.
 1. **Load configuration.**
    - Read `platform-manifest.json` and assert `modules.pm-jira` is present. Abort with a clear error if not — this skill is a no-op without the integration.
    - Load `templates/jira-transition-map.yaml` and parse it into a dict `{stage: status_name}`.
-   - Load Jira credentials from the environment (never from source files). If missing, abort with a remediation hint (`agentic doctor` will also catch this).
+   - Load Jira credentials from the environment (never from source files). If missing, abort with a remediation hint and point the user to `.env.example`.
 
 2. **Pick a mode.**
    - **Mode A — single ticket.** Caller supplies an existing Jira key (`PROJ-1234`). Skip creation.
@@ -123,6 +123,6 @@ flow that the CLI, CI, and agents all agree on.
 - **Wrong project key in branch.** Agent reads a stale manifest. Re-read `platform-manifest.json` before every run.
 - **Silent Epic duplication.** Two parallel agents each create a "Feature X" Epic. Mitigate by querying existing Epics by exact summary + initiative before creating.
 - **Smart Commit trailer drift.** Agents write `Jira: PROJ-1234 in review` instead of `#in_review_plan`. Always emit the trailer from the configured template; do not free-text.
-- **Status-map drift.** Team renames "In Review - Plan" in Jira without updating `jira-transition-map.yaml`. `agentic doctor` must flag unknown status names.
+- **Status-map drift.** Team renames "In Review - Plan" in Jira without updating `jira-transition-map.yaml`. The Jira module validation should flag unknown status names.
 - **Initiative-link panic.** Team has no Initiative. This is a warning, never an error. Do not refuse to create tickets.
 - **Credential leak.** Never commit `.env`. The skill asserts `JIRA_API_TOKEN` is present in env and redacts it in all log output.

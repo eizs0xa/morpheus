@@ -1,0 +1,17 @@
+name: CoE registry sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "{{ default_branch }}"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report CoE sync placeholder
+        run: |
+          echo "CoE registry sync is configured as a Morpheus integration placeholder."
+          echo "Wire this workflow to approved registry APIs before enabling writes."

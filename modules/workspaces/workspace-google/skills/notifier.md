@@ -49,7 +49,7 @@ meaningful event, shaped so the recipient can decide in under 10 seconds whether
    - `release_merged` → release notes snippet, link to CHANGELOG
    - `spec_ready` → link to spec.md, requested reviewers
    - `incident` → severity, incident channel link, on-call handle
-3. **Post.** Call the Google Chat MCP server with the `chat_space_id` configured at `agentic
+3. **Post.** Call the Google Chat MCP server with the `chat_space_id` configured during Morpheus
    init`. Capture the returned message name as `notification_id`.
 4. **Fallback.** If Chat returns non-2xx, retry once with jitter. On second failure, send
    a Gmail message to the `primary_channel_name` group alias with the same title + body +

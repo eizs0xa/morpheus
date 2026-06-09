@@ -1,100 +1,96 @@
 # Morpheus Platform Constitution
 
-> This is platform law. It governs how modules compose, how the platform evolves, and what the platform will never do. Project-level constitutions live elsewhere; this one governs the platform itself.
+This document governs the Morpheus platform repo. Project-level constitutions are generated or maintained in adopting Morpheus companion workspaces.
 
-## 1. Composition rules
+## 1. Platform Purpose
 
-Every Morpheus-scaffolded project MUST satisfy all six rules. The CLI enforces them. A project that violates any rule is invalid.
+Morpheus provides reusable modules, skills, templates, and governance practices for agentic development. It is repo-first and chat-orchestrated: agents guide setup from chat and write inspectable files into a workspace.
 
-1. **`core` is mandatory.** Every project includes `modules/core` at a pinned version.
-2. **Exactly one `workspace`.** A project has exactly one workspace module (`workspace-microsoft` XOR `workspace-google`). Never zero, never two.
-3. **Exactly one `git` provider.** A project declares exactly one git provider integration (e.g. `git-github`).
-4. **0..1 `pm` integration.** A project has zero or one project-management integration (e.g. `pm-jira`).
-5. **0..N `stacks`.** A project has any number of stack modules (`stack-node`, `stack-python`, `stack-react`, ...), including zero.
-6. **0..N `domains`.** A project has any number of domain modules (`domain-healthcare`, `domain-payments`, ...), including zero.
+## 2. Workspace Model
 
-## 2. Profiles
+Every adopting project should produce a VS Code workspace with `morpheus` plus product repos as workspace folders:
 
-There are **exactly five** profiles. No sixth. Ever.
-
-1. `builder` — writes and ships code.
-2. `verifier` — writes tests, holdouts, acceptance criteria.
-3. `author` — writes specs, PRDs, design docs.
-4. `explorer` — reads, maps, and documents codebases without modifying them.
-5. `steward` — owns project constitution, conventions, and lore.
-
-**Profiles are ergonomic, not runtime permissions.** They control default scaffolding, surfaced skills, and prompt wording. They do not grant or deny access to files, commands, or modules.
-
-## 3. Universal gates
-
-Gates (CI checks, PR-gate workflows, acceptance checks) are **universal**. The same gates apply to every profile. There are **no per-profile gates**. A verifier's PR runs the same checks as a builder's PR.
-
-## 4. Versioning
-
-Morpheus and every module follow **Semantic Versioning 2.0.0**.
-
-- **MAJOR (`X.0.0`)**: a breaking change. A breaking change MUST ship with a migration script and a deprecation runway (see §5). Breaking changes include: removing a module, renaming a skill, changing a schema in a non-backward-compatible way, removing a CLI flag, or changing the meaning of a manifest field.
-- **MINOR (`0.X.0`)**: new modules, new skills, new CLI commands, new templates — all backward compatible. An existing project can upgrade MINOR without edits.
-- **PATCH (`0.0.X`)**: bug fixes, documentation corrections, internal refactors. No user-visible surface changes.
-
-Modules version independently. The platform version is a release of the monorepo as a whole, pinned in each scaffolded `platform-manifest.json`.
-
-## 5. Breaking-change policy
-
-A breaking change requires **all** of:
-
-1. A prior MINOR release marking the affected surface as deprecated (with log warnings where applicable).
-2. A minimum **60-day** deprecation window before the MAJOR ships.
-3. An automated migration script under `templates/migration/` that upgrades existing projects.
-4. A CHANGELOG entry describing the change, the migration path, and the deprecation timeline.
-
-## 6. Stop-lines
-
-The platform will never do any of the following. These are not subject to negotiation between majors.
-
-1. **No sixth profile.**
-2. **No per-profile constitutions or gates.**
-3. **Profiles are ergonomic, NOT runtime permissions.**
-4. **Max 5 init questions.**
-5. **No profile × stack × project-type matrices.**
-6. **No Jira validation expansion beyond initiative existence.**
-7. **No project-type branching inside `constitution-author`.**
-
-## 7. Module contract
-
-Every module ships a `module.yaml` that declares:
-
-- `name`, `version` (semver), `kind` (`core | stack | workspace | integration | domain`)
-- `requires` — other modules and minimum versions
-- `incompatible_with` — modules it cannot coexist with
-- `contributes` — skills, templates, schemas, workflows, hooks
-- `detection` — markers used by the CLI to auto-detect applicability (where relevant)
-
-Every `module.yaml` MUST validate against `modules/core/schemas/module.schema.json`.
-
-## 8. Artifact chain
-
-Every project inherits the same artifact spine:
-
-```
-PRD → spec → plan → tasks → implementation → review → evaluation
+```text
+<project-slug>.code-workspace
+  folders:
+    morpheus/
+    <product-repo-1>/
+    <product-repo-2>/
 ```
 
-Skills, templates, and workflows attach to this spine. The spine does not branch by profile, stack, or project type.
+The `morpheus/` workspace folder is the source of truth for discovery, governance, feature artifacts, installed skills, local incubation, and promotion packages. Product repositories keep their source code and existing agent assets.
 
-## 9. Governance
+## 3. Setup Model
 
-- The CLI enforces composition rules (§1) and schema validation (§7) at `init`, `validate`, and `doctor` time.
-- Platform changes require a PR with CODEOWNER approval.
-- Breaking changes additionally require an ADR under `docs/decisions/`.
-- The stop-lines (§6) can only be changed by unanimous approval of the listed platform maintainers, recorded in an ADR.
+Setup is orchestrated from agent chat. A user pastes a setup prompt, answers concise questions, and the agent creates or updates the workspace artifacts. Deterministic helper scripts are allowed for validation, generation, scans, and repeatable checks, but user-facing setup must not require a CLI wizard.
 
-## 10. Amendments
+## 4. Module Contract
 
-This constitution may be amended only via:
+Every module ships a `module.yaml` declaring:
 
-1. A PR modifying this file.
-2. A corresponding ADR in `docs/decisions/`.
-3. A CHANGELOG entry at the next release.
+- `name`, `version`, and `description`
+- `requires`
+- `incompatible_with`
+- `contributes` for skills, workflows, templates, schemas, hooks, and instructions
+- optional prompts and detection markers
 
-Amendments that alter §6 (Stop-lines) are MAJOR changes by definition.
+Modules should be descriptive and optional where possible. Core should stay small.
+
+## 5. Initial Module Families
+
+- `core` — universal schemas, templates, and core skills.
+- `workspace-companion` — chat setup, project config, env examples, workspace files, local incubation.
+- `morpheus-initiation` — discovery, index, constitution, orient.
+- `prd-to-jira` — PRD, TDS, SDD, change management, Jira payloads, sprint sequencing.
+- `git-github` — standardized branch, commit, PR, and GitHub Actions practices.
+- `local-launch` — OS-aware local launch and auth/env setup.
+- `geodesic-audit` — optional local audit, gap report, PII/PHI scrub, and attestation integration.
+
+Some families may not exist yet. New modules should be introduced through the contribution and promotion process.
+
+## 6. Preservation Rules
+
+Morpheus must preserve product-repo agent assets during setup:
+
+- `agent.md`
+- `AGENTS.md`
+- `.github/copilot-instructions.md`
+- `.github/instructions/*.instructions.md`
+- existing `SKILL.md` files
+
+Setup may discover, summarize, and reference these files. It must not overwrite or promote them automatically.
+
+## 7. Secrets
+
+Morpheus never asks users to paste secrets into chat. Modules may generate `.env.example`; users fill `.env` locally. `.env` and local secret files must remain ignored.
+
+## 8. Promotion
+
+New reusable skills and modules flow through local incubation before promotion:
+
+```text
+.morpheus-local experiment -> contribution package -> incubator -> module-owner review -> promoted module
+```
+
+Promotion requires evidence, agnostic review, security review, and module-owner approval.
+
+## 9. GitHub And Work Item Linkage
+
+GitHub modules should standardize branch, commit, and PR behavior across repos. When a project uses Jira, branch names and PR titles should include the Jira issue key so GitHub Actions and reviewers can trace changes to work items.
+
+## 10. Local Launch
+
+Local launch modules should make testing easy across macOS and Windows without weakening production auth. Auth bypass or mock auth must be local-only, explicit, and never committed with secrets.
+
+## 11. Versioning
+
+Morpheus modules follow semantic versioning. Breaking changes to module surfaces, schemas, generated file paths, or promotion gates require migration notes and changelog entries.
+
+## 12. Stop Lines
+
+- Do not reintroduce CLI-centered setup as the primary user workflow.
+- Do not collect secrets in chat.
+- Do not overwrite product-repo agent assets during setup.
+- Do not make project-specific assumptions core behavior.
+- Do not promote local skills without evidence and agnostic review.
+- Do not bypass GitHub branch, PR-title, or work-item linkage gates.

@@ -51,7 +51,7 @@ At the same time, agentic practice is genuinely evolving — month over month. A
 
 **Profiles are ergonomics, not permissions.** A `verifier` and a `builder` see the same artifact chain; they just get different default scaffolding, skill surfacing, and prompts. There is no RBAC, no matrix of profile × stack × project-type. Five profiles. Forever.
 
-**Composition is law, not convention.** The CLI enforces composition rules (exactly one workspace, exactly one git provider, 0..1 PM, 0..N stacks). Schemas validate every module. A breaking change to the core requires a migration script. The law is small enough to fit on one page ([CONSTITUTION.md](CONSTITUTION.md)) and firm enough to prevent drift.
+**Composition is law, not convention.** Morpheus modules declare their contracts in versioned manifests, and agents validate those manifests before promotion or setup. A breaking change to core module behavior requires migration notes. The law is small enough to fit on one page ([CONSTITUTION.md](CONSTITUTION.md)) and firm enough to prevent drift.
 
 ## Design tenets
 

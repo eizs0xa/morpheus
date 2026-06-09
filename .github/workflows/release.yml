@@ -11,17 +11,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: pip install copier
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - run: cd cli && pnpm install --frozen-lockfile
-      - run: cd cli && pnpm build
-      - run: cd cli && pnpm test
-      - run: pnpm test:integration
+      - run: npm test
       - name: Extract changelog entry
         id: changelog
         run: |

@@ -6,7 +6,7 @@ Emits Jira stories from the Morpheus artifact chain. When the chain advances pas
 
 ## When to invoke
 
-Triggered by the `artifact_chain.tasks.on_finalize` hook. Also callable manually: `agentic jira sync`.
+Triggered by the `artifact_chain.tasks.on_finalize` hook. Also callable manually by invoking the Jira synchronization skill from agent chat.
 
 ## Procedure
 

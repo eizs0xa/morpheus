@@ -1,0 +1,16 @@
+name: Governance events
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  governance-events:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report governance event placeholder
+        run: |
+          echo "Governance event workflow placeholder."
+          echo "Wire this to approved ADLC/registry APIs before enabling external writes."

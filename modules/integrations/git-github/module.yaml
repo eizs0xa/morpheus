@@ -1,9 +1,9 @@
 name: git-github
 version: 0.1.0
 description: >-
-  GitHub git-provider integration. Ships PR-gate, merge-queue, and release-train
-  workflows plus PR template, CODEOWNERS template, and branch-protection JSON
-  consumable by `gh api`.
+  GitHub git-provider integration. Ships standardized agent skills for branch,
+  commit, and PR automation, plus PR gates, merge queue, release train,
+  CODEOWNERS, branch protection, and Jira-key linked naming checks.
 requires:
   - name: core
     version_range: ">=0.1.0 <1.0.0"
@@ -14,12 +14,16 @@ contributes:
   skills:
     - skills/branch-naming.md
     - skills/conventional-commits.md
+    - skills/agent-git-operator.md
+    - skills/pull-request-workflow.md
+    - skills/jira-linked-branching.md
   workflows:
     - workflows/agent-pr-gate.yml.tmpl
     - workflows/merge-queue.yml.tmpl
     - workflows/release-train.yml.tmpl
     - workflows/commit-lint.yml.tmpl
     - workflows/branch-name-check.yml.tmpl
+    - workflows/jira-linked-pr-check.yml.tmpl
   templates:
     - templates/pull_request_template.md.tmpl
     - templates/CODEOWNERS.tmpl
@@ -44,9 +48,12 @@ prompts:
     default: true
   - name: branch_prefix_pattern
     question: "Branch prefix regex (e.g. '^(feat|fix|chore|docs)/' or '^[A-Z]+-[0-9]+')"
-    default: "^(feat|fix|chore|docs|refactor|test|style)/"
+    default: "^([A-Z]+-[0-9]+)(-[a-z0-9-]+)?$"
   - name: conventional_commits_enforced
     question: "Enforce Conventional Commits on PR titles and commits?"
+    default: true
+  - name: jira_key_required
+    question: "Require a Jira issue key in branch names and PR titles?"
     default: true
 detection:
   file_markers:

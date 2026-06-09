@@ -2,7 +2,7 @@
 
 > Shipped by `integrations/coe-portal`.
 
-Pulls canonical playbooks, standards, and approved template updates from the CoE Portal into the project. Runs on `agentic init`, on `agentic doctor --refresh`, and on a scheduled weekly workflow.
+Pulls canonical playbooks, standards, and approved template updates from the CoE Portal into the project. Runs during chat-orchestrated setup, during scheduled refresh workflows, or when explicitly invoked by an agent.
 
 ## What is pulled
 

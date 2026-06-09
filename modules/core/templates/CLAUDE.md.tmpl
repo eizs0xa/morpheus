@@ -20,11 +20,11 @@ This project uses the **morpheus-platform** (`v{{ platform_version | default("0.
 3. Use the skills in `.agent/skills/` — do not reinvent them.
 4. Respect composition rules: exactly one workspace, exactly one git provider, 0..1 PM,
    0..N stacks, 0..N domains.
-5. Never edit `platform-manifest.json` by hand — run the CLI's update flow.
+5. Never edit generated manifests casually — update them through the Morpheus setup or migration workflow.
 
 ## When the project changes
 
-If a new stack, workspace, or integration is added, re-run `agentic init --resume` so the
+If a new stack, workspace, or integration is added, run the Morpheus setup/update prompt so the
 manifest, skills, and templates stay in sync.
 
 ---

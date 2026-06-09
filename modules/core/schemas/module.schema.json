@@ -63,7 +63,7 @@
     },
     "prompts": {
       "type": "array",
-      "description": "Prompts surfaced during `agentic init` when this module is selected.",
+      "description": "Prompts surfaced during chat-orchestrated setup when this module is selected.",
       "items": {
         "type": "object",
         "additionalProperties": false,

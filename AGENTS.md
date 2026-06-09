@@ -1,59 +1,35 @@
-# Morpheus — AGENTS.md
+# Morpheus Agent Guide
 
-This is the **Morpheus platform repo** — the source of the CLI, modules, templates, and docs
-that are scaffolded into other projects. It is **not** itself a project scaffolded by Morpheus.
+This is the Morpheus platform repo. It is repo-first and chat-orchestrated. Do not reintroduce CLI-centered setup flows.
 
----
-
-## Repo layout
+## Repo Layout
 
 | Path | What lives here |
-|------|-----------------|
-| `cli/` | TypeScript CLI (`morpheus` / `agentic` binaries). Entry: `cli/src/index.ts`. |
-| `modules/` | Platform modules — `core`, `stacks/`, `integrations/`, `domains/`, `workspaces/`. |
-| `templates/` | Copier templates — `new-project/`, `brownfield-overlay/`, `migration/`. |
-| `tests/` | Integration test runner (`tests/run.mjs`) and fixtures. |
-| `examples/` | Pre-rendered template output for inspection and regression. |
-| `docs/` | Role-based documentation (for-engineers, for-authors, etc.). |
-| `scripts/` | Bootstrap scripts (`bootstrap.sh`, `bootstrap.ps1`). |
+|---|---|
+| `modules/` | Optional Morpheus modules: core, integrations, stacks, workspaces, domains. |
+| `templates/` | Shared templates used by modules. |
+| `docs/` | Repo-first setup, module, and contributor documentation. |
+| `examples/` | Example outputs and regression snapshots. |
+| `tests/` | Module manifest and contributed-file validation. |
 
-## Build & test
+## Build And Test
 
 ```bash
-# Build the CLI
-cd cli && pnpm install && pnpm build
-
-# Unit tests (Vitest)
-cd cli && pnpm test
-
-# Integration tests
-node tests/run.mjs
+npm test
 ```
 
-## Rules of engagement
+## Rules Of Engagement
 
-### Restructuring rule — ALWAYS follow this
-When any file is **moved, renamed, or deleted**:
-1. Search the entire workspace for every reference to that path — imports, markdown links,
-   `$ref` in JSON schemas, `uses:` in GitHub Actions workflows, template variables, and
-   any hardcoded strings in source code.
-2. Update every reference before considering the task complete.
-3. Verify with `get_errors` or a targeted `grep_search` after updating.
-4. Never leave a dangling link, broken import, or stale cross-reference.
+- Preserve product-repo agent assets. Morpheus discovers and references existing `agent.md`, `AGENTS.md`, Copilot instructions, and `SKILL.md` files; it does not overwrite them during setup.
+- Keep setup chat-first. A user should paste one setup prompt into agent chat and answer concise questions there.
+- Keep generated artifacts inspectable: workspace files, `project.config.json`, `.env.example`, `START_HERE.md`, discovery docs, governance docs, and feature docs.
+- Do not ask users to paste secrets into chat.
+- When adding a module, update [docs/reference/module-catalog.md](docs/reference/module-catalog.md) and [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md).
+- When moving, renaming, or deleting files, update all references in docs, module manifests, templates, tests, and workflows.
 
-### General rules
-- Never edit `examples/` by hand — they are generated outputs. Regenerate them via the CLI.
-- Never edit `tests/fixtures/seek-snapshot/` by hand — it is a locked regression snapshot.
-- Module `module.yaml` changes must be reflected in the TypeScript types under `cli/src/`.
-- Schema changes under `modules/core/schemas/` must ship in the same PR as any CLI type
-  changes that depend on them.
-- Follow [CONSTITUTION.md](CONSTITUTION.md) — five profiles, six composition rules, seven
-  stop-lines. No exceptions.
-- All new CLI commands must be documented in `docs/reference/cli-reference.md`.
+## What Agents Must Not Do
 
-### What agents must NOT do
-- Do not add a sixth profile.
-- Do not create per-profile gates or per-profile constitutions.
-- Do not push directly to `main` — all changes go through a PR.
-- Do not commit `.env` files or secrets.
-- Do not bypass `--frozen-lockfile` in CI — update the lockfile explicitly when dependencies change.
+- Do not add CLI setup commands or CLI-only workflows.
+- Do not stage or commit `.env` files or secrets.
+- Do not overwrite product-repo `agent.md`, `AGENTS.md`, Copilot instructions, or existing `SKILL.md` files.
+- Do not bypass GitHub branch, PR-title, or Jira-key checks.

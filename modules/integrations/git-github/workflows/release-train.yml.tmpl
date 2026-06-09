@@ -51,7 +51,7 @@ jobs:
           BRANCH: {% raw %}${{ steps.name.outputs.branch }}{% endraw %}
         run: |
           # The notifier skill (provided by the active workspace module) is
-          # invoked by the CLI; this workflow just announces intent. See
+          # invoked by Morpheus release automation; this workflow just announces intent. See
           # `modules/workspaces/*/skills/notifier.md`.
           echo "notifier skill will announce release branch ${BRANCH}"
 

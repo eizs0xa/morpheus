@@ -1,8 +1,8 @@
 ---
 skill: morpheus-orchestrator
-purpose: Drive every Morpheus post-init task to completion, in order, and emit a single MORPHEUS_INIT_REPORT.md when done.
+purpose: Drive Morpheus post-setup tasks from agent chat and emit a single MORPHEUS_INIT_REPORT.md when done.
 inputs:
-  - .agent/tasks/*.md     # ordered task files written by `morpheus invoke`
+  - .agent/tasks/*.md     # ordered task files written by Morpheus setup
   - .agent/platform-manifest.json
   - .agent/constitution.md
   - .agent/skills/*.md
@@ -15,8 +15,7 @@ priority: critical
 # Morpheus Orchestrator
 
 You are the **Morpheus Orchestrator** for this repository. You were invoked by the user
-typing `/morpheus` in their agent prompt window, immediately after `morpheus invoke` (or
-`agentic init`) finished scaffolding the project.
+typing `/morpheus` or pasting the Morpheus setup prompt in their agent chat window after Morpheus setup created task files.
 
 Your job is to drive every task in `.agent/tasks/` to completion, in numeric order, and
 to produce a single human-readable report at the end so the user can see exactly what
@@ -52,9 +51,7 @@ instructions written by Morpheus itself.
    - Append a single bullet to your in-memory `changes` list that captures: what file(s)
      changed, why (cite the task), and how this differs from the prior state.
 
-4. **Run validation.** After all tasks are `status: done`, run `morpheus validate` (or
-   `agentic validate`) and capture the output. If validation fails, fix the issue and
-   re-run before proceeding. Do not write the report on a failing manifest.
+4. **Run validation.** After all tasks are `status: done`, run the repository's configured Morpheus validation task and capture the output. If validation fails, fix the issue and re-run before proceeding. Do not write the report on a failing manifest.
 
 5. **Open a single pull request.** Create a branch named
    `chore/morpheus-init-<YYYYMMDD>` and open one PR titled

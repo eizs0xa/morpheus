@@ -16,7 +16,7 @@ A domain module contributes:
 - **Skills** that encode domain workflows (e.g. PHI-scrubbing reviewer, PCI
   scope auditor) — optional.
 - **Constitution addendum template** (`constitution-addendum.md.tmpl`) merged
-  into the project constitution at `agentic init` — optional.
+  into the project constitution during Morpheus initiation — optional.
 - **Schemas** for domain-specific artifacts (e.g. data-classification manifest)
   — optional.
 

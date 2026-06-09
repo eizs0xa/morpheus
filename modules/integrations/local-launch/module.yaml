@@ -1,0 +1,45 @@
+name: local-launch
+version: 0.1.0
+description: >-
+  OS-aware one-click local launch support for testing. Provides agent guidance,
+  VS Code task templates, and macOS/Windows launch scripts that normalize env
+  differences and local auth/Okta testing flows.
+requires:
+  - name: core
+    version_range: ">=0.1.0 <1.0.0"
+incompatible_with: []
+contributes:
+  skills:
+    - skills/local-launch.md
+  workflows: []
+  templates:
+    - templates/vscode/tasks.json.tmpl
+    - templates/scripts/morpheus-launch.macos.sh.tmpl
+    - templates/scripts/morpheus-launch.windows.ps1.tmpl
+    - templates/local-launch.env.example.tmpl
+  hooks: []
+  schemas: []
+  instructions:
+    - instructions/local-launch.instructions.md
+prompts:
+  - name: auth_provider
+    question: "Local auth provider"
+    default: "okta"
+    choices:
+      - okta
+      - entra
+      - mock
+      - none
+  - name: launch_mode
+    question: "Default launch mode"
+    default: "fullstack"
+    choices:
+      - fullstack
+      - backend-only
+      - frontend-only
+detection:
+  file_markers:
+    - package.json
+    - pyproject.toml
+    - requirements.txt
+    - .env.example

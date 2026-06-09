@@ -44,7 +44,7 @@
       "status": "accepted",
       "date": "2026-04-23",
       "context": "We need a template engine that supports updates (re-rendering an existing project after template changes) and conditional file rendering per profile.",
-      "decision": "Adopt copier as the rendering engine invoked by the agentic CLI via a Python subprocess.",
+      "decision": "Adopt repo-first module templates rendered by agent-guided setup.",
       "consequences": "Projects gain deterministic template upgrades. Requires Python >= 3.10 on developer machines. Cookiecutter ecosystem templates are not directly compatible."
     }
   ]

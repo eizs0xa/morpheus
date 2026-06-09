@@ -7,7 +7,7 @@ Thanks for your interest. Morpheus is governed by [CONSTITUTION.md](CONSTITUTION
 1. **Propose a new module** (stack, domain, integration, workspace) — see [Module proposal process](#module-proposal-process).
 2. **Fix a bug** — open a PR with a passing test.
 3. **Improve docs** — PRs welcome; docs ship with the platform version.
-4. **Propose a platform change** — for anything touching `modules/core/`, schemas, CLI composition rules, or the constitution, open an ADR under `docs/decisions/` before the PR.
+4. **Propose a platform change** — for anything touching `modules/core/`, schemas, setup orchestration, or the constitution, include the rationale in the PR and update docs.
 
 ## Module proposal process
 

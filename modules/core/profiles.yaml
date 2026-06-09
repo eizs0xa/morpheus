@@ -3,7 +3,7 @@
 # Defines the five canonical profiles: builder, verifier, author, explorer, steward.
 # Per CONSTITUTION §6.1 (stop-line): exactly five profiles — no sixth is permitted.
 #
-# Template tokens expanded by the CLI at `agentic init`:
+# Legacy template tokens retained for compatibility with generated artifacts:
 #   {selected_stacks} — list of stack module names chosen interactively
 #   {workspace}       — workspace module name (e.g. vscode, cursor, claude-code)
 #   {pm}              — project-management integration (e.g. jira, linear, github-projects)

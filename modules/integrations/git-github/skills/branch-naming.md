@@ -6,25 +6,26 @@ Every branch in a Morpheus-scaffolded project follows a standardized naming conv
 
 ## Default pattern
 
-The default regex is:
+The default regex requires a Jira issue key:
 
 ```
-^(feat|fix|chore|docs|refactor|test|style)/[a-z0-9][a-z0-9._-]*$
+^([A-Z]+-[0-9]+)(-[a-z0-9-]+)?$
 ```
 
-Teams using `pm-jira` should override to:
+Examples:
 
-```
-^[A-Z]+-[0-9]+(-[a-z0-9-]+)?$
+```text
+FOCAL-123-add-launch-script
+DAAA-10212-repair-sprint-plan
 ```
 
-so that every branch begins with the Jira issue key. The active pattern is stored in `platform-manifest.json` under `modules.git-github.config.branch_prefix_pattern`.
+Every agent-created branch begins with the Jira issue key so GitHub Actions, reviewers, and release automation can trace code back to the work item. If a project uses a different work item system, configure the equivalent work item key regex in the project config.
 
 ## Enforcement
 
-1. Pre-push git hook (optional) rejects non-conforming names.
-2. `workflows/branch-name-check.yml` CI gate rejects PRs from non-conforming branches.
-3. `agentic doctor` warns on existing non-conforming branches during brownfield overlays.
+1. `workflows/branch-name-check.yml` rejects PRs from non-conforming branches.
+2. `workflows/jira-linked-pr-check.yml` rejects PRs whose title lacks the same Jira key.
+3. Agent Git skills ask for a Jira key before creating a branch when one is not known.
 
 ## Reserved prefixes
 
