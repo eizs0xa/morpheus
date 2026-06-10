@@ -1,14 +1,13 @@
-# Morpheus Documentation
+# Morpheus Docs
 
-Morpheus is repo-first and chat-orchestrated. Start with the setup prompt, then use the module and skill catalogs to understand what can be installed into an adopting workspace.
+This folder holds project-level documentation about Morpheus itself.
 
-## Start Here
+## Files
 
-- [Getting started](getting-started.md) — setup from the agent chat window.
-- [Module catalog](reference/module-catalog.md) — current modules.
-- [Skill catalog](reference/skill-catalog.md) — current skills by module.
+- `PHILOSOPHY.md` - why Morpheus exists and how it should grow.
+- `CONSTITUTION.md` - working rules for the Morpheus repository.
+- `CHANGELOG.md` - meaningful changes to Morpheus.
+- `CONTRIBUTING.md` - how to propose changes.
+- `AGENTS.md` - guidance for agents working in this repository.
 
-## Contributor Notes
-
-- [Adding a module](contributors/adding-a-module.md)
-- [Writing a skill](contributors/writing-a-skill.md)
+Most day-to-day users should start at the root `README.md`, then move into `initiative/`, `features/`, or `releases/` depending on what they are doing.

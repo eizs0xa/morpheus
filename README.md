@@ -1,64 +1,62 @@
 # Morpheus
 
-Morpheus is a repo-first companion system for agentic software development. It lives in the same VS Code workspace as product repositories and provides shared modules, skills, templates, governance artifacts, and promotion gates that agents can use from chat.
+Morpheus is a workspace companion for agentic development. It gives teams a simple, shared place to keep approved skills, project context, feature artifacts, release documentation, and reusable workflow knowledge.
 
-## Direction
+Morpheus should grow from real project use. A workflow becomes part of Morpheus only after a team has used it, learned from it, and made it general enough for others.
 
-Morpheus is no longer centered on a command-line setup flow. Setup is orchestrated from the agent chat window using a copyable prompt, with deterministic helper scripts and repository validation where useful.
+## Start Here
 
-The intended workspace output is:
+Open the Morpheus workspace and read these in order:
 
-```text
-<project-slug>.code-workspace
-  folders:
-    morpheus/
-    <product-repo-1>/
-    <product-repo-2>/
-```
+1. `START_HERE.md` when present in an initialized project workspace.
+2. `initiative/README.md` for project-level context.
+3. `initiative/constitution.md` for project rules.
+4. `features/README.md` for active feature work.
+5. `releases/README.md` for release planning and change management.
 
-The `morpheus/` workspace folder is the source of truth for generated discovery, governance, feature, and workflow artifacts. Product repositories keep their own source code and any existing agent assets.
-
-## Current Modules
-
-- `core` — universal schemas, templates, and governance for approved agent workflows.
-- `workspace-companion` — chat-orchestrated workspace setup, project config, env examples, `START_HERE.md`, and local incubation.
-- `git-github` — standardized branch, commit, PR, CODEOWNERS, branch protection, and Jira-linked GitHub checks.
-- `local-launch` — OS-aware local launch tasks and local auth/env guidance for macOS and Windows.
-- `pm-jira` — Jira integration assets.
-- `stack-node`, `stack-python`, `stack-react` — optional stack guidance.
-- `workspace-microsoft`, `workspace-google` — optional notification/collaboration adapters.
-- `domain-healthcare` — example domain module.
-
-Unready inherited skills are preserved under `incubator/candidate-skills/` until they are reviewed and promoted.
-
-## Chat Setup Prompt
-
-Use the prompt in [docs/getting-started.md](docs/getting-started.md) to set up Morpheus from the agent chat window. The agent asks baseline questions, creates or verifies the workspace folders, preserves existing product-repo agent assets, generates project config and environment examples, and validates the result.
-
-## Local Testing
-
-Run repository validation with:
-
-```bash
-npm test
-```
-
-This validates module manifests and contributed files. It does not build or run a CLI.
-
-## Repository Layout
+## Folder Model
 
 ```text
-modules/       Optional Morpheus modules and contributed skills/templates/workflows.
-.agents/      Approved reusable Morpheus skills surfaced to VS Code and agents.
-incubator/    Candidate skills/modules that are preserved but not setup-ready.
-templates/     Shared project and overlay templates retained for module assets.
-docs/          Repo-first setup and module documentation.
-examples/      Example outputs and regression snapshots.
-tests/         Module manifest and contributed-file validation.
+morpheus/
+  core/         approved shared standards, setup guidance, templates, governance
+  initiative/   project-level context, discovery, constitution, decisions, docs
+  features/     feature/epic-level PRD, TDS, SDD, Jira, tests, evidence
+  releases/     release planning, notes, readiness, deployment, change management
+  modules/      simple module descriptions and skill-sequence maps
+  .agents/      approved skills surfaced to VS Code and agents
+  incubator/    candidate skills/modules not yet approved
+  local/        ignored local experiments and evidence
 ```
 
-Approved reusable skills live in `.agents/skills/<skill-name>/SKILL.md`. Module manifests declare which approved skills they contribute; the skill bodies do not live under `modules/*/skills`.
+## Approved Skills
 
-## Secrets
+Approved skills live in:
 
-Morpheus never asks users to paste secrets into chat. Modules generate `.env.example` files, and users fill `.env` locally. `.env` files must remain ignored.
+```text
+.agents/skills/<skill-name>/SKILL.md
+```
+
+Only setup-ready skills belong there. Skills that are useful but not yet fully wired live in:
+
+```text
+incubator/candidate-skills/<skill-name>/SKILL.md
+```
+
+## Current Approved Skill Areas
+
+- Workspace setup from agent chat.
+- GitHub branch, commit, and PR standardization.
+- Jira-linked branch and PR naming.
+- OS-aware local launch setup.
+- Morpheus initiation sequence.
+- PRD-to-Jira workflow sequence.
+
+## What Morpheus Is Not
+
+- Not a CLI-first tool.
+- Not a pile of speculative modules.
+- Not a replacement for product repositories.
+- Not a place for secrets.
+- Not a place to overwrite project-specific agent rules.
+
+Morpheus is a shared operating layer that should remain understandable when a new teammate opens the workspace.

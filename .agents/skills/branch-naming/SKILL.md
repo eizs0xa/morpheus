@@ -1,7 +1,5 @@
 # Skill: branch-naming
 
-> Shipped by `integrations/git-github`. Universal across all stacks.
-
 Every branch in a Morpheus-scaffolded project follows a standardized naming convention that encodes work-item linkage, enabling cross-team automation (Jira sync, status rollup, portfolio view).
 
 ## Default pattern
@@ -23,13 +21,12 @@ Every agent-created branch begins with the Jira issue key so GitHub Actions, rev
 
 ## Enforcement
 
-1. `workflows/branch-name-check.yml` rejects PRs from non-conforming branches.
-2. `workflows/jira-linked-pr-check.yml` rejects PRs whose title lacks the same Jira key.
-3. Agent Git skills ask for a Jira key before creating a branch when one is not known.
+1. Agent Git skills ask for a Jira key before creating a branch when one is not known.
+2. Repository GitHub Actions should reject PRs from non-conforming branches when that policy is installed.
+3. PR titles should carry the same work item key as the branch.
 
 ## Reserved prefixes
 
-- `coe/` — reserved for `coe-portal` automation.
 - `release/` — reserved for `release-train` workflow.
 - `revert-` — reserved for GitHub auto-revert PRs.
 

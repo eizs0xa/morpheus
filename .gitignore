@@ -76,3 +76,6 @@ Desktop.ini
 # --- Morpheus-specific (local only) ---
 SEEK-dogfood.report.md
 /tmp-scratch/
+local/**
+!local/
+!local/README.md

@@ -4,28 +4,26 @@ applyTo: "**"
 
 # Morpheus Repository Instructions
 
-This repo is the source for repo-first, chat-orchestrated Morpheus modules and templates. It is not a CLI product.
+This repo is the start of the simplified Morpheus workspace companion. Keep it small, readable, and grounded in real use.
 
 ## Layout
 
-- `modules/` — Morpheus modules and their contributed skills, workflows, templates, schemas, hooks, and instructions.
-- `.agents/skills/` — approved reusable Morpheus skill bodies referenced by modules.
-- `docs/` — repo-first setup, module, skill, and contributor docs.
-- `tests/` — module manifest and contributed-file validation.
-- `examples/` — optional examples if present.
-
-## Test
-
-```bash
-npm test
-```
+- `.agents/skills/` — approved setup-ready skills.
+- `core/` — shared setup/governance/template guidance.
+- `initiative/` — project-level documentation landing zone.
+- `features/` — feature/epic-level documentation landing zone.
+- `releases/` — release and change-management landing zone.
+- `modules/` — README-only workflow maps.
+- `incubator/` — useful but unapproved candidate skills/modules.
+- `local/` — ignored local experiments.
+- `docs/` — repository-level documentation.
 
 ## Rules
 
-1. Do not add CLI setup flows or CLI-only documentation.
-2. Preserve product-repo agent assets during setup; discover and reference them instead of overwriting.
-3. Never commit `.env` files or secrets.
-4. New modules must update `docs/reference/module-catalog.md`.
-5. New skills must update `docs/reference/skill-catalog.md`.
-6. Run `npm test` after module manifest or contribution changes.
-7. Keep skill bodies in `.agents/skills/<skill-name>/SKILL.md`, not under module-local `skills/` folders.
+1. Do not add CLI-first setup.
+2. Do not add schemas, profiles, tests, or automation without real usage proving the need.
+3. Keep approved skills in `.agents/skills/<skill>/SKILL.md`.
+4. Keep unready skills in `incubator/candidate-skills/<skill>/SKILL.md`.
+5. Keep module folders flat and README-only unless the user asks otherwise.
+6. Do not recreate `domains`, `integrations`, `stacks`, or `workspaces` category folders.
+7. Never commit secrets or `.env` files.
