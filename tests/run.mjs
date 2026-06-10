@@ -110,7 +110,7 @@ async function validateModule(modulePath) {
         ok(`${rel}: contributes.${type} declares event hook: ${item}`);
         continue;
       }
-      const target = path.join(moduleDir, item);
+      const target = item.startsWith('.') ? path.join(root, item) : path.join(moduleDir, item);
       if (await exists(target)) ok(`${rel}: contributes.${type} exists: ${item}`);
       else bad(`${rel}: missing contributes.${type}: ${item}`);
     }

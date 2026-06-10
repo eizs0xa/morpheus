@@ -14,8 +14,8 @@ requires:
 incompatible_with: []
 contributes:
   skills:
-    - skills/registry-sync.md
-    - skills/portal-pull.md
+    - .agents/skills/registry-sync/SKILL.md
+    - .agents/skills/portal-pull/SKILL.md
   workflows:
     - workflows/coe-registry-sync.yml.tmpl
   templates:

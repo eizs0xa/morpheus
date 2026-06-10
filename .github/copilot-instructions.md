@@ -9,6 +9,7 @@ This repo is the source for repo-first, chat-orchestrated Morpheus modules and t
 ## Layout
 
 - `modules/` — Morpheus modules and their contributed skills, workflows, templates, schemas, hooks, and instructions.
+- `.agents/skills/` — approved reusable Morpheus skill bodies referenced by modules.
 - `docs/` — repo-first setup, module, skill, and contributor docs.
 - `tests/` — module manifest and contributed-file validation.
 - `examples/` — optional examples if present.
@@ -27,3 +28,4 @@ npm test
 4. New modules must update `docs/reference/module-catalog.md`.
 5. New skills must update `docs/reference/skill-catalog.md`.
 6. Run `npm test` after module manifest or contribution changes.
+7. Keep skill bodies in `.agents/skills/<skill-name>/SKILL.md`, not under module-local `skills/` folders.

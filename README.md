@@ -20,7 +20,7 @@ The `morpheus/` workspace folder is the source of truth for generated discovery,
 
 ## Current Modules
 
-- `core` — universal schemas, templates, and core agent workflow skills.
+- `core` — universal schemas, templates, and governance for approved agent workflows.
 - `workspace-companion` — chat-orchestrated workspace setup, project config, env examples, `START_HERE.md`, and local incubation.
 - `git-github` — standardized branch, commit, PR, CODEOWNERS, branch protection, and Jira-linked GitHub checks.
 - `local-launch` — OS-aware local launch tasks and local auth/env guidance for macOS and Windows.
@@ -47,11 +47,14 @@ This validates module manifests and contributed files. It does not build or run 
 
 ```text
 modules/       Optional Morpheus modules and contributed skills/templates/workflows.
+.agents/      Approved reusable Morpheus skills surfaced to VS Code and agents.
 templates/     Shared project and overlay templates retained for module assets.
 docs/          Repo-first setup and module documentation.
 examples/      Example outputs and regression snapshots.
 tests/         Module manifest and contributed-file validation.
 ```
+
+Approved reusable skills live in `.agents/skills/<skill-name>/SKILL.md`. Module manifests declare which approved skills they contribute; the skill bodies do not live under `modules/*/skills`.
 
 ## Secrets
 

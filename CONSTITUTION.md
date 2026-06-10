@@ -18,7 +18,7 @@ Every adopting project should produce a VS Code workspace with `morpheus` plus p
     <product-repo-2>/
 ```
 
-The `morpheus/` workspace folder is the source of truth for discovery, governance, feature artifacts, installed skills, local incubation, and promotion packages. Product repositories keep their source code and existing agent assets.
+The `morpheus/` workspace folder is the source of truth for discovery, governance, feature artifacts, approved skills, local incubation, and promotion packages. Product repositories keep their source code and existing agent assets.
 
 ## 3. Setup Model
 
@@ -36,9 +36,11 @@ Every module ships a `module.yaml` declaring:
 
 Modules should be descriptive and optional where possible. Core should stay small.
 
+Approved reusable skills live in `.agents/skills/<skill-name>/SKILL.md`. Module manifests may contribute those approved skills, but skill bodies should not be duplicated under module folders.
+
 ## 5. Initial Module Families
 
-- `core` — universal schemas, templates, and core skills.
+- `core` — universal schemas, templates, and governance for approved skills.
 - `workspace-companion` — chat setup, project config, env examples, workspace files, local incubation.
 - `morpheus-initiation` — discovery, index, constitution, orient.
 - `prd-to-jira` — PRD, TDS, SDD, change management, Jira payloads, sprint sequencing.
@@ -69,7 +71,7 @@ Morpheus never asks users to paste secrets into chat. Modules may generate `.env
 New reusable skills and modules flow through local incubation before promotion:
 
 ```text
-.morpheus-local experiment -> contribution package -> incubator -> module-owner review -> promoted module
+local experiment -> contribution package -> incubator -> module-owner review -> .agents/skills or promoted module
 ```
 
 Promotion requires evidence, agnostic review, security review, and module-owner approval.

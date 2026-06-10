@@ -12,11 +12,11 @@ incompatible_with:
   - git-bitbucket
 contributes:
   skills:
-    - skills/branch-naming.md
-    - skills/conventional-commits.md
-    - skills/agent-git-operator.md
-    - skills/pull-request-workflow.md
-    - skills/jira-linked-branching.md
+    - .agents/skills/branch-naming/SKILL.md
+    - .agents/skills/conventional-commits/SKILL.md
+    - .agents/skills/agent-git-operator/SKILL.md
+    - .agents/skills/pull-request-workflow/SKILL.md
+    - .agents/skills/jira-linked-branching/SKILL.md
   workflows:
     - workflows/agent-pr-gate.yml.tmpl
     - workflows/merge-queue.yml.tmpl

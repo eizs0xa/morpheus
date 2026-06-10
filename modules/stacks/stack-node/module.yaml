@@ -7,8 +7,8 @@ requires:
 incompatible_with: []
 contributes:
   skills:
-    - skills/coding-agent-node.md
-    - skills/tester-node.md
+    - .agents/skills/coding-agent-node/SKILL.md
+    - .agents/skills/tester-node/SKILL.md
   workflows:
     - workflows/agent-pr-gate-node.yml.tmpl
   hooks:

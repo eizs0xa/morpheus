@@ -12,9 +12,9 @@ requires:
 incompatible_with: []
 contributes:
   skills:
-    - skills/risk-score.md
-    - skills/intake-submit.md
-    - skills/adlc-gate.md
+    - .agents/skills/risk-score/SKILL.md
+    - .agents/skills/intake-submit/SKILL.md
+    - .agents/skills/adlc-gate/SKILL.md
   workflows:
     - workflows/governance-events.yml.tmpl
   templates:

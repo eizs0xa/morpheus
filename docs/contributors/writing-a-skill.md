@@ -2,6 +2,14 @@
 
 A Morpheus skill is an on-demand workflow instruction file contributed by a module. Skills should be specific, discoverable, and safe for agents to follow from chat.
 
+Approved reusable skill bodies live in:
+
+```text
+.agents/skills/<skill-name>/SKILL.md
+```
+
+The contributing module references that path in `module.yaml`.
+
 ## Shape
 
 ```markdown
@@ -37,3 +45,4 @@ outputs:
 - Promote reusable candidates through an incubator PR with evidence.
 - Never ask users to paste secrets into chat.
 - Reference existing product-repo agent assets instead of overwriting them.
+- Do not duplicate approved skill bodies under module-local `skills/` folders.

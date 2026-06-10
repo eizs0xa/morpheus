@@ -8,20 +8,20 @@ requires: []
 incompatible_with: []
 contributes:
   skills:
-    - skills/spec-author.md
-    - skills/planner.md
-    - skills/decomposer.md
-    - skills/initializer.md
-    - skills/reviewer.md
-    - skills/integrator.md
-    - skills/fixer.md
-    - skills/evaluator.md
-    - skills/constitution-author.md
-    - skills/lore-reader.md
-    - skills/lore-curator.md
-    - skills/kill-switch.md
-    - skills/decommission.md
-    - skills/morpheus-orchestrator.md
+    - .agents/skills/spec-author/SKILL.md
+    - .agents/skills/planner/SKILL.md
+    - .agents/skills/decomposer/SKILL.md
+    - .agents/skills/initializer/SKILL.md
+    - .agents/skills/reviewer/SKILL.md
+    - .agents/skills/integrator/SKILL.md
+    - .agents/skills/fixer/SKILL.md
+    - .agents/skills/evaluator/SKILL.md
+    - .agents/skills/constitution-author/SKILL.md
+    - .agents/skills/lore-reader/SKILL.md
+    - .agents/skills/lore-curator/SKILL.md
+    - .agents/skills/kill-switch/SKILL.md
+    - .agents/skills/decommission/SKILL.md
+    - .agents/skills/morpheus-orchestrator/SKILL.md
   templates:
     - templates/constitution.md.tmpl
     - templates/CLAUDE.md.tmpl

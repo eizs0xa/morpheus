@@ -10,7 +10,7 @@ requires:
 incompatible_with: []
 contributes:
   skills:
-    - skills/local-launch.md
+    - .agents/skills/local-launch/SKILL.md
   workflows: []
   templates:
     - templates/vscode/tasks.json.tmpl

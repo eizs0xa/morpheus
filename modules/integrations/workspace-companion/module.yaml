@@ -10,7 +10,7 @@ requires:
 incompatible_with: []
 contributes:
   skills:
-    - skills/chat-setup.md
+    - .agents/skills/chat-setup/SKILL.md
   workflows: []
   templates:
     - templates/project.code-workspace.tmpl

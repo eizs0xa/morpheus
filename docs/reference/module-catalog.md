@@ -6,7 +6,7 @@ Every Morpheus module currently shipped in this repo.
 
 | Module | Version | Kind | Description |
 |---|---:|---|---|
-| [core](../../modules/core/module.yaml) | 0.1.0 | core | Universal schemas, templates, and core agent workflow skills. |
+| [core](../../modules/core/module.yaml) | 0.1.0 | core | Universal schemas, templates, and governance for approved agent workflows. |
 | [workspace-companion](../../modules/integrations/workspace-companion/module.yaml) | 0.1.0 | integration | Chat-orchestrated repo-first workspace setup. |
 | [git-github](../../modules/integrations/git-github/module.yaml) | 0.1.0 | integration | Standardized branch, commit, PR, CODEOWNERS, branch protection, and Jira-linked GitHub checks. |
 | [local-launch](../../modules/integrations/local-launch/module.yaml) | 0.1.0 | integration | OS-aware one-click local launch support for macOS and Windows. |
@@ -37,7 +37,8 @@ Add `local-launch` when teams need one-click local startup support. Add future `
 ## Registering A New Module
 
 1. Add `modules/<category>/<module>/module.yaml`.
-2. Add contributed files under the module folder.
-3. Update this catalog.
-4. Update [skill-catalog.md](skill-catalog.md) when the module contributes skills.
-5. Run `npm test`.
+2. Add contributed templates, workflows, schemas, hooks, and instructions under the module folder.
+3. Add approved reusable skill bodies under `.agents/skills/<skill-name>/SKILL.md` and reference them from `module.yaml`.
+4. Update this catalog.
+5. Update [skill-catalog.md](skill-catalog.md) when the module contributes skills.
+6. Run `npm test`.

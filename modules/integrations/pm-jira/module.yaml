@@ -12,9 +12,9 @@ incompatible_with:
   - pm-linear
 contributes:
   skills:
-    - skills/ticket-syncer-jira.md
-    - skills/story-emitter.md
-    - skills/story-prompt-composer.md
+    - .agents/skills/ticket-syncer-jira/SKILL.md
+    - .agents/skills/story-emitter/SKILL.md
+    - .agents/skills/story-prompt-composer/SKILL.md
   workflows:
     - workflows/jira-branch-check.yml.tmpl
     - workflows/jira-smart-commits.yml.tmpl
