@@ -6,13 +6,16 @@ Morpheus should grow from real project use. A workflow becomes part of Morpheus 
 
 ## Start Here
 
-Open the Morpheus workspace and read these in order:
+If you are setting up Morpheus for a project, start with [WORKSPACE_SETUP.md](WORKSPACE_SETUP.md). It contains the copy/paste prompt to give the agent and the exact workspace setup expectations.
+
+After setup, open the Morpheus workspace and read these in order:
 
 1. `START_HERE.md` when present in an initialized project workspace.
-2. `initiative/README.md` for project-level context.
-3. `initiative/constitution.md` for project rules.
-4. `features/README.md` for active feature work.
-5. `releases/README.md` for release planning and change management.
+2. `WORKSPACE_SETUP.md` if you need to understand or rerun setup.
+3. `initiative/README.md` for project-level context.
+4. `initiative/constitution.md` for project rules.
+5. `features/README.md` for active feature work.
+6. `releases/README.md` for release planning and change management.
 
 ## Folder Model
 
