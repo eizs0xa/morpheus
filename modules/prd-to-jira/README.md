@@ -15,6 +15,12 @@ It turns a validated PRD into technical design, implementation specs, Jira-ready
 7. `sprint-sequencer` - assigns Jira stories to sprints and dates when needed.
 8. `test-plan` - creates test planning and validation artifacts.
 
+This sequence preserves the Morpheus 2 flow:
+
+```text
+PRD -> TDS -> SDD -> Jira -> Sprint Sequencing -> Test Plan
+```
+
 ## Outputs
 
 - `features/<feature-slug>/PRD.md`
@@ -23,6 +29,16 @@ It turns a validated PRD into technical design, implementation specs, Jira-ready
 - `features/<feature-slug>/jira/`
 - `features/<feature-slug>/test-plan.md`
 - `features/<feature-slug>/changelog.md`
+
+## References
+
+The workflow uses these shared references:
+
+- [estimation-rubric.md](references/estimation-rubric.md) - story point sizing.
+- [agent-prompt-template.md](references/agent-prompt-template.md) - copy-ready implementation prompt shape.
+- [story-template.md](references/story-template.md) - Jira story description and acceptance criteria shape.
+- [story-title-convention.md](references/story-title-convention.md) - Jira summary/title convention.
+- [jira-field-reference.md](references/jira-field-reference.md) - environment/configuration names for Jira field mappings.
 
 ## Notes
 

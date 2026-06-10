@@ -12,6 +12,8 @@ Enrich `features/<feature-slug>/jira/payload.json` with sprint assignment and da
 ## Inputs
 
 - Jira payload from the `jira` skill.
+- `modules/prd-to-jira/references/estimation-rubric.md`
+- `modules/prd-to-jira/references/jira-field-reference.md`
 - sprint names or IDs.
 - sprint start/end dates.
 - team capacity assumptions.
@@ -28,3 +30,4 @@ Enrich `features/<feature-slug>/jira/payload.json` with sprint assignment and da
 - Never silently clamp dates to fit a sprint.
 - Use prompt-run readiness, not only dependency links, to decide sequencing.
 - If a story cannot finish inside a sprint, recommend next sprint unless the user explicitly approves compression.
+- Keep story points unchanged when date compression is approved; the estimation rubric sizes work, not calendar duration.
