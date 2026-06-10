@@ -2,43 +2,28 @@
 applyTo: "**"
 ---
 
-# Morpheus — GitHub Copilot Instructions
+# Morpheus Repository Instructions
 
-This is the **Morpheus platform repo** — the source of the CLI, modules, templates, and docs.
-It is not itself a project scaffolded by Morpheus.
+This repo is the start of the simplified Morpheus workspace companion. Keep it small, readable, and grounded in real use.
 
-## Repo layout
+## Layout
 
-- `cli/` — TypeScript CLI source and Vitest tests.
-- `modules/` — platform modules (core, stacks, integrations, domains, workspaces).
-- `templates/` — copier templates (new-project, brownfield-overlay, migration).
-- `tests/` — integration test runner and fixtures.
-- `examples/` — pre-rendered template output (do not edit by hand).
-- `docs/` — role-based documentation.
-- `scripts/` — bootstrap scripts (bootstrap.sh, bootstrap.ps1).
-
-## Restructuring rule — follow on every move/rename/delete
-1. Before completing any restructuring task, search the full workspace for all references
-   to the old path: markdown links, TypeScript imports, JSON `$ref`, GitHub Actions `uses:`,
-   template variables, and hardcoded strings.
-2. Update every reference in the same operation.
-3. Run `get_errors` or a targeted search after to confirm no dangling references remain.
-
-## Build & test
-
-```bash
-cd cli && pnpm install && pnpm build   # build CLI
-cd cli && pnpm test                    # unit tests
-node tests/run.mjs                     # integration tests
-```
+- `.agents/skills/` — approved setup-ready skills.
+- `core/` — shared setup/governance/template guidance.
+- `initiative/` — project-level documentation landing zone.
+- `features/` — feature/epic-level documentation landing zone.
+- `releases/` — release and change-management landing zone.
+- `modules/` — README-only workflow maps.
+- `incubator/` — useful but unapproved candidate skills/modules.
+- `local/` — ignored local experiments.
+- `docs/` — repository-level documentation.
 
 ## Rules
 
-1. Schema changes under `modules/core/schemas/` and TypeScript type changes in `cli/src/`
-   must ship in the same PR.
-2. New CLI commands must be documented in `docs/reference/cli-reference.md`.
-3. `examples/` and `tests/fixtures/seek-snapshot/` are generated — do not edit by hand.
-4. Follow [CONSTITUTION.md](CONSTITUTION.md): five profiles, six composition rules,
-   seven stop-lines.
-5. All changes go through a PR — do not push directly to `main`.
-6. Never commit secrets or `.env` files.
+1. Do not add CLI-first setup.
+2. Do not add schemas, profiles, tests, or automation without real usage proving the need.
+3. Keep approved skills in `.agents/skills/<skill>/SKILL.md`.
+4. Keep unready skills in `incubator/candidate-skills/<skill>/SKILL.md`.
+5. Keep module folders flat and README-only unless the user asks otherwise.
+6. Do not recreate `domains`, `integrations`, `stacks`, or `workspaces` category folders.
+7. Never commit secrets or `.env` files.

@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a reproducible defect in the platform, CLI, or a module
+about: Report a reproducible defect in the platform, setup prompt, module, or generated artifact
 title: "[bug] <short description>"
 labels: ["bug"]
 assignees: []
@@ -15,8 +15,7 @@ assignees: []
 - Morpheus version:
 - Module (if applicable) + version:
 - OS / arch:
-- Node version (for CLI bugs):
-- Python version (for copier bugs):
+- Agent host/editor:
 
 ## Reproduction steps
 
@@ -36,10 +35,10 @@ assignees: []
 <paste error / stack trace here>
 ```
 
-## Platform manifest (if applicable)
+## Project config or module manifest (if applicable)
 
 ```json
-<paste contents of platform-manifest.json>
+<paste relevant non-secret config>
 ```
 
 ## Additional context

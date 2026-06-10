@@ -2,38 +2,25 @@
 
 ## Summary
 
-<!-- What does this PR do, in one paragraph? -->
+<!-- What changed and why? -->
 
-## Type of change
+## Type
 
-- [ ] feat — new feature / module / skill
-- [ ] fix — bug fix
-- [ ] refactor — internal change, no user-visible surface change
-- [ ] docs — documentation only
-- [ ] test — tests only
-- [ ] chore — tooling, CI, housekeeping
-- [ ] **breaking change** (MAJOR) — see below
+- [ ] docs / structure
+- [ ] approved skill change
+- [ ] incubator candidate change
+- [ ] module README change
+- [ ] release/change-management update
+- [ ] cleanup
 
-## Breaking change
+## Checks
 
-- [ ] This PR contains a breaking change
-- [ ] Migration script added under `templates/migration/`
-- [ ] Prior MINOR release marked the surface deprecated
-- [ ] 60-day deprecation window met
-- [ ] ADR added under `docs/decisions/`
+- [ ] Root remains simple: `README.md`, `.gitignore`, `LICENSE`, and folders only.
+- [ ] Approved skills live only in `.agents/skills/`.
+- [ ] Unready skills live in `incubator/candidate-skills/`.
+- [ ] No secrets or `.env` files committed.
+- [ ] Documentation updated for user-visible changes.
 
-## Checklist
+## Notes
 
-- [ ] Tests added / updated
-- [ ] Docs updated (if user-visible)
-- [ ] Schema changes include example updates
-- [ ] CHANGELOG entry under `[Unreleased]`
-- [ ] CODEOWNER tagged
-
-## Related
-
-<!-- Issues, ADRs, workstreams -->
-
-## Notes for reviewers
-
-<!-- Anything non-obvious? Anything you explicitly want eyes on? -->
+<!-- Anything reviewers should inspect carefully? -->

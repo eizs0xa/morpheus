@@ -1,128 +1,65 @@
 # Morpheus
 
-> **The standard operating system for agentic software development.** One platform. Every team. Every repo. Every agent.
+Morpheus is a workspace companion for agentic development. It gives teams a simple, shared place to keep approved skills, project context, feature artifacts, release documentation, and reusable workflow knowledge.
 
-![status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange) ![version: 0.2.0-dev](https://img.shields.io/badge/version-0.2.0--dev-blue) ![governance: ADLC-aligned](https://img.shields.io/badge/governance-ADLC--aligned-green)
+Morpheus should grow from real project use. A workflow becomes part of Morpheus only after a team has used it, learned from it, and made it general enough for others.
 
-## Morpheus in one picture: the digital foreman
+## Start Here
 
-If you've never written a line of code, picture a **construction site**.
+If you are setting up Morpheus for a project, start with [WORKSPACE_SETUP.md](WORKSPACE_SETUP.md). It contains the copy/paste prompt to give the agent and the exact workspace setup expectations.
 
-A great foreman doesn't swing the hammer. The foreman shows up before the crew, walks the site with a clipboard, and checks that the **foundation**, **plumbing**, and **electrical** are all up to code. If something's missing, they don't shrug — they call it out, hand you the right form, and make sure the inspector can sign off later.
+After setup, open the Morpheus workspace and read these in order:
 
-**Morpheus is that foreman, for software built by AI agents.**
+1. `START_HERE.md` when present in an initialized project workspace.
+2. `WORKSPACE_SETUP.md` if you need to understand or rerun setup.
+3. `initiative/README.md` for project-level context.
+4. `initiative/constitution.md` for project rules.
+5. `features/README.md` for active feature work.
+6. `releases/README.md` for release planning and change management.
 
-- You (or an AI) open a project and type one command.
-- Morpheus walks the "site" (the codebase) with a checklist.
-- It asks: *"Do you have a product spec? A ticket plan? A safety manual for the AI? A paper trail for what got built and why?"*
-- If the answer is no, it helps you write one — using the same templates every team in the company uses.
-- When the crew (a fleet of AI agents) starts work, every nail they drive is logged, every decision is traceable back to the original blueprint, and a human inspector can step in at the checkpoints that matter.
+## Folder Model
 
-That's it. No mystery. A foreman, a clipboard, and a standard that everyone agrees on.
-
-## What is Morpheus?
-
-Morpheus is how an enterprise stops reinventing agentic development in every repo and starts compounding it. It scaffolds any project — greenfield or brownfield — with the **same shared foundation** every team needs but nobody wants to build from scratch:
-
-- **Standardized git workflow** — conventional commits, branch-naming, PR gates, merge queues, release trains. One grammar across every repo, so portfolio rollups and automated CHANGELOGs *just work*.
-- **Standardized Jira integration** — PRD → spec → plan → tasks → **stories**, auto-emitted and bidirectionally linked. Stop building team-specific dashboards.
-- **Agent cost efficiency** — composition rules eliminate duplicated scaffolding; shared skills and templates collapse per-team reinvention; every project emits the same cost and ROI tags for enterprise rollup.
-- **Institutional knowledge, captured** — every project emits the same artifact chain (PRD → spec → plan → tasks → implementation → review → evaluation) in the same shapes. What one team learns becomes queryable by every team and every agent.
-- **Agent-led best practices, shipped** — five fixed profiles (`builder`, `verifier`, `author`, `explorer`, `steward`) surface the right skills, gates, and prompts for every role without a permissions matrix.
-- **Governance built in, not bolted on** — four-tier risk classification, AI Service Intake, Agent Development Lifecycle gates, Kill Switch, and formal decommissioning are schema-enforced on day one. Security, compliance, and cost controls are embedded in the workflow, not review gates after the fact.
-- **CoE Portal-ready** — every Morpheus repo pushes manifest + artifact-chain state to the enterprise Agent Registry automatically. Demand intake, registry, playbooks, and training flow *into* your repo; value cards flow *out*.
-
-## Why teams adopt it
-
-- **Day one**: a new project lands with the correct CODEOWNERS, PR template, branching rules, Jira hooks, kill-switch declaration, risk tier, cost tags, and training tier — in under a minute.
-- **Day 30**: the CoE portal already shows your agent, its value card, its ADLC gate status, and its lineage back to the PRD — without you building a single dashboard.
-- **Day 365**: when the model, the framework, or the governance model changes, you migrate with a versioned migration script and a 60-day deprecation window. No rewrites. No forks. No drift.
-
-## From PRD to production, on autopilot — with humans at the wheel
-
-Morpheus exists to make one specific thing **reliable and repeatable**: taking a detailed product requirements document (PRD) and turning it into working, reviewed, auditable software built by a fleet of AI agents — without losing the thread of *what* was built or *why*.
-
-The end-to-end automation (back to the foreman analogy):
-
-1. **Blueprint in.** A human hands Morpheus a PRD. Morpheus breaks it down into a spec, a design, a plan, and a concrete, agent-legible task list. Each task is small enough for one agent to pick up and finish.
-2. **Permits filed.** Morpheus auto-emits **Jira stories** (bidirectionally linked to the spec) for tracking and **Confluence pages** (or your docs equivalent) for the human-readable record. Project managers and stakeholders see the work in the tools they already live in — nobody has to learn Morpheus to follow along.
-3. **Crew dispatched.** A fleet of agents picks up the task list. Each agent knows the rules of *this* site, because Morpheus has already dropped a `.agent-rules` / `AGENTS.md` "house manual" in the repo: naming conventions, banned libraries, how to write tests, when to stop and ask.
-4. **Every swing of the hammer, logged.** Every change ships through git with conventional commits, PRs tied to the originating Jira story, and a machine-readable artifact chain: PRD → spec → plan → task → commit → review → evaluation. The audit trail is a side effect of doing the work, not a second job.
-5. **Human-in-the-loop checkpoints, where they matter.** Morpheus inserts HITL gates at the places a real foreman would: risk-tier review, first PR on a new module, irreversible actions (prod deploy, schema migration, kill-switch activation), and any decision outside the agent's declared scope. Everywhere else, the crew keeps swinging.
-6. **Inspection-ready, always.** At any moment, a human can open the repo, the Jira board, the Confluence space, or the CoE portal and answer: *what was built, by which agent, from which requirement, reviewed by whom, and why?* That answer is never more than one click away, because the platform wrote it down as it went.
-
-This is what "agentic development, standardized" actually buys you: not just faster agents — a **trustworthy paper trail** that scales to dozens of teams and hundreds of agents without a central team heroically stitching it together.
-
-## Why not?
-
-Walk away any time. Every rendered file is inspectable markdown / YAML / TypeScript. Morpheus is not a runtime — your code runs without it.
-
-## Read next
-
-- [PHILOSOPHY.md](PHILOSOPHY.md) — the motivation and the knowledge-graph roadmap.
-- [CONSTITUTION.md](CONSTITUTION.md) — platform law: composition rules, five profiles, seven stop-lines, semver policy.
-- [EXECUTION_PLAN.md](EXECUTION_PLAN.md) — the workstream-by-workstream build plan.
-- [CONTRIBUTING.md](CONTRIBUTING.md) — module proposals, breaking-change policy.
-- [CHANGELOG.md](CHANGELOG.md) — what shipped, what's next.
-
-## Get started — one command, any machine
-
-No prerequisites. No manual steps. Paste one line in your terminal from inside your project directory (or an empty folder for greenfield), and Morpheus installs everything it needs, detects your project type, and walks you through the setup interactively.
-
-**macOS / Linux:**
-```bash
-curl -fsSL https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.sh | bash
+```text
+morpheus/
+  core/         approved shared standards, setup guidance, templates, governance
+  initiative/   project-level context, discovery, constitution, decisions, docs
+  features/     feature/epic-level PRD, TDS, SDD, Jira, tests, evidence
+  releases/     release planning, notes, readiness, deployment, change management
+  modules/      simple module descriptions and skill-sequence maps
+  .agents/      approved skills surfaced to VS Code and agents
+  incubator/    candidate skills/modules not yet approved
+  local/        ignored local experiments and evidence
 ```
 
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/eizs0xa/morpheus/main/scripts/bootstrap.ps1 | iex
+## Approved Skills
+
+Approved skills live in:
+
+```text
+.agents/skills/<skill-name>/SKILL.md
 ```
 
-> The bootstrap script: installs git, Node ≥ 20, pnpm, Python 3, and copier if any are missing → clones/updates the Morpheus platform → builds and globally links the CLI → runs `morpheus invoke` in your current directory, which auto-detects greenfield vs brownfield and walks you through a five-question setup.
->
-> **Already have the repo cloned?** Run `./scripts/bootstrap.sh` (or `.\scripts\bootstrap.ps1`) from the repo root — it will skip the clone step.
+Only setup-ready skills belong there. Skills that are useful but not yet fully wired live in:
 
----
-
-## Quick start (if Morpheus CLI is already installed)
-
-```bash
-# Greenfield
-morpheus invoke
-
-# Brownfield overlay on an existing repo
-cd my-existing-repo && morpheus invoke
-# When it finishes, it tells you the one action to take:
-#   "Type /morpheus in your agent prompt window and press send."
-# Your agent then drives constitution authoring, docs audit, validation,
-# and writes MORPHEUS_INIT_REPORT.md at the repo root.
-
-# Keep Morpheus current (pull + rebuild + re-apply)
-morpheus update
-
-# Validate against platform law
-morpheus doctor
+```text
+incubator/candidate-skills/<skill-name>/SKILL.md
 ```
 
-> `agentic init` is a backward-compatible alias. Both `morpheus` and `agentic` resolve to the same binary.
+## Current Approved Skill Areas
 
-See [docs/getting-started.md](docs/) for the full flow and [docs/for-engineers/](docs/for-engineers/) for role-based walkthroughs.
+- Workspace setup from agent chat.
+- GitHub branch, commit, and PR standardization.
+- Jira-linked branch and PR naming.
+- OS-aware local launch setup.
+- Morpheus initiation sequence.
+- PRD-to-Jira workflow sequence.
 
-## Strategic alignment
+## What Morpheus Is Not
 
-Morpheus is the governed self-service substrate for the enterprise **AI/MLOps Strategic Roadmap**:
+- Not a CLI-first tool.
+- Not a pile of speculative modules.
+- Not a replacement for product repositories.
+- Not a place for secrets.
+- Not a place to overwrite project-specific agent rules.
 
-| Roadmap layer | Morpheus role |
-|---|---|
-| Foundation — Hub-and-Spoke, Intake, Agent Governance (ADLC) | Schema-enforced `governance` block, `integrations/governance-adlc`, kill-switch + decommission skills in core. |
-| Visibility & Enablement — CoE Portal, AI Adoption Engineering | `integrations/coe-portal`, curated template library with training tiers, role-based docs per profile. |
-| Accountability & Intelligence — ROI Framework, Agent Memory, Ontology | `value-card.schema.json`, `memory.schema.json` (five-layer), `ontology.schema.json`, domain ontologies with steward-approved change logs. |
-
-## Status
-
-Pre-alpha, building toward `v0.2.0`. Pilot-ready across the Phase 1–3 roadmap.
-
-## License
-
-[MIT](LICENSE)
+Morpheus is a shared operating layer that should remain understandable when a new teammate opens the workspace.
