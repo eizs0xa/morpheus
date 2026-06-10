@@ -10,7 +10,7 @@ It creates the project understanding that every later workflow depends on.
 2. `discovery` - scans product repos and records structure, intent, architecture, and conflicts.
 3. `index` - creates the project navigation map.
 4. `constitution` - creates or updates project-level rules.
-5. `orient` - creates the first feature folder when feature work begins.
+5. `orient` - creates a feature folder later, only when a real feature begins.
 
 ## Outputs
 
@@ -21,8 +21,10 @@ It creates the project understanding that every later workflow depends on.
 - `initiative/repo-index.md`
 - `initiative/constitution.md`
 - `initiative/conflicts-report.md`
-- `features/<feature-slug>/` when `orient` runs
+- `features/<feature-slug>/` only when `orient` is explicitly run for a real feature
 
 ## Notes
 
 This module should stay small and practical. If a step is not needed for a real project, it should not be added here.
+
+Initiation should not create a blank first feature. Feature folders begin with `orient` only after a feature/epic exists.

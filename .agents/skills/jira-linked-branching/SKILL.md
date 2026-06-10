@@ -11,8 +11,8 @@ when_not_to_use: |
   - The project does not use Jira or a compatible work item key format.
   - The change is a GitHub-generated revert or dependency bot PR exempted by policy.
 inputs:
-  - jira_project_key: string
-  - jira_issue_key: string
+  - "jira_project_key: string"
+  - "jira_issue_key: string"
 outputs:
   - branch name
   - PR title prefix

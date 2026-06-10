@@ -12,9 +12,9 @@ when_not_to_use: |
   - Required local validation has not run or failures are unexplained.
   - The PR would include unrelated work.
 inputs:
-  - jira_issue_key: string
-  - branch_name: string
-  - base_branch: string
+  - "jira_issue_key: string"
+  - "branch_name: string"
+  - "base_branch: string"
 outputs:
   - PR title
   - PR body

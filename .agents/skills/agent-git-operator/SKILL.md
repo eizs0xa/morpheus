@@ -12,9 +12,9 @@ when_not_to_use: |
   - The user has not supplied or approved the Jira issue key for the work.
   - The change includes secrets, generated credentials, or unreviewed local env files.
 inputs:
-  - jira_issue_key: string
-  - change_summary: string
-  - target_branch: string (default: main)
+  - "jira_issue_key: string"
+  - "change_summary: string"
+  - "target_branch: string (default: main)"
 outputs:
   - standardized branch name
   - conventional commit message
