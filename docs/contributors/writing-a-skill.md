@@ -10,6 +10,14 @@ Approved reusable skill bodies live in:
 
 The contributing module references that path in `module.yaml`.
 
+Unready or inherited skills live in:
+
+```text
+incubator/candidate-skills/<skill-name>/SKILL.md
+```
+
+Do not reference incubator skills from `module.yaml` until they are promoted.
+
 ## Shape
 
 ```markdown

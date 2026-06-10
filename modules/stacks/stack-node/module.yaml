@@ -6,9 +6,7 @@ requires:
     version_range: ">=0.1.0 <1.0.0"
 incompatible_with: []
 contributes:
-  skills:
-    - .agents/skills/coding-agent-node/SKILL.md
-    - .agents/skills/tester-node/SKILL.md
+  skills: []
   workflows:
     - workflows/agent-pr-gate-node.yml.tmpl
   hooks:

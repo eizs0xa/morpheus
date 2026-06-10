@@ -36,7 +36,7 @@ Every module ships a `module.yaml` declaring:
 
 Modules should be descriptive and optional where possible. Core should stay small.
 
-Approved reusable skills live in `.agents/skills/<skill-name>/SKILL.md`. Module manifests may contribute those approved skills, but skill bodies should not be duplicated under module folders.
+Approved reusable skills live in `.agents/skills/<skill-name>/SKILL.md`. Module manifests may contribute those approved skills, but skill bodies should not be duplicated under module folders. Skills that are not fully wired live in `incubator/candidate-skills/` until promoted.
 
 ## 5. Initial Module Families
 

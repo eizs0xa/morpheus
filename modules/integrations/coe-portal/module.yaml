@@ -13,9 +13,7 @@ requires:
     version_range: ">=0.1.0 <1.0.0"
 incompatible_with: []
 contributes:
-  skills:
-    - .agents/skills/registry-sync/SKILL.md
-    - .agents/skills/portal-pull/SKILL.md
+  skills: []
   workflows:
     - workflows/coe-registry-sync.yml.tmpl
   templates:

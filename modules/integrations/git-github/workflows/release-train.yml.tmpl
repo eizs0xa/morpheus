@@ -52,7 +52,7 @@ jobs:
         run: |
           # The notifier skill (provided by the active workspace module) is
           # invoked by Morpheus release automation; this workflow just announces intent. See
-          # `.agents/skills/notifier-*/SKILL.md`.
+          # the project's approved notification workflow.
           echo "notifier skill will announce release branch ${BRANCH}"
 
   close-stale-release-branches:

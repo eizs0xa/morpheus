@@ -7,21 +7,7 @@ description: >-
 requires: []
 incompatible_with: []
 contributes:
-  skills:
-    - .agents/skills/spec-author/SKILL.md
-    - .agents/skills/planner/SKILL.md
-    - .agents/skills/decomposer/SKILL.md
-    - .agents/skills/initializer/SKILL.md
-    - .agents/skills/reviewer/SKILL.md
-    - .agents/skills/integrator/SKILL.md
-    - .agents/skills/fixer/SKILL.md
-    - .agents/skills/evaluator/SKILL.md
-    - .agents/skills/constitution-author/SKILL.md
-    - .agents/skills/lore-reader/SKILL.md
-    - .agents/skills/lore-curator/SKILL.md
-    - .agents/skills/kill-switch/SKILL.md
-    - .agents/skills/decommission/SKILL.md
-    - .agents/skills/morpheus-orchestrator/SKILL.md
+  skills: []
   templates:
     - templates/constitution.md.tmpl
     - templates/CLAUDE.md.tmpl

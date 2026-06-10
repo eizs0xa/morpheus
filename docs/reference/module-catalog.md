@@ -32,7 +32,7 @@ pm-jira
 local-launch
 ```
 
-Add `local-launch` when teams need one-click local startup support. Add future `morpheus-initiation`, `prd-to-jira`, and `geodesic-audit` modules as they are promoted.
+Add `local-launch` when teams need one-click local startup support. Skills not listed in the approved skill catalog remain in `incubator/candidate-skills/` until they are properly ported.
 
 ## Registering A New Module
 
@@ -40,5 +40,5 @@ Add `local-launch` when teams need one-click local startup support. Add future `
 2. Add contributed templates, workflows, schemas, hooks, and instructions under the module folder.
 3. Add approved reusable skill bodies under `.agents/skills/<skill-name>/SKILL.md` and reference them from `module.yaml`.
 4. Update this catalog.
-5. Update [skill-catalog.md](skill-catalog.md) when the module contributes skills.
+5. Update [skill-catalog.md](skill-catalog.md) only when a contributed skill is approved for setup-time use.
 6. Run `npm test`.

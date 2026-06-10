@@ -11,10 +11,7 @@ requires:
     version_range: ">=0.1.0 <1.0.0"
 incompatible_with: []
 contributes:
-  skills:
-    - .agents/skills/risk-score/SKILL.md
-    - .agents/skills/intake-submit/SKILL.md
-    - .agents/skills/adlc-gate/SKILL.md
+  skills: []
   workflows:
     - workflows/governance-events.yml.tmpl
   templates:

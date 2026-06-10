@@ -7,8 +7,7 @@ requires:
 incompatible_with:
   - workspace-microsoft
 contributes:
-  skills:
-    - .agents/skills/notifier-google/SKILL.md
+  skills: []
   templates:
     - mcp-config.json.tmpl
 prompts:

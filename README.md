@@ -29,6 +29,8 @@ The `morpheus/` workspace folder is the source of truth for generated discovery,
 - `workspace-microsoft`, `workspace-google` — optional notification/collaboration adapters.
 - `domain-healthcare` — example domain module.
 
+Unready inherited skills are preserved under `incubator/candidate-skills/` until they are reviewed and promoted.
+
 ## Chat Setup Prompt
 
 Use the prompt in [docs/getting-started.md](docs/getting-started.md) to set up Morpheus from the agent chat window. The agent asks baseline questions, creates or verifies the workspace folders, preserves existing product-repo agent assets, generates project config and environment examples, and validates the result.
@@ -48,6 +50,7 @@ This validates module manifests and contributed files. It does not build or run 
 ```text
 modules/       Optional Morpheus modules and contributed skills/templates/workflows.
 .agents/      Approved reusable Morpheus skills surfaced to VS Code and agents.
+incubator/    Candidate skills/modules that are preserved but not setup-ready.
 templates/     Shared project and overlay templates retained for module assets.
 docs/          Repo-first setup and module documentation.
 examples/      Example outputs and regression snapshots.
